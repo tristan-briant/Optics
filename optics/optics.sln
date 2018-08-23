@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "optics", "Assembly-CSharp.csproj", "{56374ED9-D592-7339-7D3C-11004D0F726F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{56374ED9-D592-7339-7D3C-11004D0F726F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
