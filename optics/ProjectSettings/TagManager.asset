@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Bases
+    uniqueID: 474554351
+    locked: 0
+  - name: Rays
+    uniqueID: 3302682715
+    locked: 0
+  - name: Optics
+    uniqueID: 3287845623
+    locked: 0

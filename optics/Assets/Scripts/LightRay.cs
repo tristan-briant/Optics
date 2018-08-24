@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightRay : MonoBehaviour {
 
     public Vector3 StartPosition;
-    public Vector3 Direction;
+    public float Direction;
     public float Length;
     public Color Col;
     public float Width;
@@ -14,22 +14,31 @@ public class LightRay : MonoBehaviour {
 
     LineRenderer lr;
 
-    public void Draw() {
+
+    public void Initiliaze()
+    {
         lr = gameObject.AddComponent<LineRenderer>();
-
+        lr.useWorldSpace = false;
         lr.material = new Material(Shader.Find("Particles/Additive"));
+        lr.sortingLayerName="Rays";
+    }
 
+    public void Draw() {
+     
         lr.SetPosition(0, StartPosition);
-        lr.SetPosition(1, StartPosition + Length * Direction);
+        lr.SetPosition(1, StartPosition + Length * new Vector3(Mathf.Cos(Direction), Mathf.Sin(Direction), 0));
 
-        lr.startWidth = Width;
-        lr.endWidth = Width + Divergence*Length;
+        float s = transform.lossyScale.x;
+
+        lr.startWidth = Width * s;
+        lr.endWidth = Width + Divergence * Length * s;
+
 
         Color c = Col;
-        c.a = intensity / Width;
+        //c.a = intensity / Width;
         lr.startColor = c;
        
-        c.a = intensity / (Width + Divergence * Length);
+        //c.a = intensity / Width * ( 1 - 10f*Divergence * Length);
         lr.endColor = c;
         
     }
