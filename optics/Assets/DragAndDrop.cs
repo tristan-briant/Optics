@@ -36,7 +36,7 @@ public class DragAndDrop : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 rayPoint = ray.GetPoint(distance);
         transform.position = rayPoint;
-        Debug.Log("drag!!");
+        //Debug.Log("drag!!");
     }
 
     void Update()
