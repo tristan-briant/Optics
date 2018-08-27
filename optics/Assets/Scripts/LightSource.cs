@@ -17,7 +17,11 @@ public class LightSource : MonoBehaviour {
     LightRay[] LightRays;
 
     void Start () {
+        //InitializeSource();
+    }
 
+    public void InitializeSource()
+    {
         Vector3 pos = transform.localPosition;
 
         Rays = transform.parent.Find("Rays");
@@ -32,7 +36,7 @@ public class LightSource : MonoBehaviour {
 
             LightRay r =ray.AddComponent<LightRay>();
             
-            r.Col = new Color(1, 1, 0.8f, 0.5f * (1 - (i - N / 2f) * (i - N / 2f) / N / N * 4.0f));
+            r.Col = new Color(1, 1, 0.8f, 0.5f * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f));
             r.Initiliaze();
             r.isVisible = true;
             r.cross = cross;
@@ -60,46 +64,33 @@ public class LightSource : MonoBehaviour {
         }
     }
 	
-	// Update is called once per frame
-	void Update () {
-
+    public void EmitLight()
+    {
         float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
         Vector3 pos = transform.localPosition;//+Random.Range(0,0.001f)*Vector3.one;
 
         int i = 0;
-        //foreach(Transform t in Rays)
-        foreach(LightRay r in LightRays)
+        foreach (LightRay r in LightRays)
         {
-            //LightRay r = t.GetComponent<LightRay>();
-            r.StartPosition1 =  pos;
-            r.StartPosition2 = pos;
-            r.Length1 = r.Length2 = Length;
-            r.Divergence = Div / N;
-            float a = Div * (-0.5f +0.5f/N + i / (float)N) + angle;//float a = 2 * Mathf.PI * (-1.0f / 20.0f + 1 / 100.0f * i) + angle;
-            r.Direction1 = a;
+            float l1 = - radius * (-0.5f + 0.5f / N + i / (float)N);
+            float l2 = - radius * (-0.5f + 0.5f / N + (i + 1) / (float)N);
+
+            r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
+            r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
+
+            r.Direction1 = Div * (-0.5f + 0.5f / N + i / (float)N) + angle;
             r.Direction2 = Div * (-0.5f + 0.5f / N + (i + 1) / (float)N) + angle;
+
+            r.Length1 = r.Length2 = Length;
+
             i++;
             r.Width = 0;
-            //r.Draw();
+
         }
+    }
 
-        /*foreach (Transform t in Rays)
-        {
-            LightRay r = t.GetComponent<LightRay>();
-            float l = radius*(-0.5f + 0.5f / N + i / (float)N);
-            r.StartPosition = pos + new Vector3(Mathf.Sin(angle)*l, -Mathf.Cos(angle) * l,0);
-            r.Length = Length;
-            //r.Divergence =0.001f;
-            r.Direction = angle;
-            i++;
-            r.Width = radius  / (float)N;
-            r.Draw();
-        }*/
 
-        /* r.StartPosition = pos;
-
-         r.Direction = new Vector3(Mathf.Cos(2 * Mathf.PI / 100 * i), Mathf.Sin(2 * Mathf.PI / 100 * i), 0);
-
-     */
+    void Update () {
+        //EmitLight();
     }
 }

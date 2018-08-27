@@ -61,27 +61,25 @@ public class LightRay : MonoBehaviour {
     }
 
     public void Draw() {
-        if (!isVisible) return;
-        //DrawLineRenderer();
+        // Draw the rays recursively;
+        //if (!isVisible) return;
         DrawMesh();
-
-
+        foreach(Transform child in transform)
+        {
+            child.GetComponent<LightRay>().Draw();
+        }
     }
 
-    float width = 1;
-
+ 
     void LateUpdate()
     {
-        Draw();
+        //Draw();
     }
 
     void DrawMesh() {
        
         Vector3[] vertices;
-        int[] tri;
-        Vector3[] normals;
-        Vector2[] uv;
-
+        
         //Test if a waist exists
         Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(Mathf.Cos(Direction1), Mathf.Sin(Direction1), 0);
         Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(Mathf.Cos(Direction2), Mathf.Sin(Direction2), 0);
@@ -98,10 +96,8 @@ public class LightRay : MonoBehaviour {
             HasWaist = true;
             WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
-            /*if (cross != null)
-                cross.transform.localPosition = WaistPos;*/
-
-           vertices = new Vector3[6] {
+           
+            vertices = new Vector3[6] {
                 StartPosition1,
                 StartPosition2,
                 WaistPos,
@@ -134,51 +130,14 @@ public class LightRay : MonoBehaviour {
                 EndPosition2,
                 StartPosition2
             };
-            /*vertices = new Vector3[4] {
-                StartPosition1,
-                StartPosition2,
-                EndPosition2,
-                EndPosition1
-            };*/
-            //tri = new int[6] { 0, 1, 2, 3, 4, 5 };
-            //tri = new int[6] { 0, 2, 1, 0, 3, 2 };
-
-            /*normals = new Vector3[4] {
-                -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward
-            };
-
-            //UV
-            uv = new Vector2[4] {
-                new Vector2(0.45f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.45f,0.5f)
-            };*/
-
-            /*normals = new Vector3[6] {
-                -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward
-            };
-
-            //UV
-            uv = new Vector2[6] {
-                 new Vector2(0.45f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.45f,0.5f),new Vector2(0.45f,0.5f),new Vector2(0.45f,0.5f)
-            };*/
+           
 
         }
 
         Mesh m = GetComponent<MeshFilter>().mesh;
 
         m.vertices = vertices;
-        /*m.triangles = tri;
-        m.normals = normals;
-        m.uv = uv;*/
-
-        /*mesh = new Mesh
-        {
-            vertices = vertices,
-            triangles = tri,
-            normals = normals,
-            uv = uv
-        };*/
-        //GetComponent<MeshFilter>().mesh = mesh;
-
+      
         GetComponent<MeshRenderer>().material.color = Col;
 
     }

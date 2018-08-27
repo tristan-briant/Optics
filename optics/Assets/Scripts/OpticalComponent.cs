@@ -59,21 +59,23 @@ public class OpticalComponent : MonoBehaviour {
 
     Vector3 OldPosition;
     Quaternion OldRotation;
-    void Update () {
+    void LateUpdate () {
 
         /*if (OldPosition == transform.localPosition && transform.localRotation == OldRotation) return;
 
         OldPosition = transform.localPosition;
         OldRotation = transform.localRotation;*/
 
+       
+        
+    }
+
+    public void Deflection() {
         foreach (Transform t in transform.parent.Find("Rays"))
         {
-            //Transform t = transform.parent.Find("Rays").GetChild(0);
             LightRay r = t.GetComponent<LightRay>();
             RayCollision2(r);
-            r.Draw();
         }
-        
     }
 
     public void RayCollision2(LightRay r)
