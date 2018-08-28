@@ -57,7 +57,7 @@ public class LightSource : MonoBehaviour {
                 lr.cross = cross;
                 prev = rr;
             }
-
+            r.Origin = null;
             LightRays[i] = r;
 
 
@@ -85,6 +85,8 @@ public class LightSource : MonoBehaviour {
 
             i++;
             r.Width = 0;
+            
+            r.ComputeDir();
 
         }
     }

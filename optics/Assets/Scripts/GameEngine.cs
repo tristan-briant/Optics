@@ -8,6 +8,7 @@ public class GameEngine : MonoBehaviour {
     public OpticalComponent[] OpticalComponents;
     public Transform Rays;
 
+    public float ll;
 	// Use this for initialization
 	void Start () {
         LightSources = FindObjectsOfType<LightSource>();
@@ -21,25 +22,72 @@ public class GameEngine : MonoBehaviour {
     }
 
     // Update is called once per frame
+    int i = 0;
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
+
+        //if (i++ == 10) { i = 0; } else return;
 
         foreach (LightSource ls in LightSources)
         {
             ls.EmitLight();
         }
 
-        foreach (OpticalComponent op in OpticalComponents)
+        /*foreach (OpticalComponent op in OpticalComponents)
         {
             op.Deflection();
-        }
+        }*/
 
 
 
         foreach (Transform t in Rays)
         {
-            t.GetComponent<LightRay>().Draw();
+            LightRay lr = t.GetComponent<LightRay>();
+            Collision(lr);
+            lr.Draw();
         }
+    }
+
+    bool Collision(LightRay lr) {
+
+        float lmin = -1;
+        OpticalComponent opCollision = OpticalComponents[0];
+
+        foreach (OpticalComponent op in OpticalComponents)
+        {
+            if (lr.Origin == op) continue;
+
+            float l = op.Collision2(lr);
+
+            if (l > 0 && ( l < lmin || lmin <0 ) ) // trouve la plus proche collision
+            {
+                lmin = l;
+                opCollision = op;
+            }
+
+            
+
+        }
+
+        if (lmin > 0)
+            {
+                
+                opCollision.Deflect(lr);
+                foreach (Transform lchild in lr.transform)
+                {
+                    Collision(lchild.GetComponent<LightRay>());
+                }
+            }
+            else
+            {
+                foreach (Transform lchild in lr.transform) {
+                    lchild.gameObject.SetActive(false);
+                }
+            }
+
+
+        ll = lmin;
+        return false;
     }
 }

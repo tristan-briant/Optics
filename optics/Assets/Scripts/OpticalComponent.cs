@@ -13,10 +13,27 @@ public class OpticalComponent : MonoBehaviour {
     public GameObject cross;
     public GameObject other;
     public bool backSide = false;
+    public float cos, sin, param; // vecteur directeur
 
+    public void ComputeDir()
+    {
+
+        x = transform.localPosition.x;
+        y = transform.localPosition.y;
+
+        angle = (transform.localRotation.eulerAngles.z + 90) * Mathf.PI / 180f;
+        cos = Mathf.Cos(angle);
+        sin = Mathf.Sin(angle);
+        param = -sin * x + cos * y;
+    }
+
+    private void Update()
+    {
+        ComputeDir();
+    }
 
     float xc, yc;
-    public float Collision(float xr,float yr, float ar)
+    /*public float Collision(float xr,float yr, float ar)
     {
         float cosr = Mathf.Cos(ar);
         float sinr = Mathf.Sin(ar);
@@ -39,10 +56,51 @@ public class OpticalComponent : MonoBehaviour {
                 return 1;
 
         return -1;
+    }*/
+
+    public float Collision(LightRay lr, int i)
+    {
+        float cosr, sinr, xr, yr, br;
+        if (i == 1)
+        {
+            cosr = lr.cos1;
+            sinr = lr.sin1;
+            xr = lr.StartPosition1.x;
+            yr = lr.StartPosition1.y;
+            br = lr.param1;
+        }
+        else
+        {
+            cosr = lr.cos2;
+            sinr = lr.sin2;
+            xr = lr.StartPosition2.x;
+            yr = lr.StartPosition2.y;
+            br = lr.param2;
+        }
+
+        float b = param;
+
+        float det = -cosr * sin + sinr * cos;
+
+        if (det == 0) return -1;
+
+
+        xc = (cosr * b - cos * br) / det;
+        yc = (sinr * b - sin * br) / det;
+
+ 
+        if ((cosr > 0 && xc > xr) || (cosr < 0 && xc < xr) || (sinr > 0 && yc > yr) || (sinr < 0 && yc < yr))
+            if ((xc - x) * (xc - x) + (yc - y) * (yc - y) < radius * radius)
+                return (xc - xr) * (xc - xr) + (yc - yr) * (yc - yr);
+        
+        return -1;
     }
 
+
+
+
     float xc1, yc1, xc2, yc2;
-    public float Collision2(float xr1, float yr1, float ar1, float xr2, float yr2, float ar2)
+    /*public float Collision2(float xr1, float yr1, float ar1, float xr2, float yr2, float ar2)
     {
         float l1=Collision(xr1, yr1, ar1);
         xc1 = xc; yc1 = yc;
@@ -51,38 +109,45 @@ public class OpticalComponent : MonoBehaviour {
         xc2 = xc; yc2 = yc;
         if (l2 < 0) return -1;
 
-        return 1;
+        return l1;
+    }*/
+
+    public float Collision2(LightRay lr)
+    {
+        float l1 = Collision(lr, 1);
+        xc1 = xc; yc1 = yc;
+        if (l1 < 0) return -1;
+        float l2 = Collision(lr, 2);
+        xc2 = xc; yc2 = yc;
+        if (l2 < 0) return -1;
+
+        return l1;
     }
 
 
-    // Update is called once per frame
-
-    Vector3 OldPosition;
+    /*Vector3 OldPosition;
     Quaternion OldRotation;
     void LateUpdate () {
 
-        /*if (OldPosition == transform.localPosition && transform.localRotation == OldRotation) return;
+        if (OldPosition == transform.localPosition && transform.localRotation == OldRotation) return;
 
         OldPosition = transform.localPosition;
-        OldRotation = transform.localRotation;*/
+        OldRotation = transform.localRotation;
 
        
         
-    }
+    }*/
 
-    public void Deflection() {
+    /*public void Deflection() {
         foreach (Transform t in transform.parent.Find("Rays"))
         {
             LightRay r = t.GetComponent<LightRay>();
             RayCollision2(r);
         }
-    }
+    }*/
 
-    public void RayCollision2(LightRay r)
+    public void Deflect(LightRay r)
     {
-        x = transform.localPosition.x;
-        y = transform.localPosition.y;
-        angle = (transform.localRotation.eulerAngles.z + 90) * Mathf.PI / 180f;
 
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
@@ -91,9 +156,81 @@ public class OpticalComponent : MonoBehaviour {
         float yo2 = r.StartPosition2.y;
         float ao2 = r.Direction2;
 
-        if (Collision2(xo1, yo1, ao1, xo2, yo2, ao2) > 0)
+        r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
+        r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
+
+        Transform nextRay = r.transform.GetChild(0);
+        LightRay lr = nextRay.GetComponent<LightRay>();
+        lr.isVisible = true;
+        lr.gameObject.SetActive(true);
+
+        lr.Col = r.Col;
+        lr.Col.r = lr.Col.r * 0.2f;
+        lr.StartPosition1 = new Vector3(xc1, yc1, 0);
+        lr.StartPosition2 = new Vector3(xc2, yc2, 0);
+        lr.Direction1 = ao1;
+        lr.Direction2 = ao2;
+        lr.Length1 = 15.0f;
+        lr.Length2 = 15.0f;
+        lr.Origin = this;
+        //lr.ComputeDir();
+
+        // Pour une lentille
+        float zz1, theta1, thetaP1;
+        float zz2, theta2, thetaP2;
+        float cos = Mathf.Cos(angle);
+
+
+        if (cos > 0.7f || cos < -0.7f)
         {
-            //cross.transform.GetComponent<Image>().color = Color.green;
+            zz1 = (xc1 - x) / cos;
+            zz2 = (xc2 - x) / cos;
+        }
+        else
+        {
+            zz1 = (yc1 - y) / Mathf.Sin(angle);
+            zz2 = (yc2 - y) / Mathf.Sin(angle);
+        }
+        theta1 = ao1 - (angle - Mathf.PI / 2);
+        theta2 = ao2 - (angle - Mathf.PI / 2);
+
+        if (Mathf.Cos(theta1) < 0) backSide = true;
+        else backSide = false;
+
+        if (backSide)
+        {
+            thetaP1 = Mathf.Atan(zz1 / focal + Mathf.Tan(theta1)) + Mathf.PI; // le nouvel angle
+            thetaP2 = Mathf.Atan(zz2 / focal + Mathf.Tan(theta2)) + Mathf.PI; // le nouvel angle
+        }
+        else
+        {
+            thetaP1 = Mathf.Atan(-zz1 / focal + Mathf.Tan(theta1)); // le nouvel angle
+            thetaP2 = Mathf.Atan(-zz2 / focal + Mathf.Tan(theta2)); // le nouvel angle
+        }
+
+        lr.Direction1 = thetaP1 + (angle - Mathf.PI / 2);
+        lr.Direction2 = thetaP2 + (angle - Mathf.PI / 2);
+        lr.ComputeDir();
+    }
+
+
+
+
+    /*public void RayCollision2(LightRay r)
+    {
+        x = transform.localPosition.x;
+        y = transform.localPosition.y;
+ 
+        float xo1 = r.StartPosition1.x;
+        float yo1 = r.StartPosition1.y;
+        float ao1 = r.Direction1;
+        float xo2 = r.StartPosition2.x;
+        float yo2 = r.StartPosition2.y;
+        float ao2 = r.Direction2;
+
+        //if (Collision2(xo1, yo1, ao1, xo2, yo2, ao2) > 0)
+        if (Collision2(r) > 0)
+        {
             r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
             r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
@@ -110,7 +247,7 @@ public class OpticalComponent : MonoBehaviour {
             lr.Direction2 = ao2;
             lr.Length1 = 15.0f;
             lr.Length2 = 15.0f;
-  
+            //lr.ComputeDir();
 
             // Pour une lentille
             float zz1, theta1, thetaP1;
@@ -146,6 +283,7 @@ public class OpticalComponent : MonoBehaviour {
 
             lr.Direction1 = thetaP1 + (angle - Mathf.PI / 2);
             lr.Direction2 = thetaP2 + (angle - Mathf.PI / 2);
+            lr.ComputeDir();
         }
         else
         {
@@ -154,11 +292,11 @@ public class OpticalComponent : MonoBehaviour {
             lr.isVisible = false;
             lr.gameObject.SetActive(false);
         }
-    }
+    }*/
 
 
 
-    public void RayCollision(LightRay r) {
+    /*public void RayCollision(LightRay r) {
         x = transform.localPosition.x;
         y = transform.localPosition.y;
         angle = (transform.localRotation.eulerAngles.z + 90) * Mathf.PI / 180f;
@@ -221,10 +359,7 @@ public class OpticalComponent : MonoBehaviour {
         }
 
 
-        /*if (cross != null)
-            cross.transform.localPosition = new Vector3(xc, yc, 0);*/
 
-
-    }
+    }*/
 
 }

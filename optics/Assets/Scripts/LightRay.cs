@@ -16,6 +16,9 @@ public class LightRay : MonoBehaviour {
     public GameObject cross;
     Vector3 WaistPos;
     LineRenderer lr;
+    public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2; // vecteur directeur, proj et parametre
+    public OpticalComponent Origin;
+
 
     Mesh mesh;
     void InitilizedMesh()
@@ -40,7 +43,6 @@ public class LightRay : MonoBehaviour {
             }; 
 
         GetComponent<MeshFilter>().mesh=m;
-
 
     }
 
@@ -76,18 +78,31 @@ public class LightRay : MonoBehaviour {
         //Draw();
     }
 
+    public void ComputeDir() { //Calcule les vecteurs directeurs
+        cos1 = Mathf.Cos(Direction1);
+        sin1 = Mathf.Sin(Direction1);
+        proj1 = StartPosition1.x * cos1 + StartPosition1.y * sin1;
+        param1 = -StartPosition1.x * sin1 + StartPosition1.y * cos1;
+        cos2 = Mathf.Cos(Direction2);
+        sin2 = Mathf.Sin(Direction2);
+        proj2 = StartPosition2.x * cos2 + StartPosition2.y * sin2;
+        param2 = -StartPosition2.x * sin2 + StartPosition2.y * cos2;
+
+
+    }
+
     void DrawMesh() {
        
         Vector3[] vertices;
         
         //Test if a waist exists
-        Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(Mathf.Cos(Direction1), Mathf.Sin(Direction1), 0);
-        Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(Mathf.Cos(Direction2), Mathf.Sin(Direction2), 0);
+        Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(cos1, sin1, 0);
+        Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(cos2, sin2, 0);
 
-        float cos1 = Mathf.Cos(Direction1);
-        float sin1 = Mathf.Sin(Direction1);
+        /*float cos1 = Mathf.Cos(Direction1);
+        float sin1 = Mathf.Sin(Direction1);*/
 
-        float p1 = -StartPosition1.x * sin1 + StartPosition1.y * cos1;
+        float p1 = param1;  //-StartPosition1.x * sin1 + StartPosition1.y * cos1;
         float p2start = -StartPosition2.x * sin1 + StartPosition2.y * cos1;
         float p2end = -EndPosition2.x * sin1 + EndPosition2.y * cos1;
 
@@ -185,6 +200,13 @@ public class LightRay : MonoBehaviour {
         }
 
     }
+
+
+    public void Propagate()
+    {
+
+    }
+
 
 
 }
