@@ -29,6 +29,8 @@ public class LightRay : MonoBehaviour {
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         mr.material = mat;
         mr.material.color = Col;
+        mr.sortingLayerName="Rays";
+
         Mesh m = new Mesh();
 
  

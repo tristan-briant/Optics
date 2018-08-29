@@ -21,10 +21,10 @@ public class CreatePoligon : MonoBehaviour {
 
         //Vertices
         Vector3[] vertices = new Vector3[4] {
-            new Vector3(0,0,0),
-            new Vector3(width,0,0),
-            new Vector3(width,height,0),
-            new Vector3(0,height,0)
+            new Vector3(0,0,1),
+            new Vector3(width,0,1),
+            new Vector3(width,height,1),
+            new Vector3(0,height,1)
         };
 
         //Triangle

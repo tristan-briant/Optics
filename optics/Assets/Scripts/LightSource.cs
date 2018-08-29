@@ -15,13 +15,25 @@ public class LightSource : MonoBehaviour {
     public float radius;
     public GameObject cross;
     LightRay[] LightRays;
+    public bool hasChanged=true;
+    public Color Color=new Color(1, 1, 0.8f, 0.5f);
 
-    void Start () {
-        //InitializeSource();
+    Vector3 OldPosition;
+    Quaternion OldRotation;
+    void Update()
+    {
+        if (OldPosition == transform.localPosition && transform.localRotation == OldRotation)
+            return;
+       
+        hasChanged = true;
+        OldPosition = transform.localPosition;
+        OldRotation = transform.localRotation;
+
     }
 
     public void InitializeSource()
     {
+        hasChanged = true;
         Vector3 pos = transform.localPosition;
 
         Rays = transform.parent.Find("Rays");
@@ -35,8 +47,11 @@ public class LightSource : MonoBehaviour {
             ray.transform.localPosition = Vector3.zero;
 
             LightRay r =ray.AddComponent<LightRay>();
-            
-            r.Col = new Color(1, 1, 0.8f, 0.5f * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f));
+
+
+            Color c = Color;
+            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f);
+            r.Col = c;
             r.Initiliaze();
             r.isVisible = true;
             r.cross = cross;
@@ -51,7 +66,7 @@ public class LightSource : MonoBehaviour {
 
                 LightRay lr = rr.AddComponent<LightRay>();
                 lr.Initiliaze();
-                lr.Col = new Color(1, 1, 0.8f, 0.5f);
+                //lr.Col = new Color(1, 1, 0.8f, 0.5f);
                 lr.isVisible = false;
                 lr.gameObject.SetActive(false);
                 lr.cross = cross;
@@ -72,27 +87,27 @@ public class LightSource : MonoBehaviour {
         int i = 0;
         foreach (LightRay r in LightRays)
         {
-            float l1 = - radius * (-0.5f + 0.5f / N + i / (float)N);
-            float l2 = - radius * (-0.5f + 0.5f / N + (i + 1) / (float)N);
+            float l1 = - radius * (-0.5f  + i / (float)N);
+            float l2 = - radius * (-0.5f  + (i + 1) / (float)N);
 
             r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
             r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
 
-            r.Direction1 = Div * (-0.5f + 0.5f / N + i / (float)N) + angle;
-            r.Direction2 = Div * (-0.5f + 0.5f / N + (i + 1) / (float)N) + angle;
+            r.Direction1 = Div * (-0.5f  + i / (float)N) + angle;
+            r.Direction2 = Div * (-0.5f  + (i + 1) / (float)N) + angle;
 
             r.Length1 = r.Length2 = Length;
 
             i++;
             r.Width = 0;
-            
+
+            Color c = Color;
+            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f);
+            r.Col = c;
+
             r.ComputeDir();
 
         }
     }
-
-
-    void Update () {
-        //EmitLight();
-    }
+ 
 }

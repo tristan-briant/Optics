@@ -23,23 +23,35 @@ public class GameEngine : MonoBehaviour {
 
     // Update is called once per frame
     int i = 0;
-    void Update() {
+    void LateUpdate() {
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
-        //if (i++ == 10) { i = 0; } else return;
+        if (i++ == 2) { i = 0; } else return;
+
+        bool update = false;
+        foreach (LightSource ls in LightSources)
+        {
+            if (ls.hasChanged)
+            {
+                update = true;
+                break;
+            }
+        }
+        foreach (OpticalComponent op in OpticalComponents)
+        {
+            if (op.hasChanged)
+            {
+                update = true;
+                break;
+            }
+        }
+        if (!update) return;
 
         foreach (LightSource ls in LightSources)
         {
             ls.EmitLight();
         }
-
-        /*foreach (OpticalComponent op in OpticalComponents)
-        {
-            op.Deflection();
-        }*/
-
-
 
         foreach (Transform t in Rays)
         {
@@ -47,6 +59,11 @@ public class GameEngine : MonoBehaviour {
             Collision(lr);
             lr.Draw();
         }
+
+        foreach (LightSource ls in LightSources) ls.hasChanged = false;
+        foreach (OpticalComponent op in OpticalComponents) op.hasChanged = false;
+
+
     }
 
     bool Collision(LightRay lr) {
