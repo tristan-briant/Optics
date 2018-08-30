@@ -93,7 +93,8 @@ public class GameEngine : MonoBehaviour {
                 opCollision.Deflect(lr);
                 foreach (Transform lchild in lr.transform)
                 {
-                    Collision(lchild.GetComponent<LightRay>());
+                    if(lchild.GetComponent<LightRay>().isVisible)
+                        Collision(lchild.GetComponent<LightRay>());
                 }
             }
             else

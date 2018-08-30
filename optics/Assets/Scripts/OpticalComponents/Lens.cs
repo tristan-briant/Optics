@@ -24,6 +24,7 @@ public class Lens : OpticalComponent {
         lr.gameObject.SetActive(true);
 
         lr.Col = r.Col;
+        lr.Intensity = r.Intensity;
         //lr.Col.r = lr.Col.r * 0.2f;
         lr.StartPosition1 = new Vector3(xc1, yc1, 0);
         lr.StartPosition2 = new Vector3(xc2, yc2, 0);
@@ -32,7 +33,6 @@ public class Lens : OpticalComponent {
         lr.Length1 = 15.0f;
         lr.Length2 = 15.0f;
         lr.Origin = this;
-        //lr.ComputeDir();
 
         // Pour une lentille
         float zz1, theta1, thetaP1;

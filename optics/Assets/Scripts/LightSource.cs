@@ -17,6 +17,7 @@ public class LightSource : MonoBehaviour {
     LightRay[] LightRays;
     public bool hasChanged=true;
     public Color Color=new Color(1, 1, 0.8f, 0.5f);
+    public float Intensity=1;
 
     Vector3 OldPosition;
     Quaternion OldRotation;
@@ -52,9 +53,10 @@ public class LightSource : MonoBehaviour {
             Color c = Color;
             c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f);
             r.Col = c;
+            r.Intensity = Intensity/N;
             r.Initiliaze();
-            r.isVisible = true;
-            r.cross = cross;
+            //r.isVisible = true;
+            //r.cross = cross;
 
             GameObject prev = ray;
             for (int k = 0; k < MaxDepth; k++)
@@ -98,15 +100,16 @@ public class LightSource : MonoBehaviour {
 
             r.Length1 = r.Length2 = Length;
 
-            i++;
+            
             r.Width = 0;
 
             Color c = Color;
-            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / N / N * 4.0f);
+            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
             r.Col = c;
+            r.Intensity = Intensity / N;
 
             r.ComputeDir();
-
+            i++;
         }
     }
  

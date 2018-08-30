@@ -12,16 +12,19 @@ Shader "Custom/RayDiv" {
     }
     SubShader
     {
+		Cull Off
 		Blend One One
 		//Blend One OneMinusSrcAlpha
 
 		 Tags
         { 
             "Queue"="Transparent" 
-           /* "IgnoreProjector"="True" 
+			"RenderType"="Transparent" 
+
+           "IgnoreProjector"="True" 
             "RenderType"="Transparent" 
             "PreviewType"="Plane"
-            "CanUseSpriteAtlas"="True"*/
+            "CanUseSpriteAtlas"="True"
         }
 
         Pass
@@ -38,7 +41,7 @@ Shader "Custom/RayDiv" {
             {
                 float4 vertex : POSITION; // vertex position
                 float2 uv : TEXCOORD0; // texture coordinate
-				float4 color    : COLOR;
+				//float4 color    : COLOR;
             };
 
             // vertex shader outputs ("vertex to fragment")
@@ -46,7 +49,7 @@ Shader "Custom/RayDiv" {
             {
                 float2 uv : TEXCOORD0; // texture coordinate
                 float4 vertex : SV_POSITION; // clip space position
-				fixed4 color    : COLOR;
+				//fixed4 color    : COLOR;
             };
 
             // vertex shader
@@ -58,19 +61,21 @@ Shader "Custom/RayDiv" {
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 // just pass the texture coordinate
                 o.uv = v.uv;
-				o.color=v.color;
+				//o.color=v.color;
                 return o;
             }
             
             // color from the material
             fixed4 _Color;
 
-            // pixel shader, no inputs needed
+            // pixel shader
             fixed4 frag (v2f i) : SV_Target
             {
 				float4 c=_Color;
-				c.a=0.5f;
-				c.rgb*=-1+3*i.uv.x ;
+				//c.a=0.5f;
+				float a=i.uv.x ;
+				if(a<0.1f) a=0.1f;
+				c.rgb*=c.a / a;
                 return c; // just return it
             }
             ENDCG

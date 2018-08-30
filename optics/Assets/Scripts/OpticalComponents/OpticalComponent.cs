@@ -74,16 +74,18 @@ public class OpticalComponent : MonoBehaviour {
         xc = (cosr * b - cos * br) / det;
         yc = (sinr * b - sin * br) / det;
 
- 
+
         if ((cosr > 0 && xc > xr) || (cosr < 0 && xc < xr) || (sinr > 0 && yc > yr) || (sinr < 0 && yc < yr))
-            if ((xc - x) * (xc - x) + (yc - y) * (yc - y) < radius * radius)
+        {
+            float r2 = (xc - x) * (xc - x) + (yc - y) * (yc - y);
+            if (r2 < radius * radius)
                 return (xc - xr) * (xc - xr) + (yc - yr) * (yc - yr);
-        
+        }
         return -1;
     }
     
     protected float xc1, yc1, xc2, yc2;
-    public float Collision2(LightRay lr)
+    virtual public float Collision2(LightRay lr)
     {
         float l1 = Collision(lr, 1);
         xc1 = xc; yc1 = yc;

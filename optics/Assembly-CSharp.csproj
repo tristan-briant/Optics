@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\OpticalComponents\Lens.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Mirror.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\OpticalComponent.cs" />
+    <Compile Include="Assets\Scripts\OpticalComponents\Target.cs" />
     <None Include="Assets\Resources\Materials\NewSurfaceShader.shader" />
     <None Include="Assets\Resources\Materials\RayDiv.shader" />
     <Reference Include="UnityEditor.StandardEvents">
