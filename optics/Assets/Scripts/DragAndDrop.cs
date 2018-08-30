@@ -35,6 +35,7 @@ public class DragAndDrop : MonoBehaviour {
     void OnMouseDrag(){
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 rayPoint = ray.GetPoint(distance);
+        rayPoint.z = 0;//transform.position.z;
         transform.position = rayPoint;
         //Debug.Log("drag!!");
     }
@@ -45,6 +46,7 @@ public class DragAndDrop : MonoBehaviour {
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 rayPoint = ray.GetPoint(distance);
+            rayPoint.z = transform.position.z;
             transform.position = rayPoint;
         }
     }

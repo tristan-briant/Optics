@@ -23,7 +23,7 @@ Shader "Custom/NewSurfaceShader" {
         Lighting Off
         ZWrite Off
         Fog { Mode Off }
-       // Blend One OneMinusSrcAlpha
+        //Blend One OneMinusSrcAlpha
 		 Blend One One
         Pass
         {
@@ -54,7 +54,7 @@ Shader "Custom/NewSurfaceShader" {
                 v2f OUT;
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
-                OUT.color = IN.color * _Color;
+                OUT.color = _Color;//IN.color * _Color;
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap (OUT.vertex);
                 #endif
@@ -66,7 +66,8 @@ Shader "Custom/NewSurfaceShader" {
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+                //fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+				fixed4 c =IN.color;
                 c.rgb *= c.a;
                 return c;
             }

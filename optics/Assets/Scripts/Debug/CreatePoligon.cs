@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CreatePoligon : MonoBehaviour {
 
+    public Material mat;
+
     public float width, height;
 	// Use this for initialization
 	void Start () {
@@ -11,20 +13,21 @@ public class CreatePoligon : MonoBehaviour {
         //MeshFilter mf = GetComponent<MeshFilter>();
         Mesh mesh = new Mesh();
         mf.mesh = mesh;
-        Material mat = Resources.Load("Materials/Material Line", typeof(Material)) as Material;
+        //Material mat = Resources.Load("Materials/Material Line", typeof(Material)) as Material;
+        
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         //MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.material = mat;
-        mr.material.color= new Color(1, 1, 0.8f, 0.5f);
+        //mr.material.color= new Color(1, 1, 0.8f, 0.5f);
 
 
 
         //Vertices
         Vector3[] vertices = new Vector3[4] {
-            new Vector3(0,0,1),
-            new Vector3(width,0,1),
-            new Vector3(width,height,1),
-            new Vector3(0,height,1)
+            new Vector3(0,-0.5f*height,1),
+            new Vector3(width,-2*height,1),
+            new Vector3(width,2*height,1),
+            new Vector3(0,0.5f*height,1)
         };
 
         //Triangle
@@ -37,7 +40,8 @@ public class CreatePoligon : MonoBehaviour {
 
         //UV
         Vector2[] uv = new Vector2[4] {
-             new Vector2(0.45f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.45f,0.5f)
+             //new Vector2(0.45f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.55f,0.5f),new Vector2(0.45f,0.5f)
+             new Vector2(0,0.5f),new Vector2(0.5f,0.5f),new Vector2(0.5f,0.5f),new Vector2(0,0.5f)
         };
 
         mesh.vertices = vertices;
