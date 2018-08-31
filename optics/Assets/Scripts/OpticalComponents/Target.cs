@@ -1,8 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Target : OpticalComponent {
+
+    public float CollectedIntensity;
+    public float TargetIntensity;
+
+    public GameObject Shine;
+
+    public void ResetTarget()
+    {
+        CollectedIntensity = 0;
+    }
 
     override public float Collision2(LightRay lr)
     {
@@ -49,6 +60,17 @@ public class Target : OpticalComponent {
         lr.isVisible = false;
         lr.gameObject.SetActive(false);
 
+        CollectedIntensity += r.Intensity;
+    }
 
+
+    override public void Update()
+    {
+        base.Update();
+        Color c = Shine.GetComponent<Image>().color;
+        float I = Mathf.Sqrt( Mathf.Clamp01((CollectedIntensity / TargetIntensity)));
+
+        c.a = I * (0.6f + 0.4f * Mathf.Cos(1.5f*Mathf.PI * Time.time));
+        Shine.GetComponent<Image>().color = c;
     }
 }

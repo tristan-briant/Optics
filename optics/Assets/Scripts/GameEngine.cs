@@ -6,6 +6,8 @@ public class GameEngine : MonoBehaviour {
 
     public LightSource[] LightSources;
     public OpticalComponent[] OpticalComponents;
+    public Target[] Targets;
+
     public Transform Rays;
 
     public float ll;
@@ -13,6 +15,7 @@ public class GameEngine : MonoBehaviour {
 	void Start () {
         LightSources = FindObjectsOfType<LightSource>();
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
+        Targets = FindObjectsOfType<Target>();
         Rays = GameObject.Find("Rays").transform;
 
         foreach (LightSource ls in LightSources)
@@ -52,6 +55,11 @@ public class GameEngine : MonoBehaviour {
         {
             ls.EmitLight();
         }
+        foreach(Target t in Targets)
+        {
+            t.ResetTarget();
+        }
+
 
         foreach (Transform t in Rays)
         {

@@ -19,7 +19,7 @@ public class OpticalComponent : MonoBehaviour {
 
     Vector3 OldPosition;
     Quaternion OldRotation;
-    void Update()
+    virtual public void Update()
     {
         if (OldPosition == transform.localPosition && transform.localRotation == OldRotation)
             return;
