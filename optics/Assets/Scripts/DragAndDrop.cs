@@ -21,15 +21,23 @@ public class DragAndDrop : MonoBehaviour {
         //renderer.material.color = originalColor;
     }
 
+    Vector3 Offset;
     void OnMouseDown()
     {
         distance =  Vector3.Distance(transform.position, Camera.main.transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 rayPoint = ray.GetPoint(distance);
+        Offset = transform.position - rayPoint;
+   
         dragging = true;
+
+        transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass / 10;
     }
     
     void OnMouseUp()
     {
         dragging = false;
+        transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass * 10;
     }
 
     void OnMouseDrag(){
@@ -47,13 +55,31 @@ public class DragAndDrop : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 rayPoint = ray.GetPoint(distance);
 
-            float z = transform.localPosition.z; // Conserve le z de l'objet
+            Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
 
-            transform.position = rayPoint;
+            if (rb)
+            {
+                Vector2 f=Vector2.zero;
+                f.x =  rayPoint.x + Offset.x - transform.position.x;
+                f.y =  rayPoint.y + Offset.y - transform.position.y;
 
-            Vector3 locPos = transform.localPosition;
-            locPos.z = z;
-            transform.localPosition = locPos;
+
+                transform.GetComponent<Rigidbody2D>().AddForce(f);
+
+            }
+            else
+            {
+                float z = transform.localPosition.z; // Conserve le z de l'objet
+
+                transform.position = rayPoint + Offset;
+
+                Vector3 locPos = transform.localPosition;
+
+                
+
+                locPos.z = z;
+                transform.localPosition = locPos;
+            }
         }
     }
 }

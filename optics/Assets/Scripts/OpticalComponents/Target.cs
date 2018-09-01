@@ -9,6 +9,9 @@ public class Target : OpticalComponent {
     public float TargetIntensity;
 
     public GameObject Shine;
+    public GameObject ScoreText;
+
+    float score=0, scoreSpeed=0.5f;
 
     public void ResetTarget()
     {
@@ -68,9 +71,24 @@ public class Target : OpticalComponent {
     {
         base.Update();
         Color c = Shine.GetComponent<Image>().color;
-        float I = Mathf.Sqrt( Mathf.Clamp01((CollectedIntensity / TargetIntensity)));
+        float I =  Mathf.Clamp01((CollectedIntensity / TargetIntensity));
 
-        c.a = I * (0.6f + 0.4f * Mathf.Cos(1.5f*Mathf.PI * Time.time));
+        if (score < I)
+        {
+            score += Time.deltaTime * scoreSpeed;
+            if (score > I) score = I;
+        }
+        else if (score > I)
+        {
+            score -= Time.deltaTime * scoreSpeed;
+            if (score < 0) score = 0;
+        }
+
+        
+
+        c.a = Mathf.Sqrt(score) * (0.6f + 0.4f * Mathf.Cos(1.5f*Mathf.PI * Time.time));
         Shine.GetComponent<Image>().color = c;
+        ScoreText.GetComponent<Text>().text = Mathf.RoundToInt(score * 100) + "%";
+        ScoreText.GetComponent<Text>().fontSize= (int) (20+40*score);
     }
 }
