@@ -58,10 +58,10 @@ public class Target : OpticalComponent {
         r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
         r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
 
-        Transform nextRay = r.transform.GetChild(0);
+        /*Transform nextRay = r.transform.GetChild(0);
         LightRay lr = nextRay.GetComponent<LightRay>();
         lr.isVisible = false;
-        lr.gameObject.SetActive(false);
+        lr.gameObject.SetActive(false);*/
 
         CollectedIntensity += r.Intensity;
     }

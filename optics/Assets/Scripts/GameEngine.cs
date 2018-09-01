@@ -7,21 +7,49 @@ public class GameEngine : MonoBehaviour {
     public LightSource[] LightSources;
     public OpticalComponent[] OpticalComponents;
     public Target[] Targets;
+    public int NRaysMax=10000;
 
     public Transform Rays;
+    public Transform RaysReserve;
+    public int DepthMax = 10;
+
 
     public float ll;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         LightSources = FindObjectsOfType<LightSource>();
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
         Rays = GameObject.Find("Rays").transform;
+        RaysReserve = GameObject.Find("RaysReserve").transform;
 
         foreach (LightSource ls in LightSources)
         {
-            ls.InitializeSource();
+            //ls.InitializeSource();
         }
+
+        foreach (OpticalComponent op in OpticalComponents)
+        {
+            op.DepthMax = DepthMax;
+            op.Rays = Rays;
+            op.RaysReserve = RaysReserve;
+        }
+
+            for (int i = 0; i < NRaysMax; i++)
+        {
+
+            GameObject ray = new GameObject("Ray");
+            ray.transform.SetParent(RaysReserve);
+            ray.transform.localScale = Vector3.one;
+            ray.transform.localPosition = Vector3.zero;
+
+            LightRay r = ray.AddComponent<LightRay>();
+
+            r.Initiliaze();
+            r.gameObject.SetActive(false);
+        }
+
     }
 
     // Update is called once per frame
@@ -30,7 +58,7 @@ public class GameEngine : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
-        if (i++ == 2) { i = 0; } else return;
+        //if (i++ == 2) { i = 0; } else return;
 
         bool update = false;
         foreach (LightSource ls in LightSources)
@@ -50,6 +78,8 @@ public class GameEngine : MonoBehaviour {
             }
         }
         if (!update) return;
+
+        ResetLightRay();
 
         foreach (LightSource ls in LightSources)
         {
@@ -90,9 +120,6 @@ public class GameEngine : MonoBehaviour {
                 lmin = l;
                 opCollision = op;
             }
-
-            
-
         }
 
         if (lmin > 0)
@@ -115,5 +142,15 @@ public class GameEngine : MonoBehaviour {
 
         ll = lmin;
         return false;
+    }
+
+
+    private void ResetLightRay()
+    {
+        foreach (LightRay r in Rays.GetComponentsInChildren<LightRay>())
+        {
+            r.transform.parent = RaysReserve;
+            r.gameObject.SetActive(false);
+        }
     }
 }

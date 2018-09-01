@@ -7,79 +7,156 @@ public class DragAndDrop : MonoBehaviour {
 
     private Color mouseOverColor = Color.blue;
     private Color originalColor = Color.yellow;
-    private bool dragging = false;
+    public bool dragging = false;
+    public bool moving = false;
+    public bool rotating = false;
+
     private float distance;
+    public GameObject RotationCircle;
+    public GameObject Handle;
+    public bool selected=false;
+
+    float PressedTime;
+    const float ClickDuration = 0.1f; // maximum click duration 
+    Rigidbody2D rb;
 
 
-    void OnMouseEnter()
+    Vector3 PositionOffset;
+    Vector3 InitialPos;
+    float angleOffset;
+
+    private void Start()
     {
-       // renderer.material.color = mouseOverColor;
+        rb = transform.GetComponent<Rigidbody2D>();
     }
 
-    void OnMouseExit()
-    {
-        //renderer.material.color = originalColor;
-    }
-
-    Vector3 Offset;
     void OnMouseDown()
     {
-        distance =  Vector3.Distance(transform.position, Camera.main.transform.position);
+        distance = Vector3.Distance(transform.position, Camera.main.transform.position);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Vector3 rayPoint = ray.GetPoint(distance);
-        Offset = transform.position - rayPoint;
-   
-        dragging = true;
+        InitialPos = transform.position;
+        PositionOffset = rayPoint - transform.position;
+        angleOffset = AngleFromXY(PositionOffset.x, PositionOffset.y)- transform.localEulerAngles.z / 180.0f * Mathf.PI;
+
 
         transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass / 10;
+        PressedTime = Time.time;
     }
-    
+
     void OnMouseUp()
     {
+        if (Time.time < PressedTime + ClickDuration) // C'est un click !
+        {
+            OnMouseClick();
+        }
+        else
+        {
+           OnMouseEndDrag();
+        }
+
+    }
+
+    void OnMouseClick()
+    {
+        selected = !selected;
+        if (Handle) Handle.SetActive(selected);
+    }
+
+    private void OnMouseDrag()
+    {
+        if (!dragging && Time.time > PressedTime + ClickDuration)
+        {
+            OnMouseBeginDrag();
+        }
+    }
+
+    private void OnMouseBeginDrag()
+    {
+        dragging = true;
+        
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        if (hit.collider != null && hit.collider.gameObject == RotationCircle)
+        {
+            rotating = true;
+            rb.constraints = RigidbodyConstraints2D.None;
+        }
+        else
+        {
+            moving = true;
+        }
+    }
+
+    void OnMouseEndDrag()
+    {
+        moving = false;
+        rotating = false;
         dragging = false;
         transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass * 10;
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
-    void OnMouseDrag(){
-       /* Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 rayPoint = ray.GetPoint(distance);
-        //rayPoint.z = 0;//transform.position.z;
-        transform.position = rayPoint;
-        //Debug.Log("drag!!");*/
+
+
+    float AngleFromXY(float x, float y)
+    {
+        float angle= Mathf.Atan2(y, x);
+        return angle;
     }
 
+
+    public float angleAct;
+    public float angleSet;
     void Update()
     {
-        if (dragging)
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 rayPoint = ray.GetPoint(distance);
+
+        Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
+
+
+        if (rotating)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 rayPoint = ray.GetPoint(distance);
+            Vector2 f;
+            f.x = rayPoint.x - transform.position.x;
+            f.y = rayPoint.y - transform.position.y;
 
-            Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
+            angleAct = transform.localEulerAngles.z / 180.0f * Mathf.PI;
+            angleSet = AngleFromXY(f.x, f.y)-angleOffset;
+            if (angleSet > Mathf.PI) angleSet -= 2 * Mathf.PI;
+            if (angleSet < -Mathf.PI) angleSet += 2 * Mathf.PI;
 
+            float angle = angleSet-angleAct;
+            if (angle > Mathf.PI) angle -= 2 * Mathf.PI;
+            if (angle < -Mathf.PI) angle += 2 * Mathf.PI;
+
+            rb.AddTorque((angle)/10.0f);
+           
+        }
+
+        if (moving)
+        {
+            
             if (rb)
             {
-                Vector2 f=Vector2.zero;
-                f.x =  rayPoint.x + Offset.x - transform.position.x;
-                f.y =  rayPoint.y + Offset.y - transform.position.y;
-
+                Vector2 f;
+                if (!selected)
+                {
+                    f.x = rayPoint.x - PositionOffset.x - transform.position.x;
+                    f.y = rayPoint.y - PositionOffset.y - transform.position.y;
+                }
+                else
+                {
+                    const float r = 0.3f;
+                    f.x = (r * (rayPoint.x - PositionOffset.x) + (1 - r) * InitialPos.x) - transform.position.x;
+                    f.y = (r * (rayPoint.y - PositionOffset.y) + (1 - r) * InitialPos.y) - transform.position.y;
+                }
 
                 transform.GetComponent<Rigidbody2D>().AddForce(f);
 
             }
-            else
-            {
-                float z = transform.localPosition.z; // Conserve le z de l'objet
-
-                transform.position = rayPoint + Offset;
-
-                Vector3 locPos = transform.localPosition;
-
-                
-
-                locPos.z = z;
-                transform.localPosition = locPos;
-            }
+            
         }
     }
 }

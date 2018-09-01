@@ -10,9 +10,14 @@ public class OpticalComponent : MonoBehaviour {
     public float radius=0.5f;
     public float cos, sin, param; // vecteur directeur
     public bool hasChanged = true;
+    public Transform Rays;
+    public Transform RaysReserve;
+    public int DepthMax = 10;
 
     private void Start()
     {
+        //Rays = GameObject.Find("Rays").transform;
+        //RaysReserve = GameObject.Find("RaysReserve").transform;
         ComputeDir();
         hasChanged = true;
     }
@@ -96,10 +101,19 @@ public class OpticalComponent : MonoBehaviour {
 
         return l1;
     }
-    
-    public virtual void Deflect(LightRay r)
-    {
-        
-    }
 
+    public virtual void Deflect(LightRay r) { }
+
+    protected LightRay NewRayLightChild(LightRay lr)
+    {
+        if (lr.depth>=DepthMax || RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
+
+        // Preparation du rayon
+        LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
+        r.transform.parent = lr.transform;
+        r.gameObject.SetActive(true);
+        r.depth = lr.depth+1;
+        return r;
+    }
+   
 }

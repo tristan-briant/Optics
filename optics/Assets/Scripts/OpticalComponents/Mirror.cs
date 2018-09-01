@@ -17,8 +17,11 @@ public class Mirror : OpticalComponent {
         r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
         r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
-        Transform nextRay = r.transform.GetChild(0);
-        LightRay lr = nextRay.GetComponent<LightRay>();
+        //Transform nextRay = r.transform.GetChild(0);
+        //LightRay lr = nextRay.GetComponent<LightRay>();
+        LightRay lr = NewRayLightChild(r);
+        if (lr == null) return;
+
         lr.isVisible = true;
         lr.gameObject.SetActive(true);
 

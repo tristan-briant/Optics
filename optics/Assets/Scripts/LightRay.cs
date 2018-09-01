@@ -8,16 +8,15 @@ public class LightRay : MonoBehaviour {
     public float Direction1, Direction2;
     public float Length1,Length2;
     public Color Col;
-    public float Width;
-    public float Divergence;
+    //public float Width;
+    //public float Divergence;
     public float Intensity=0.05f;
     public bool isVisible;
     public bool HasWaist;
-    public GameObject cross;
     Vector3 WaistPos;
-    LineRenderer lr;
     public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2; // vecteur directeur, proj et parametre
     public OpticalComponent Origin;
+    public int depth;
 
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
 

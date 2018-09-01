@@ -61,6 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Alignment.cs" />
+    <Compile Include="Assets\FixedRotation.cs" />
+    <Compile Include="Assets\LameSemi.cs" />
     <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
     <Compile Include="Assets\Scripts\Debug\polygon.cs" />
     <Compile Include="Assets\Scripts\DragAndDrop.cs" />
