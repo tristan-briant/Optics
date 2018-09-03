@@ -13,7 +13,7 @@ public class LightRay : MonoBehaviour {
     public float Intensity=0.05f;
     public bool isVisible;
     public bool HasWaist;
-    Vector3 WaistPos;
+    //Vector3 WaistPos;
     public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2; // vecteur directeur, proj et parametre
     public OpticalComponent Origin;
     public OpticalComponent End;
@@ -21,7 +21,7 @@ public class LightRay : MonoBehaviour {
 
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
 
-    Mesh mesh;
+    //Mesh mesh;
     void InitilizedMesh()
     {
         MeshFilter mf = gameObject.AddComponent<MeshFilter>();
@@ -33,12 +33,12 @@ public class LightRay : MonoBehaviour {
         mr.material.color = Col;
         mr.sortingLayerName="Rays";
 
-        Mesh m = new Mesh();
-
- 
-
-        m.vertices = new Vector3[6];
-        m.triangles = new int[6] { 0, 1, 2, 3, 4, 5 }; ;
+        Mesh m = new Mesh
+        {
+            vertices = new Vector3[6],
+            triangles = new int[6] { 0, 1, 2, 3, 4, 5 }
+        };
+        
         m.normals = new Vector3[6] {
                 -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward
             };
@@ -46,7 +46,7 @@ public class LightRay : MonoBehaviour {
                  new Vector2(0f,0f),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(1f,0f),new Vector2(0f,0f),new Vector2(1f,0f)
             }; 
 
-        GetComponent<MeshFilter>().mesh=m;
+        mf.mesh=m;
 
     }
 
@@ -79,9 +79,9 @@ public class LightRay : MonoBehaviour {
         param2 = -StartPosition2.x * sin2 + StartPosition2.y * cos2;
     }
 
-    public bool colimated;
+    //public bool colimated;
 
-    public float p2start;
+    //public float p2start;
     void DrawMesh() {
 
         Vector3[] vertices;
@@ -92,15 +92,12 @@ public class LightRay : MonoBehaviour {
         Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(cos2, sin2, 0);
 
         float p1 = param1;  
-        //float p2start = -StartPosition2.x * sin1 + StartPosition2.y * cos1;
-        p2start = -StartPosition2.x * sin1 + StartPosition2.y * cos1;
+        float p2start = -StartPosition2.x * sin1 + StartPosition2.y * cos1;
         float p2end = -EndPosition2.x * sin1 + EndPosition2.y * cos1;
 
-        colimated = false;
         if (p2start<p1 && p2end> p1 || p2start > p1 && p2end<p1)
         {
-            HasWaist = true;
-            WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
+            Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
             float cs1, cs2, ce1, ce2; //Couleur des vertex ( Shader uv en 1/u )
 
@@ -131,8 +128,6 @@ public class LightRay : MonoBehaviour {
         }
         else
         {
-            HasWaist = false;
-
             float cs1, cs2, ce1, ce2; //Couleur des vertex ( Shader uv en 1/u )
 
             float div = Direction2 - Direction1;
@@ -145,7 +140,7 @@ public class LightRay : MonoBehaviour {
 
             if (p > EPSILON)
             {
-                WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
+                Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
                 cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;
                 cs2 = Vector3.Distance(StartPosition2, WaistPos) * div;
@@ -153,8 +148,7 @@ public class LightRay : MonoBehaviour {
                 ce2 = Vector3.Distance(EndPosition2, WaistPos) * div;
             }
             else
-            {
-                colimated = true;
+            {   // Faisceau collimaté
                 float cc = (p2start - p1);
                 if (cc < 0) cc = -cc;
                 cs1 = cs2 = ce1 = ce2 = cc / Intensity;

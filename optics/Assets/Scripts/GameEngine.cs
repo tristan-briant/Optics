@@ -181,6 +181,11 @@ public class GameEngine : MonoBehaviour {
 
     private void UpdateLightRays1OP(OpticalComponent op)
     {
+        foreach (Target t in Targets)
+        {
+            t.ResetTarget();
+        }
+
         foreach (Transform t in Rays)
         {
             LightRay lr = t.GetComponent<LightRay>();

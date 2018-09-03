@@ -9,16 +9,6 @@ public class Alignment : MonoBehaviour {
     public GameObject Target;
     
 
-    void OnMouseEnter()
-    {
-        // renderer.material.color = mouseOverColor;
-    }
-
-    void OnMouseExit()
-    {
-        //renderer.material.color = originalColor;
-    }
-
     Vector3 Offset;
     void OnMouseDown()
     {

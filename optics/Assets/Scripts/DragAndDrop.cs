@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class DragAndDrop : MonoBehaviour {
 
-    private Color mouseOverColor = Color.blue;
-    private Color originalColor = Color.yellow;
+    
     public bool dragging = false;
     public bool moving = false;
     public bool rotating = false;
