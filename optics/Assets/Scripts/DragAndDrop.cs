@@ -40,7 +40,8 @@ public class DragAndDrop : MonoBehaviour {
         angleOffset = AngleFromXY(PositionOffset.x, PositionOffset.y)- transform.localEulerAngles.z / 180.0f * Mathf.PI;
 
 
-        transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass / 10;
+        //transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass / 10;
+
         PressedTime = Time.time;
     }
 
@@ -84,6 +85,7 @@ public class DragAndDrop : MonoBehaviour {
         else
         {
             moving = true;
+            transform.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 
@@ -92,9 +94,10 @@ public class DragAndDrop : MonoBehaviour {
         moving = false;
         rotating = false;
         dragging = false;
-        transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass * 10;
+        //transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass * 10;
 
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
 
@@ -123,15 +126,17 @@ public class DragAndDrop : MonoBehaviour {
             f.y = rayPoint.y - transform.position.y;
 
             angleAct = transform.localEulerAngles.z / 180.0f * Mathf.PI;
-            angleSet = AngleFromXY(f.x, f.y)-angleOffset;
+            //angleAct = GetComponent<OpticalComponent>().angle;
+            angleSet = (AngleFromXY(f.x, f.y)-angleOffset);
             if (angleSet > Mathf.PI) angleSet -= 2 * Mathf.PI;
             if (angleSet < -Mathf.PI) angleSet += 2 * Mathf.PI;
 
+            //angleSet = angleSet * 0.2f;
             float angle = angleSet-angleAct;
             if (angle > Mathf.PI) angle -= 2 * Mathf.PI;
             if (angle < -Mathf.PI) angle += 2 * Mathf.PI;
 
-            rb.AddTorque((angle)/10.0f);
+            rb.AddTorque((angle)*1.0f);
            
         }
 
@@ -153,7 +158,7 @@ public class DragAndDrop : MonoBehaviour {
                     f.y = (r * (rayPoint.y - PositionOffset.y) + (1 - r) * InitialPos.y) - transform.position.y;
                 }
 
-                transform.GetComponent<Rigidbody2D>().AddForce(f);
+                transform.GetComponent<Rigidbody2D>().AddForce(10*f);
 
             }
             

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Mirror : OpticalComponent {
 
+
     override public void Deflect(LightRay r)
     {
 

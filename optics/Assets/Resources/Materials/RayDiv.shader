@@ -14,6 +14,9 @@ Shader "Custom/RayDiv" {
     {
 		Cull Off
 		Blend One One
+		Lighting Off
+        ZWrite Off
+        Fog { Mode Off }
 		//Blend One OneMinusSrcAlpha
 
 		 Tags
@@ -72,7 +75,6 @@ Shader "Custom/RayDiv" {
             fixed4 frag (v2f i) : SV_Target
             {
 				float4 c=_Color;
-				//c.a=0.5f;
 				float a=i.uv.x ;
 				if(a<0.1f) a=0.1f;
 				c.rgb*=c.a / a;

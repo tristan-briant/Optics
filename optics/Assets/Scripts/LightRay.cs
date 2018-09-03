@@ -16,6 +16,7 @@ public class LightRay : MonoBehaviour {
     Vector3 WaistPos;
     public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2; // vecteur directeur, proj et parametre
     public OpticalComponent Origin;
+    public OpticalComponent End;
     public int depth;
 
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
