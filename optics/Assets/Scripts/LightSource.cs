@@ -9,8 +9,8 @@ public class LightSource : MonoBehaviour
 
     const int MaxDepth = 10;
 
-    Transform Rays;
-    Transform RaysReserve;
+    public Transform Rays;
+    public Transform RaysReserve;
 
     public int N = 50;
     public float Div = 0;
@@ -41,8 +41,8 @@ public class LightSource : MonoBehaviour
 
     public void InitializeSource()
     {
-        Rays = GameObject.Find("Rays").transform;
-        RaysReserve = GameObject.Find("RaysReserve").transform;
+        //Rays = GameObject.Find("Rays").transform;
+        //RaysReserve = GameObject.Find("RaysReserve").transform;
 
 
         LightRays = new LightRay[N];

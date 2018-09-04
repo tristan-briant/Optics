@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class GameEngine : MonoBehaviour {
 
     public LightSource[] LightSources;
     public OpticalComponent[] OpticalComponents;
     public Target[] Targets;
-    public int NRaysMax=5;
+    public int NRaysMax=1000;
     public float LengthMax=15.0f;
 
     public Transform Rays;
     public Transform RaysReserve;
     public int DepthMax = 10;
+    
 
     void Start()
     {
@@ -20,39 +22,42 @@ public class GameEngine : MonoBehaviour {
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
         Rays = GameObject.Find("Rays").transform;
-        RaysReserve = GameObject.Find("RaysReserve").transform;
+        RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
 
         for (int i = 0; i < NRaysMax; i++)
         {
-
             GameObject ray = new GameObject("Ray");
             ray.transform.SetParent(RaysReserve);
             ray.transform.localScale = Vector3.one;
             ray.transform.localPosition = Vector3.zero;
 
             LightRay r = ray.AddComponent<LightRay>();
-
             r.Initiliaze();
         }
 
         foreach (LightSource ls in LightSources)
         {
+            ls.Rays = Rays;
+            ls.RaysReserve = RaysReserve;
             ls.InitializeSource();
         }
-
-        RaysReserve.gameObject.SetActive(false);
-
+        
+        Transform PlayGround = GameObject.Find("Playground").transform;
         foreach (OpticalComponent op in OpticalComponents)
         {
             op.DepthMax = DepthMax;
             op.Rays = Rays;
             op.RaysReserve = RaysReserve;
+            op.PlayGround = PlayGround;
         }
+        RaysReserve.gameObject.SetActive(false);
 
     }
 
     int i = 0;
     void LateUpdate() {
+        //Profiler.BeginSample("MyPieceOfCode");
+
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
@@ -72,24 +77,22 @@ public class GameEngine : MonoBehaviour {
         if (update)
         {
             UpdateAllRays();
-            return;
         }
-
-        OpticalComponent opUpdate=null;
 
         foreach (OpticalComponent op in OpticalComponents)
         {
             if (op.hasChanged)
             {
+                UpdateLightRays1OP(op);
                 update = true;
-                opUpdate = op;
-                break;
             }
         }
+
         if (update) {
-            UpdateLightRays1OP(opUpdate);
-            opUpdate.hasChanged = false;
+            foreach (Target t in Targets) t.ComputeScore();
         }
+
+        //Profiler.EndSample();
     }
 
     private void UpdateAllRays()
@@ -98,11 +101,6 @@ public class GameEngine : MonoBehaviour {
         foreach (LightSource ls in LightSources)
         {
             ls.EmitLight();
-        }
-
-        foreach (Target t in Targets)
-        {
-            t.ResetTarget();
         }
 
         foreach (Transform t in Rays)
@@ -114,7 +112,8 @@ public class GameEngine : MonoBehaviour {
 
         foreach (LightSource ls in LightSources) ls.hasChanged = false;
         foreach (OpticalComponent op in OpticalComponents) op.hasChanged = false;
-
+        foreach (Target t in Targets) t.ComputeScore();
+        
     }
 
 
@@ -140,19 +139,20 @@ public class GameEngine : MonoBehaviour {
         {
             lr.End = opCollision;
             opCollision.Deflect(lr);
+
             foreach (Transform lchild in lr.transform)
-            {
                 Collision(lchild.GetComponent<LightRay>());
-            }
+
         }
-        else
+        else  // Si on touche personne
         {
             lr.Length1 = lr.Length2 = LengthMax;
+            lr.End = null;
 
+            // On retire tous les rayon enfants
             while (lr.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
-            {
                 ResetLightRay(lr.transform.GetChild(0).GetComponent<LightRay>());
-            }
+            
         }
 
         return false;
@@ -172,16 +172,13 @@ public class GameEngine : MonoBehaviour {
 
     private void UpdateLightRays1OP(OpticalComponent op)
     {
-        foreach (Target t in Targets)
-        {
-            t.ResetTarget();
-        }
-
         foreach (Transform t in Rays)
         {
             LightRay lr = t.GetComponent<LightRay>();
             Update1LightRay1OP(lr,op);
         }
+
+        op.hasChanged = false;
 
     }
 
@@ -203,30 +200,30 @@ public class GameEngine : MonoBehaviour {
 
     bool Collision1OP(LightRay lr,OpticalComponent op) // test la collision avec 1 optical component
     {
-        if (lr.End == op ) return true;  // si l'op touchait le rayon, on l'update
+        if (lr.End == op) return true;  // si l'op touchait le rayon, on l'update
         float l = op.Collision2(lr);
-        if ( l>0 ) return true; // si l'op touche le rayon on l'update
+        if (l > 0) return true; // si l'op touche le rayon on l'update
         return false;
     }
 
     private void ResetLightRay(LightRay ray) // remove child recursively
     {
 
-        while (ray.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
+        /*while (ray.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
         {
             ResetLightRay(ray.transform.GetChild(0).GetComponent<LightRay>());
         }
         ray.transform.parent = RaysReserve;
         ray.End = null;
-        ray.Origin = null;
+        ray.Origin = null;*/
 
 
-        /*foreach (LightRay r in ray.GetComponentsInChildren<LightRay>())
+        foreach (LightRay r in ray.GetComponentsInChildren<LightRay>())
         {
             r.transform.parent = RaysReserve;
             r.End = null;
             r.Origin = null;
-        }*/
+        }
     }
 
 }

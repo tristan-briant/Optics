@@ -13,28 +13,21 @@ public class OpticalComponent : MonoBehaviour {
     public Transform Rays;
     public Transform RaysReserve;
     public int DepthMax = 10;
+    public Transform PlayGround;
 
-    private void Start()
-    {
-        //Rays = GameObject.Find("Rays").transform;
-        //RaysReserve = GameObject.Find("RaysReserve").transform;
-        ComputeDir();
-        hasChanged = true;
-    }
 
     Vector3 OldPosition;
     Quaternion OldRotation;
     virtual public void Update()
     {
-        if (OldPosition == transform.localPosition && transform.localRotation == OldRotation)
-            return;
-      
-        ComputeDir();
-        OldPosition = transform.localPosition;
-        OldRotation = transform.localRotation;
-        hasChanged = true;
- 
-    }
+        if (OldPosition != transform.position || transform.rotation != OldRotation)
+        {
+            ComputeDir();
+            OldPosition = transform.position;
+            OldRotation = transform.rotation;
+            hasChanged = true;
+        }
+     }
 
     public bool FastCollision(LightRay lr)
     {
@@ -50,10 +43,11 @@ public class OpticalComponent : MonoBehaviour {
 
     public void ComputeDir()
     {
-        x = transform.localPosition.x;
-        y = transform.localPosition.y;
+        Vector3 pos = PlayGround.InverseTransformPoint(transform.position); // Position relative par rapport au playground
+        x = pos.x;
+        y = pos.y;
 
-        angle = (transform.localRotation.eulerAngles.z + 90) * Mathf.PI / 180f;
+        angle = (transform.rotation.eulerAngles.z + 90) * Mathf.PI / 180f;
         cos = Mathf.Cos(angle);
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;

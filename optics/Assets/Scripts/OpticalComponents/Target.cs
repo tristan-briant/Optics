@@ -60,13 +60,7 @@ public class Target : OpticalComponent {
 
         r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
         r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
-
-        /*Transform nextRay = r.transform.GetChild(0);
-        LightRay lr = nextRay.GetComponent<LightRay>();
-        lr.isVisible = false;
-        lr.gameObject.SetActive(false);*/
-
-        CollectedIntensity += r.Intensity;
+       
     }
 
 
@@ -87,11 +81,23 @@ public class Target : OpticalComponent {
             if (score < 0) score = 0;
         }
 
-        
-
         c.a = Mathf.Sqrt(score) * (0.6f + 0.4f * Mathf.Cos(1.5f*Mathf.PI * Time.time));
         Shine.GetComponent<Image>().color = c;
         ScoreText.GetComponent<Text>().text = Mathf.RoundToInt(score * 100) + "%";
         ScoreText.GetComponent<Text>().fontSize= (int) (20+40*score);
     }
+
+
+    public void ComputeScore()
+    {
+        CollectedIntensity = 0;
+        foreach (LightRay lr in Rays.GetComponentsInChildren<LightRay>())
+        {
+            if (lr.End == this)
+            {
+                CollectedIntensity += lr.Intensity;
+            }
+        }
+    }
+
 }
