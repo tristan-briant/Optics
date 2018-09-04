@@ -107,10 +107,19 @@ public class LightRay : MonoBehaviour {
             if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
             div = div / Intensity;
 
-            cs1 = Vector3.Distance(StartPosition1,WaistPos) * div ; 
-            cs2 = Vector3.Distance(StartPosition2,WaistPos) * div; 
-            ce1 = Vector3.Distance(EndPosition1,WaistPos) * div; 
-            ce2 = Vector3.Distance(EndPosition2,WaistPos) * div;
+            cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * div;
+            if (cs1 < 0) cs1 = -cs1;
+            cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * div;
+            if (cs2 < 0) cs2 = -cs2;
+            ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * div;
+            if (ce1 < 0) ce1 = -ce1;
+            ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * div;
+            if (ce2 < 0) ce2 = -ce2;
+
+            //cs1 = Vector3.Distance(StartPosition1,WaistPos) * div ; 
+            //cs2 = Vector3.Distance(StartPosition2,WaistPos) * div; 
+            //ce1 = Vector3.Distance(EndPosition1,WaistPos) * div; 
+            //ce2 = Vector3.Distance(EndPosition2,WaistPos) * div;
 
             vertices = new Vector3[6] {
                 StartPosition1,
@@ -142,10 +151,19 @@ public class LightRay : MonoBehaviour {
             {
                 Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
-                cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;
-                cs2 = Vector3.Distance(StartPosition2, WaistPos) * div;
-                ce1 = Vector3.Distance(EndPosition1, WaistPos) * div;
-                ce2 = Vector3.Distance(EndPosition2, WaistPos) * div;
+                cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * div;
+                if (cs1 < 0) cs1 = -cs1;
+                cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * div;
+                if (cs2 < 0) cs2 = -cs2;
+                ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * div;
+                if (ce1 < 0) ce1 = -ce1;
+                ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * div;
+                if (ce2 < 0) ce2 = -ce2;
+                
+                //cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;
+                //cs2 = Vector3.Distance(StartPosition2, WaistPos) * div;
+                //ce1 = Vector3.Distance(EndPosition1, WaistPos) * div;
+                //ce2 = Vector3.Distance(EndPosition2, WaistPos) * div;
             }
             else
             {   // Faisceau collimaté
@@ -180,5 +198,6 @@ public class LightRay : MonoBehaviour {
 
     }
 
-  
+
+    
 }

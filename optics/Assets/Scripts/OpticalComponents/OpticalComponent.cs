@@ -36,6 +36,18 @@ public class OpticalComponent : MonoBehaviour {
  
     }
 
+    public bool FastCollision(LightRay lr)
+    {
+        float p = -lr.sin1 * x + lr.cos1 * y;
+        if (p > lr.param1 + radius || p < lr.param1 - radius)
+            return false;
+
+        p = lr.cos1 * (x - lr.StartPosition1.x) + lr.sin1 * (y - lr.StartPosition1.y);
+        if (p < -radius)
+            return false;
+        return true;
+    }
+
     public void ComputeDir()
     {
         x = transform.localPosition.x;
@@ -54,6 +66,7 @@ public class OpticalComponent : MonoBehaviour {
         float cosr, sinr, xr, yr, br;
         if (i == 1)
         {
+            if (FastCollision(lr) == false) return -1;  // Pas de collision
             cosr = lr.cos1;
             sinr = lr.sin1;
             xr = lr.StartPosition1.x;
@@ -111,9 +124,18 @@ public class OpticalComponent : MonoBehaviour {
         // Preparation du rayon
         LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
         r.transform.parent = lr.transform;
-        r.gameObject.SetActive(true);
         r.depth = lr.depth+1;
         return r;
     }
-   
+
+    protected void FreeLightRay(LightRay ray) // remove child recursively
+    {
+        foreach (LightRay r in ray.GetComponentsInChildren<LightRay>())
+        {
+            r.transform.parent = RaysReserve;
+            r.End = null;
+            r.Origin = null;
+        }
+    }
+
 }

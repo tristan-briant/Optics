@@ -24,8 +24,6 @@ public class LightSource : MonoBehaviour
 
     private void Start()
     {
-        Rays = GameObject.Find("Rays").transform;
-        RaysReserve = GameObject.Find("RaysReserve").transform;
     }
 
     Vector3 OldPosition;
@@ -41,51 +39,63 @@ public class LightSource : MonoBehaviour
 
     }
 
-
-
-    /*public void InitializeSource()
+    public void InitializeSource()
     {
-        hasChanged = true;
-        Vector3 pos = transform.localPosition;
+        Rays = GameObject.Find("Rays").transform;
+        RaysReserve = GameObject.Find("RaysReserve").transform;
 
-        Rays = transform.parent.Find("Rays");
+
         LightRays = new LightRay[N];
+        for (int i = 0; i < N; i++)
+        {
 
-        for (int i = 0; i < N; i++) {
+            if (RaysReserve.childCount == 0) return; // Plus de rayons disponible !!
 
-            GameObject ray = new GameObject("Ray");
-            ray.transform.SetParent(Rays);
-            ray.transform.localScale = Vector3.one;
-            ray.transform.localPosition = Vector3.zero;
 
-            LightRay r =ray.AddComponent<LightRay>();
-
-            r.Initiliaze();
- 
-            GameObject prev = ray;
-            for (int k = 0; k < MaxDepth; k++)
-            {
-                GameObject rr = new GameObject("Ray");
-                rr.transform.SetParent(prev.transform);
-                rr.transform.localScale = Vector3.one;
-                rr.transform.localPosition = Vector3.zero;
-
-                LightRay lr = rr.AddComponent<LightRay>();
-                lr.Initiliaze();
-                lr.isVisible = false;
-                lr.gameObject.SetActive(false);
-                prev = rr;
-            }
+            // Preparation du rayon
+            LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
+            r.transform.parent = Rays;
             r.Origin = null;
-            LightRays[i] = r;
+            r.depth = 0;
 
-
+            LightRays[i]=r;
         }
-    }*/
+
+    }
+
+ 
 
     public void EmitLight()
     {
         float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
+        Vector3 pos = transform.localPosition;
+
+        for (int i = 0; i < N; i++)
+        {
+
+            LightRay r = LightRays[i];
+
+            // Couleur et intensité
+            Color c = Color;
+            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
+            r.Col = c;
+            r.Intensity = Intensity / N;
+
+            // Calculs des positions et directions
+            float l1 = -radius * (-0.5f + i / (float)N);
+            float l2 = -radius * (-0.5f + (i + 1) / (float)N);
+
+            r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
+            r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
+
+            r.Direction1 = Div * (-0.5f + i / (float)N) + angle;
+            r.Direction2 = Div * (-0.5f + (i + 1) / (float)N) + angle;
+
+            // Précalcul de paramètres géométriques utiles pour le calcul de collision
+            r.ComputeDir();
+        }
+
+        /*float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
         Vector3 pos = transform.localPosition;
 
         for (int i = 0; i < N; i++){
@@ -98,7 +108,7 @@ public class LightSource : MonoBehaviour
             r.transform.parent = Rays;
             r.Origin = null;
             r.isVisible = true;
-            r.gameObject.SetActive(true);
+            //r.gameObject.SetActive(true);
             r.depth = 0;
 
             // Couleur et intensité
@@ -118,10 +128,10 @@ public class LightSource : MonoBehaviour
             r.Direction2 = Div * (-0.5f + (i + 1) / (float)N) + angle;
 
             r.Length1 = r.Length2 = Length;
-            
+
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();
-        }
+        }*/
 
 
 
@@ -146,9 +156,6 @@ public class LightSource : MonoBehaviour
             r.Direction2 = Div * (-0.5f + (i + 1) / (float)N) + angle;
 
             r.Length1 = r.Length2 = Length;
-
-
-            //r.Width = 0;
 
             Color c = Color;
             c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
