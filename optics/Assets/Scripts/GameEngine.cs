@@ -200,7 +200,11 @@ public class GameEngine : MonoBehaviour {
 
     bool Collision1OP(LightRay lr,OpticalComponent op) // test la collision avec 1 optical component
     {
-        if (lr.End == op) return true;  // si l'op touchait le rayon, on l'update
+        if (lr.End == op) // si l'op touchait le rayon, on l'update
+        {
+            lr.Length1=LengthMax; // On redonne une long max pour le test Fast collision 
+            return true;
+        } 
         float l = op.Collision2(lr);
         if (l > 0) return true; // si l'op touche le rayon on l'update
         return false;

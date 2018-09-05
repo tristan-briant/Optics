@@ -62,18 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Alignment.cs" />
-    <Compile Include="Assets\FixedRotation.cs" />
-    <Compile Include="Assets\LameSemi.cs" />
-    <Compile Include="Assets\RectWall.cs" />
     <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
     <Compile Include="Assets\Scripts\Debug\polygon.cs" />
     <Compile Include="Assets\Scripts\DragAndDrop.cs" />
+    <Compile Include="Assets\Scripts\FixedRotation.cs" />
     <Compile Include="Assets\Scripts\GameEngine.cs" />
     <Compile Include="Assets\Scripts\LightRay.cs" />
     <Compile Include="Assets\Scripts\LightSource.cs" />
+    <Compile Include="Assets\Scripts\OpticalComponents\LameSemi.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Lens.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Mirror.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\OpticalComponent.cs" />
+    <Compile Include="Assets\Scripts\OpticalComponents\RectWall.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Target.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Wall.cs" />
     <None Include="Assets\Resources\Materials\NewSurfaceShader.shader" />

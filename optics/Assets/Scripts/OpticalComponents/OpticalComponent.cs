@@ -36,8 +36,9 @@ public class OpticalComponent : MonoBehaviour {
             return false;
 
         p = lr.cos1 * (x - lr.StartPosition1.x) + lr.sin1 * (y - lr.StartPosition1.y);
-        if (p < -radius)
+        if (p < -radius || p > lr.Length1 + radius) 
             return false;
+
         return true;
     }
 

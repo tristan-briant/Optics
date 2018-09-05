@@ -22,7 +22,7 @@ public class DragAndDrop : MonoBehaviour {
 
     Vector3 PositionOffset;
     Vector3 InitialPos;
-    float angleOffset;
+    public float angleMouse0;
 
     private void Start()
     {
@@ -36,8 +36,8 @@ public class DragAndDrop : MonoBehaviour {
         Vector3 rayPoint = ray.GetPoint(distance);
         InitialPos = transform.position;
         PositionOffset = rayPoint - transform.position;
-        angleOffset = AngleFromXY(PositionOffset.x, PositionOffset.y)- transform.localEulerAngles.z / 180.0f * Mathf.PI;
-
+        angleMouse0 = Mathf.Atan2(PositionOffset.y, PositionOffset.x) * Mathf.Rad2Deg;
+        angleSet = transform.localEulerAngles.z ;
 
         //transform.GetComponent<Rigidbody2D>().mass = transform.GetComponent<Rigidbody2D>().mass / 10;
 
@@ -110,6 +110,7 @@ public class DragAndDrop : MonoBehaviour {
 
     public float angleAct;
     public float angleSet;
+
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -124,18 +125,17 @@ public class DragAndDrop : MonoBehaviour {
             f.x = rayPoint.x - transform.position.x;
             f.y = rayPoint.y - transform.position.y;
 
-            angleAct = transform.localEulerAngles.z / 180.0f * Mathf.PI;
-            //angleAct = GetComponent<OpticalComponent>().angle;
-            angleSet = (AngleFromXY(f.x, f.y)-angleOffset);
-            if (angleSet > Mathf.PI) angleSet -= 2 * Mathf.PI;
-            if (angleSet < -Mathf.PI) angleSet += 2 * Mathf.PI;
+            float angleMouse1 = Mathf.Atan2(f.y, f.x) * Mathf.Rad2Deg; // entre -180 et 180
+            float deltaAngle = Mathf.DeltaAngle(angleMouse0, angleMouse1);//(angleMouse1 - angleMouse0);
+            angleMouse0 = angleMouse1;
 
-            //angleSet = angleSet * 0.2f;
-            float angle = angleSet-angleAct;
-            if (angle > Mathf.PI) angle -= 2 * Mathf.PI;
-            if (angle < -Mathf.PI) angle += 2 * Mathf.PI;
+            angleSet = (angleSet + deltaAngle * 0.3f);
 
-            rb.AddTorque((angle)*1.0f);
+            angleAct = transform.localEulerAngles.z;
+
+            float angle = Mathf.DeltaAngle(angleAct, angleSet);
+    
+            rb.AddTorque(angle*0.01f);
            
         }
 
@@ -152,7 +152,11 @@ public class DragAndDrop : MonoBehaviour {
                 }
                 else
                 {
-                    const float r = 0.3f;
+                    float r;
+                    Vector3 v = rayPoint - PositionOffset - InitialPos;
+                    v.z = 0;
+
+                    r = Mathf.Clamp01(0.1f+0.2f*v.magnitude);
                     f.x = (r * (rayPoint.x - PositionOffset.x) + (1 - r) * InitialPos.x) - transform.position.x;
                     f.y = (r * (rayPoint.y - PositionOffset.y) + (1 - r) * InitialPos.y) - transform.position.y;
                 }
