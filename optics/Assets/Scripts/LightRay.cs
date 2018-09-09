@@ -14,7 +14,7 @@ public class LightRay : MonoBehaviour {
     public bool isVisible;
     public bool HasWaist;
     //Vector3 WaistPos;
-    public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2; // vecteur directeur, proj et parametre
+    public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2, div; // vecteur directeur, proj et parametre
     public OpticalComponent Origin;
     public OpticalComponent End;
     public int depth;
@@ -77,6 +77,10 @@ public class LightRay : MonoBehaviour {
         sin2 = Mathf.Sin(Direction2);
         proj2 = StartPosition2.x * cos2 + StartPosition2.y * sin2;
         param2 = -StartPosition2.x * sin2 + StartPosition2.y * cos2;
+
+        div = Direction2 - Direction1;
+        if (div < 0) div = -div;
+        if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
     }
 
     //public bool colimated;
@@ -100,20 +104,16 @@ public class LightRay : MonoBehaviour {
             Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
             float cs1, cs2, ce1, ce2; //Couleur des vertex ( Shader uv en 1/u )
-
             
-            float div = Direction2 - Direction1;
-            if (div < 0) div = -div;
-            if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
-            div = div / Intensity;
+            float Ilum = div / Intensity;
 
-            cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * div;
+            cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * Ilum;
             if (cs1 < 0) cs1 = -cs1;
-            cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * div;
+            cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * Ilum;
             if (cs2 < 0) cs2 = -cs2;
-            ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * div;
+            ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * Ilum;
             if (ce1 < 0) ce1 = -ce1;
-            ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * div;
+            ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * Ilum;
             if (ce2 < 0) ce2 = -ce2;
 
             //cs1 = Vector3.Distance(StartPosition1,WaistPos) * div ; 
@@ -139,10 +139,7 @@ public class LightRay : MonoBehaviour {
         {
             float cs1, cs2, ce1, ce2; //Couleur des vertex ( Shader uv en 1/u )
 
-            float div = Direction2 - Direction1;
-            if (div < 0) div = -div;
-            if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
-            div = div / Intensity;
+            float Ilum = div / Intensity;
 
             float p = p2start - p2end;
             if (p < 0) p = -p;
@@ -151,13 +148,13 @@ public class LightRay : MonoBehaviour {
             {
                 Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
-                cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * div;
+                cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * Ilum;
                 if (cs1 < 0) cs1 = -cs1;
-                cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * div;
+                cs2 = (cos2 * (WaistPos.x - StartPosition2.x) + sin2 * (WaistPos.y - StartPosition2.y)) * Ilum;
                 if (cs2 < 0) cs2 = -cs2;
-                ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * div;
+                ce1 = (cos1 * (WaistPos.x - EndPosition1.x) + sin1 * (WaistPos.y - EndPosition1.y)) * Ilum;
                 if (ce1 < 0) ce1 = -ce1;
-                ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * div;
+                ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * Ilum;
                 if (ce2 < 0) ce2 = -ce2;
                 
                 //cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;

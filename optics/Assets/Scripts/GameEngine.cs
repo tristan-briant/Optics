@@ -23,6 +23,7 @@ public class GameEngine : MonoBehaviour {
         Targets = FindObjectsOfType<Target>();
         Rays = GameObject.Find("Rays").transform;
         RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
+        Transform PlayGround = GameObject.Find("Playground").transform;
 
         for (int i = 0; i < NRaysMax; i++)
         {
@@ -40,10 +41,10 @@ public class GameEngine : MonoBehaviour {
             ls.Rays = Rays;
             ls.RaysReserve = RaysReserve;
             ls.InitializeSource();
+            ls.PlayGround = PlayGround;
         }
         
-        Transform PlayGround = GameObject.Find("Playground").transform;
-        foreach (OpticalComponent op in OpticalComponents)
+         foreach (OpticalComponent op in OpticalComponents)
         {
             op.DepthMax = DepthMax;
             op.Rays = Rays;

@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\OpticalComponents\RectWall.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Target.cs" />
     <Compile Include="Assets\Scripts\OpticalComponents\Wall.cs" />
+    <Compile Include="Assets\StarFollowRay.cs" />
     <None Include="Assets\Resources\Materials\NewSurfaceShader.shader" />
     <None Include="Assets\Resources\Materials\RayDiv.shader" />
     <Reference Include="UnityEditor.StandardEvents">

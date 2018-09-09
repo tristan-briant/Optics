@@ -119,6 +119,7 @@ public class OpticalComponent : MonoBehaviour {
         // Preparation du rayon
         LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
         r.transform.parent = lr.transform;
+        r.transform.localScale = Vector3.one;
         r.depth = lr.depth+1;
         return r;
     }
