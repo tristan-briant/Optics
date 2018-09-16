@@ -132,7 +132,7 @@ public class LightSource : MonoBehaviour
 
     void LaunchStar()
     {
-        const float proba = 0.03f;
+        const float proba = 0.01f;
 
         if (Random.Range(0.0f, 1.0f) < proba)
         {

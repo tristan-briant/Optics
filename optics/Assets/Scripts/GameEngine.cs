@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Profiling;
 
 public class GameEngine : MonoBehaviour {
@@ -14,27 +15,46 @@ public class GameEngine : MonoBehaviour {
     public Transform Rays;
     public Transform RaysReserve;
     public int DepthMax = 10;
-    
+    public bool running = false;
+    public bool levelLoaded = false;
+
 
     void Start()
     {
+        RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
+        RaysReserve.gameObject.SetActive(false);
+
+        StartCoroutine("FillRaysReserve");
+    }
+
+    IEnumerator FillRaysReserve()
+    {
+        for (int i = 0; i < NRaysMax; i++)
+        {
+            int k = i;
+            for (; i < k + 100; i++)
+            {
+                GameObject ray = new GameObject("Ray");
+                ray.transform.SetParent(RaysReserve);
+                ray.transform.localScale = Vector3.one;
+                ray.transform.localPosition = Vector3.zero;
+
+                LightRay r = ray.AddComponent<LightRay>();
+                r.Initiliaze();
+            }
+            yield return null;
+        }
+        
+    }
+
+    public void StartGameEngine()
+    {
+
         LightSources = FindObjectsOfType<LightSource>();
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
         Rays = GameObject.Find("Rays").transform;
-        RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
         Transform PlayGround = GameObject.Find("Playground").transform;
-
-        for (int i = 0; i < NRaysMax; i++)
-        {
-            GameObject ray = new GameObject("Ray");
-            ray.transform.SetParent(RaysReserve);
-            ray.transform.localScale = Vector3.one;
-            ray.transform.localPosition = Vector3.zero;
-
-            LightRay r = ray.AddComponent<LightRay>();
-            r.Initiliaze();
-        }
 
         foreach (LightSource ls in LightSources)
         {
@@ -43,24 +63,25 @@ public class GameEngine : MonoBehaviour {
             ls.InitializeSource();
             ls.PlayGround = PlayGround;
         }
-        
-         foreach (OpticalComponent op in OpticalComponents)
+
+        foreach (OpticalComponent op in OpticalComponents)
         {
             op.DepthMax = DepthMax;
             op.Rays = Rays;
             op.RaysReserve = RaysReserve;
             op.PlayGround = PlayGround;
         }
-        RaysReserve.gameObject.SetActive(false);
 
+        running = true;
     }
 
+
     int i = 0;
-    void LateUpdate() {
+    void Update() {
         //Profiler.BeginSample("MyPieceOfCode");
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+        if (!running)  return;
+       
 
         //if (i++ == 1) { i = 0; } else return;
 
@@ -117,7 +138,6 @@ public class GameEngine : MonoBehaviour {
         
     }
 
-
     bool Collision(LightRay lr) {
 
         float lmin = -1;
@@ -159,9 +179,7 @@ public class GameEngine : MonoBehaviour {
         return false;
     }
 
-    
-
-    private void ResetLightRay()
+    public void ResetLightRay()
     {
       foreach (LightRay r in Rays.GetComponentsInChildren<LightRay>())
         {
@@ -169,7 +187,6 @@ public class GameEngine : MonoBehaviour {
             r.Origin = r.End = null;
         }
     }
-
 
     private void UpdateLightRays1OP(OpticalComponent op)
     {

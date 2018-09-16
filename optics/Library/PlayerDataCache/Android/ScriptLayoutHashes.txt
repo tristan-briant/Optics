@@ -2,7 +2,11 @@ Android
 PlayerPath?
 C:/Users/Tristan/Documents/GitHub/Optics/optics/Build/optic.apk
 SceneListBegin?
-Assets/Scenes/SampleScene.unity
+Assets/Scenes/BaseLevel.unity
+Assets/Scenes/MiniMap.unity
+Assets/Scenes/Level1.unity
+Assets/Scenes/Level2.unity
+Assets/Scenes/Level3.unity
 SceneListEnd?
 c422dd62785a6d0afa870fbd111886ce Unity.TextMeshPro.dll:TMPro.TMP_SelectionCaret
 7b803eb2910e9b4cd5e521ae07b9f7d6 Unity.TextMeshPro.dll:TMPro.TMP_Dropdown
@@ -20,7 +24,7 @@ c7dd12c15208b0447e101f80038706df UnityEngine.Timeline.dll:UnityEngine.Timeline.A
 64f3a13c1277a7f1324321d93d0ec13b UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
 f6637497451c9a030c421de4a1ad5cdb Unity.TextMeshPro.dll:TMPro.TMP_ScrollbarEventHandler
 bc982ab335090995702c5abd8959d095 Assembly-CSharp.dll:.Lens
-fc6d4ef40b14bbd9eeb168b3b5bee6af Assembly-CSharp.dll:.DragAndDrop
+a4516268016c85d2db3465e41f4936aa Assembly-CSharp.dll:.DragAndDrop
 f8046c066d6603e7182a89bac32ab5b9 Assembly-CSharp.dll:.Alignment
 b14b4630cc47b6e9ea8a644551a6a8cc Unity.TextMeshPro.dll:TMPro.TMP_Text
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.polygon
@@ -128,9 +132,11 @@ e1ea12ca952c81d81a9a21fdf34446ed UnityEngine.HoloLens.dll:UnityEngine.EventSyste
 98d69a140ec0084cde3b6a5e09aea295 UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 dfd33ff9ae3ce8d7ca1f22b475ec2387 UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 96f3ea9f23b6f08e60710ebb4af49174 Unity.TextMeshPro.dll:TMPro.TMP_SpriteAsset
-321282acf424e97da1a589876bcfabee Assembly-CSharp.dll:.GameEngine
-2b257d2e7165d7b75e2426f5d94f73ff Assembly-CSharp.dll:.LightRay
+4566d48b09e9674816f79283ea8e6bfa Assembly-CSharp.dll:.GameEngine
+13ac56df706806add109f79388bda976 Assembly-CSharp.dll:.LightRay
 f16835701e71dd5d6fb1fed4b7aff1d8 Unity.TextMeshPro.dll:TMPro.TMP_Asset
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.LeveManager
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.LevelSelector
 486cd95c82d8305219c352c06b776e1f Unity.TextMeshPro.dll:TMPro.TMP_SpriteAnimator
 eaf0bcdb10d442a4029d615f41d09957 Unity.TextMeshPro.dll:TMPro.TextContainer
 201273fb4f889724fb090164b7d6c657 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
@@ -147,6 +153,7 @@ da21fc3f8056b1f91c3dd09c7bf4f90a UnityEngine.Networking.dll:UnityEngine.Networki
 529a95e9e8e7686c4816e08fbb37183f UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransform
 fc061f3ae8a876c0687e86378d4a447c UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 7ca56e063bd071986fff4f513cc4f477 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
+16def790cd0b5a607cc4394fe341cfe1 Assembly-CSharp.dll:.StarFollowRay
 72a8523b432c0a5317826b7a9e0a0e79 Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
 e53cc67d84060d628c7f03fc725766d8 Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
 392c5b921098bd4c139d9146d0efa6d7 Unity.TextMeshPro.dll:TMPro.TMP_Settings
@@ -171,10 +178,12 @@ dfd33ff9ae3ce8d7ca1f22b475ec2387 UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 aac9c55ae7ba4b95b852a7d9c191acd1 Unity.TextMeshPro.dll:TMPro.TextMeshProUGUI
 a39ec66d9b0fcbca4c2ed8fe5de33e62 Assembly-CSharp.dll:.FixedRotation
 0a006f3734181ba8b26758f0866152c0 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.LevelButton
 45c629cb68624aed62711130e015977a Assembly-CSharp.dll:.RectWall
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
-e553888f2c6c3d166d614a09ad71072e Assembly-CSharp.dll:.LightSource
+37d8a307144c9d8ac554f139abaf80a4 Assembly-CSharp.dll:.LightSource
 d7ea379ecb246ef4f21ee3358deb73e2 Assembly-CSharp.dll:.OpticalComponent
 2f9af06a78208a67db480e9bfed4a076 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 9318334b30e9f195f573b2ce00154b95 Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
 93307bd34e39d73fd24e00ec39c25a91 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
+486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.DontDestroyOnLoad
