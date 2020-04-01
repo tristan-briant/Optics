@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightRay : MonoBehaviour {
+public class LightRay : MonoBehaviour
+{
 
+    public Vector3 OffsetPosition; // Used to keep the center of the mesh in the camera axis
     public Vector3 StartPosition1, StartPosition2;
     public float Direction1, Direction2;
-    public float Length1,Length2;
+    public float Length1, Length2;
     public Color Col;
     //public float Width;
     //public float Divergence;
-    public float Intensity=0.05f;
+    public float Intensity = 0.05f;
     public bool isVisible;
     public bool HasWaist;
     //Vector3 WaistPos;
@@ -25,50 +27,51 @@ public class LightRay : MonoBehaviour {
     void InitilizedMesh()
     {
         MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-        
+
         //Material mat = Resources.Load("Materials/Material Line", typeof(Material)) as Material;
         Material mat = Resources.Load("Materials/RayDiv", typeof(Material)) as Material;
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         mr.material = mat;
         mr.material.color = Col;
-        mr.sortingLayerName="Rays";
+        mr.sortingLayerName = "Rays";
 
         Mesh m = new Mesh
         {
             vertices = new Vector3[6],
             triangles = new int[6] { 0, 1, 2, 3, 4, 5 }
         };
-        
+
         m.normals = new Vector3[6] {
                 -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward
             };
         m.uv = new Vector2[6] {
                  new Vector2(0f,0f),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(1f,0f),new Vector2(0f,0f),new Vector2(1f,0f)
-            }; 
+            };
 
-        mf.mesh=m;
+        mf.mesh = m;
 
     }
-
-   
 
     public void Initiliaze()
     {
         InitilizedMesh();
     }
 
-    public void Draw() {
+    public void Draw()
+    {
         // Draw the rays recursively;
         //if (!isVisible) return;
+        OffsetPosition = -Camera.main.transform.position;
         DrawMesh();
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
             child.GetComponent<LightRay>().Draw();
         }
     }
 
- 
-    public void ComputeDir() { //Calcule les vecteurs directeurs et paramètres
+
+    public void ComputeDir()
+    { //Calcule les vecteurs directeurs et paramètres
         cos1 = Mathf.Cos(Direction1);
         sin1 = Mathf.Sin(Direction1);
         proj1 = StartPosition1.x * cos1 + StartPosition1.y * sin1;
@@ -86,7 +89,8 @@ public class LightRay : MonoBehaviour {
     //public bool colimated;
 
     //public float p2start;
-    void DrawMesh() {
+    void DrawMesh()
+    {
 
         Vector3[] vertices;
         Vector2[] uv;
@@ -95,16 +99,16 @@ public class LightRay : MonoBehaviour {
         Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(cos1, sin1, 0);
         Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(cos2, sin2, 0);
 
-        float p1 = param1;  
+        float p1 = param1;
         float p2start = -StartPosition2.x * sin1 + StartPosition2.y * cos1;
         float p2end = -EndPosition2.x * sin1 + EndPosition2.y * cos1;
 
-        if (p2start<p1 && p2end> p1 || p2start > p1 && p2end<p1)
+        if (p2start < p1 && p2end > p1 || p2start > p1 && p2end < p1)
         {
             Vector3 WaistPos = ((p2start - p1) * EndPosition2 - (p2end - p1) * StartPosition2) / (p2start - p2end);
 
             float cs1, cs2, ce1, ce2; //Couleur des vertex ( Shader uv en 1/u )
-            
+
             float Ilum = div / Intensity;
 
             cs1 = (cos1 * (WaistPos.x - StartPosition1.x) + sin1 * (WaistPos.y - StartPosition1.y)) * Ilum;
@@ -156,7 +160,7 @@ public class LightRay : MonoBehaviour {
                 if (ce1 < 0) ce1 = -ce1;
                 ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * Ilum;
                 if (ce2 < 0) ce2 = -ce2;
-                
+
                 //cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;
                 //cs2 = Vector3.Distance(StartPosition2, WaistPos) * div;
                 //ce1 = Vector3.Distance(EndPosition1, WaistPos) * div;
@@ -176,7 +180,7 @@ public class LightRay : MonoBehaviour {
                 EndPosition1,
                 StartPosition2,
                 EndPosition2
-                
+
             };
 
             uv = new Vector2[6] {
@@ -186,15 +190,18 @@ public class LightRay : MonoBehaviour {
 
         }
 
+        for (int i = 0; i < 6; i++)
+            vertices[i] += OffsetPosition;
+
         Mesh m = GetComponent<MeshFilter>().mesh;
 
         m.vertices = vertices;
         m.uv = uv;
-      
+
         GetComponent<MeshRenderer>().material.color = Col;
 
     }
 
 
-    
+
 }

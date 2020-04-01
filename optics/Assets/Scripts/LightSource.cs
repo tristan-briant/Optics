@@ -12,7 +12,7 @@ public class LightSource : MonoBehaviour
     public Transform Rays;
     public Transform RaysReserve;
 
-    public int N = 50;
+    public int N = 10;
     public float Div = 0;
     public float Length = 15;
     public float radius = 0.6f;
@@ -23,6 +23,8 @@ public class LightSource : MonoBehaviour
     public Transform PlayGround;
 
 
+
+
     private void Start()
     {
     }
@@ -31,9 +33,9 @@ public class LightSource : MonoBehaviour
     Quaternion OldRotation;
     void Update()
     {
-       
+
         LaunchStar();
-        
+
 
         if (OldPosition == transform.localPosition && transform.localRotation == OldRotation)
             return;
@@ -41,7 +43,7 @@ public class LightSource : MonoBehaviour
         hasChanged = true;
         OldPosition = transform.localPosition;
         OldRotation = transform.localRotation;
-        
+
     }
 
     public void InitializeSource()
@@ -57,11 +59,11 @@ public class LightSource : MonoBehaviour
             LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
             r.transform.parent = Rays;
             r.transform.localScale = Vector3.one;
-            r.transform.position = Vector3.zero;
+            //r.transform.position = Vector3.zero;
             r.Origin = null;
             r.depth = 0;
 
-            LightRays[i]=r;
+            LightRays[i] = r;
         }
 
     }
@@ -75,6 +77,7 @@ public class LightSource : MonoBehaviour
         {
 
             LightRay r = LightRays[i];
+            if (r == null) return;
 
             // Couleur et intensité
             Color c = Color;
@@ -96,7 +99,7 @@ public class LightSource : MonoBehaviour
             r.ComputeDir();
         }
 
-        
+
 
     }
 
@@ -134,11 +137,15 @@ public class LightSource : MonoBehaviour
     {
         const float proba = 0.01f;
 
-        if (Random.Range(0.0f, 1.0f) < proba)
+        if (PlayGround != null && LightRays[N - 1] != null)
         {
-            GameObject Star = Instantiate(Resources.Load("Star", typeof(GameObject)) as GameObject);
-            StarFollowRay sf = Star.GetComponent<StarFollowRay>();
-            sf.Initialize(PlayGround, LightRays[Random.Range(0, N)]);
+
+            if (Random.Range(0.0f, 1.0f) < proba)
+            {
+                GameObject Star = Instantiate(Resources.Load("Star", typeof(GameObject)) as GameObject);
+                StarFollowRay sf = Star.GetComponent<StarFollowRay>();
+                sf.Initialize(PlayGround, LightRays[Random.Range(0, N)]);
+            }
         }
 
     }

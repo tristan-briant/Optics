@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OpticalComponent : MonoBehaviour {
+public class OpticalComponent : MonoBehaviour
+{
 
-    public float x=0,y=0; // position
+    public float x = 0, y = 0; // position
     public float angle = 0;
-    public float radius=0.5f;
+    public float radius = 0.5f;
     public float cos, sin, param; // vecteur directeur
     public bool hasChanged = true;
     public Transform Rays;
@@ -15,6 +16,11 @@ public class OpticalComponent : MonoBehaviour {
     public int DepthMax = 10;
     public Transform PlayGround;
 
+
+    void Awake()
+    {
+        PlayGround=GameObject.Find("Playground").transform;
+    }
 
     Vector3 OldPosition;
     Quaternion OldRotation;
@@ -27,7 +33,7 @@ public class OpticalComponent : MonoBehaviour {
             OldRotation = transform.rotation;
             hasChanged = true;
         }
-     }
+    }
 
     public bool FastCollision(LightRay lr)
     {
@@ -36,7 +42,7 @@ public class OpticalComponent : MonoBehaviour {
             return false;
 
         p = lr.cos1 * (x - lr.StartPosition1.x) + lr.sin1 * (y - lr.StartPosition1.y);
-        if (p < -radius || p > lr.Length1 + radius) 
+        if (p < -radius || p > lr.Length1 + radius)
             return false;
 
         return true;
@@ -96,7 +102,7 @@ public class OpticalComponent : MonoBehaviour {
         }
         return -1;
     }
-    
+
     protected float xc1, yc1, xc2, yc2;
     virtual public float Collision2(LightRay lr)
     {
@@ -114,13 +120,14 @@ public class OpticalComponent : MonoBehaviour {
 
     protected LightRay NewRayLightChild(LightRay lr)
     {
-        if (lr.depth>=DepthMax || RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
+        if (lr.depth >= DepthMax || RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
 
         // Preparation du rayon
         LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
         r.transform.parent = lr.transform;
         r.transform.localScale = Vector3.one;
-        r.depth = lr.depth+1;
+        r.transform.localPosition=Vector3.zero;
+        r.depth = lr.depth + 1;
         return r;
     }
 

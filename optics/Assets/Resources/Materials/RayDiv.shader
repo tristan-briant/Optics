@@ -22,12 +22,12 @@ Shader "Custom/RayDiv" {
 		 Tags
         { 
             "Queue"="Transparent" 
-			"RenderType"="Transparent" 
+			//"RenderType"="Transparent" 
 
-           "IgnoreProjector"="True" 
-            "RenderType"="Transparent" 
-            "PreviewType"="Plane"
-            "CanUseSpriteAtlas"="True"
+           //"IgnoreProjector"="True" 
+            //"RenderType"="Transparent" 
+            //"PreviewType"="Plane"
+            //"CanUseSpriteAtlas"="True"
         }
 
         Pass
