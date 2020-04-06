@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandler
 {
     Animator animator;
     Vector3 startPos;
@@ -17,10 +17,13 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     Vector3 HandleInitialPosition;
     Vector3 newLocalPosition;
 
+    const float ratioFineTranslation = 0.1f;
+
     void Start()
     {
         animator = GetComponentInParent<Animator>();
         startPos = transform.localPosition;
+        startPos.z = 0;
         startAngle = AngleFromXY(startPos.x, startPos.y);
         lr = GetComponent<LineRenderer>();
     }
@@ -28,6 +31,15 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     float angleMouse0;
     Vector3 positionMouse0;
 
+    void OnMouseDown()
+    {
+        OnPointerDown(null);
+    }
+
+    void OnMouseUp()
+    {
+        OnPointerUp(null);
+    }
 
     bool dragged = false;
     Vector3 offset;
@@ -40,7 +52,8 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                         transform.position.y - handle.position.y, -startAngle);
 
         HandleInitialPosition = handle.position;
-        positionMouse0 = 0.3f * transform.position + 0.7f * HandleInitialPosition;
+        positionMouse0 = ratioFineTranslation * transform.position
+                        + (1 - ratioFineTranslation) * HandleInitialPosition;
 
 
         animator.SetBool("controled", true);
@@ -87,7 +100,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
             direction.z = 0;
 
-            transform.localPosition = startPos / startPos.magnitude * direction.magnitude;
+            XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
 
             float angleMouse1 = AngleFromXY(direction.x, direction.y, -startAngle);
 
@@ -99,7 +112,8 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
             if (translation)
             {
-                Vector3 positionMouse1 = 0.3f * transform.position + 0.7f * HandleInitialPosition;
+                Vector3 positionMouse1 = ratioFineTranslation * transform.position
+                                        + (1 - ratioFineTranslation) * HandleInitialPosition;
 
                 handle.GetComponent<HandleManager>().SetTargetDeltaPosition(positionMouse1 - positionMouse0);
                 positionMouse0 = positionMouse1;
@@ -110,6 +124,15 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         lr.SetPosition(0, handle.position);
         lr.SetPosition(1, transform.position);
+    }
+
+
+    void XYLocalPosition(Vector3 newPos)
+    {
+        // Modifie uniquement le X et Y
+        Vector3 pos = newPos;
+        pos.z = transform.localPosition.z;
+        transform.localPosition = pos;
     }
 
 }

@@ -9,6 +9,14 @@ public class HandleManager : MonoBehaviour
     public Vector3 PositionSet;
     float angleAct, angleMouse0, angleMouse1;
 
+    void Start()
+    {
+        Transform fineHandle = transform.Find("FineHandle");
+        if (fineHandle)
+            foreach (Canvas c in fineHandle.GetComponentsInChildren<Canvas>())
+                c.sortingLayerName = "Handle";
+    }
+
     public void SetTargetDeltaAngle(float deltaAngle)
     {
         Target.GetComponent<DragAndDrop>().angleSet += deltaAngle;
@@ -16,7 +24,7 @@ public class HandleManager : MonoBehaviour
 
     public void SetTargetDeltaPosition(Vector3 deltaPosition)
     {
-        Target.GetComponent<DragAndDrop>().PositionSet += deltaPosition;
+        Target.GetComponent<DragAndDrop>().positionSet += deltaPosition;
     }
 
     public void ConstrainTarget(bool translation, bool rotation)

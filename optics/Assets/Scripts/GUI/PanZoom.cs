@@ -4,10 +4,14 @@ public class PanZoom : MonoBehaviour
 {
     Vector3 touchStart;
     float zoomInit;
+    RectTransform rt;
     // Start is called before the first frame update
     void Start()
     {
-        zoomInit = Camera.main.orthographicSize;
+
+        rt = (RectTransform)transform;
+        zoomInit = Camera.main.orthographicSize = rt.rect.height / 2;
+        //Debug.Log("Camera Size : " + zoomInit + "Pg size : " + x + "   -  " + y);
     }
 
     void OnMouseDown()
@@ -18,11 +22,13 @@ public class PanZoom : MonoBehaviour
     {
         Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Camera.main.transform.position += direction;
+        ClampCamera();
     }
 
     void zoom(float increment)
     {
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + increment, 0.5f * zoomInit, zoomInit);
+        ClampCamera();
     }
 
     bool two2oneTouch;
@@ -50,6 +56,25 @@ public class PanZoom : MonoBehaviour
             touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             two2oneTouch = false;
         }
-
     }
+
+    void ClampCamera()
+    {// Clamp teh camera in the rectangle of the PG
+        Vector3 CamPos = Camera.main.transform.position;
+        float camsize = Camera.main.orthographicSize;
+        float ratio = Camera.main.aspect;
+
+        if (2 * camsize * ratio > rt.rect.width)
+            CamPos.x = 0;
+        else
+            CamPos.x = Mathf.Clamp(CamPos.x, -rt.rect.width / 2 + camsize * ratio, rt.rect.width / 2 - camsize * ratio);
+
+        if (2 * camsize > rt.rect.height)
+            CamPos.y = 0;
+        else
+            CamPos.y = Mathf.Clamp(CamPos.y, -rt.rect.height / 2 + camsize, rt.rect.height / 2 - camsize);
+
+        Camera.main.transform.position = CamPos;
+    }
+
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class DontDestroyOnLoad : MonoBehaviour {
 
@@ -13,7 +10,10 @@ public class DontDestroyOnLoad : MonoBehaviour {
         {
             DontDestroyOnLoad(this.gameObject);
             created = true;
-            SceneManager.LoadScene("MiniMap");
+            //SceneManager.LoadScene("MiniMap");
+        }
+        else{
+            DestroyImmediate(gameObject);
         }
     }
 

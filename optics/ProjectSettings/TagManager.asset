@@ -51,3 +51,9 @@ TagManager:
   - name: Optics
     uniqueID: 3287845623
     locked: 0
+  - name: Handle
+    uniqueID: 1518129299
+    locked: 0
+  - name: GUI
+    uniqueID: 3067595485
+    locked: 0

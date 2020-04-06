@@ -34,7 +34,8 @@ public class LightRay : MonoBehaviour
         mr.material = mat;
         mr.material.color = Col;
         mr.sortingLayerName = "Rays";
-
+        //mr.sortingOrder = 10;
+        
         Mesh m = new Mesh
         {
             vertices = new Vector3[6],
