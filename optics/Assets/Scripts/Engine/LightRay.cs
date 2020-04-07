@@ -5,37 +5,33 @@ using UnityEngine;
 public class LightRay : MonoBehaviour
 {
 
-    public Vector3 OffsetPosition; // Used to keep the center of the mesh in the camera axis
     public Vector3 StartPosition1, StartPosition2;
     public float Direction1, Direction2;
     public float Length1, Length2;
     public Color Col;
-    //public float Width;
-    //public float Divergence;
     public float Intensity = 0.05f;
     public bool isVisible;
     public bool HasWaist;
-    //Vector3 WaistPos;
     public float cos1, sin1, cos2, sin2, proj1, proj2, param1, param2, div; // vecteur directeur, proj et parametre
     public OpticalComponent Origin;
     public OpticalComponent End;
     public int depth;
 
+    static public Transform RaysReserve;
+    static public Transform Rays;
+    static public int DepthMax;
+
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
 
-    //Mesh mesh;
-    void InitilizedMesh()
+    void InitializeMesh()
     {
         MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-
-        //Material mat = Resources.Load("Materials/Material Line", typeof(Material)) as Material;
         Material mat = Resources.Load("Materials/RayDiv", typeof(Material)) as Material;
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         mr.material = mat;
         mr.material.color = Col;
         mr.sortingLayerName = "Rays";
-        //mr.sortingOrder = 10;
-        
+
         Mesh m = new Mesh
         {
             vertices = new Vector3[6],
@@ -50,26 +46,17 @@ public class LightRay : MonoBehaviour
             };
 
         mf.mesh = m;
-
-    }
-
-    public void Initiliaze()
-    {
-        InitilizedMesh();
     }
 
     public void Draw()
     {
         // Draw the rays recursively;
-        //if (!isVisible) return;
-        OffsetPosition = -Camera.main.transform.position;
         DrawMesh();
         foreach (Transform child in transform)
         {
             child.GetComponent<LightRay>().Draw();
         }
     }
-
 
     public void ComputeDir()
     { //Calcule les vecteurs directeurs et paramètres
@@ -87,10 +74,7 @@ public class LightRay : MonoBehaviour
         if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
     }
 
-    //public bool colimated;
-
-    //public float p2start;
-    void DrawMesh()
+    public void DrawMesh()
     {
 
         Vector3[] vertices;
@@ -181,18 +165,17 @@ public class LightRay : MonoBehaviour
                 EndPosition1,
                 StartPosition2,
                 EndPosition2
-
             };
 
             uv = new Vector2[6] {
                  new Vector2(cs1,0f),new Vector2(cs2,0f),new Vector2(ce1,0f),new Vector2(ce1,0f),new Vector2(cs2,0f),new Vector2(ce2,0f)
             };
-
-
         }
 
+        // Used to keep the center of the mesh in the camera axis
+        Vector3 OffsetPosition = Camera.main.transform.position;
         for (int i = 0; i < 6; i++)
-            vertices[i] += OffsetPosition;
+            vertices[i] -= OffsetPosition;
 
         Mesh m = GetComponent<MeshFilter>().mesh;
 
@@ -203,6 +186,49 @@ public class LightRay : MonoBehaviour
 
     }
 
+    public void FreeLightRay() // remove child recursively
+    {
+        foreach (LightRay r in GetComponentsInChildren<LightRay>())
+        {
+            r.transform.parent = RaysReserve;
+            r.End = null;
+            r.Origin = null;
+        }
+    }
 
+    static public LightRay NewLightRayChild(LightRay lr = null)
+    {
+        if (lr && lr.depth >= DepthMax) return null; // profondeur max atteinte !!
+        if (RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
+
+        // Preparation du rayon
+        LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
+        if (lr)
+        {
+            r.transform.SetParent(lr.transform);
+            r.depth = lr.depth + 1;
+        }
+        else
+        {
+            r.transform.SetParent(Rays);
+            r.depth = 0;
+        }
+
+        r.transform.localScale = Vector3.one;
+        r.transform.localPosition = Vector3.zero;
+        return r;
+    }
+
+    static public LightRay InstantiateLightRay()
+    {
+        GameObject ray = new GameObject("Ray");
+        ray.transform.SetParent(RaysReserve);
+        ray.transform.localScale = Vector3.one;
+        ray.transform.localPosition = Vector3.zero;
+
+        LightRay r = ray.AddComponent<LightRay>();
+        r.InitializeMesh();
+        return r;
+    }
 
 }

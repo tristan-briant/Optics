@@ -93,7 +93,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: -1007121673
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &7942915954536172458
 GameObject:
@@ -122,7 +122,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7942915954536172458}
   m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000159, y: 1.0000159, z: 1.0000317}
   m_Children: []
   m_Father: {fileID: 7942915955526002386}
@@ -200,7 +200,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7942915955526002386}
   - component: {fileID: 7942915955526002395}
-  - component: {fileID: 7942915955526002392}
   - component: {fileID: 7942915955526002393}
   - component: {fileID: 7942915955526002390}
   - component: {fileID: 7942915955526002391}
@@ -247,32 +246,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
---- !u!61 &7942915955526002392
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7942915955526002389}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.24, y: 1}
-  m_EdgeRadius: 0
 --- !u!50 &7942915955526002393
 Rigidbody2D:
   serializedVersion: 4
@@ -338,13 +311,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514ec7bd951a3ac4eab0f5184c7815f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+  angle: 0
+  radius: 0
+  cos: 0
+  sin: 0
+  param: 0
+  hasChanged: 1
   Rays: {fileID: 0}
   RaysReserve: {fileID: 0}
   N: 100
   Div: 0.6
   Length: 15
-  radius: 0
-  hasChanged: 1
   Color: {r: 1, g: 1, b: 0.8, a: 0.5}
   Intensity: 1
-  PlayGround: {fileID: 0}
+  lightRadius: 0

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mirror : OpticalComponent {
+public class Mirror : OpticalComponent
+{
 
 
     override public void Deflect(LightRay r)
@@ -18,15 +19,16 @@ public class Mirror : OpticalComponent {
         r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
         r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
-        LightRay lr=null;
+        LightRay lr = null;
         if (r.transform.childCount == 0)
-            lr = NewRayLightChild(r);
+            lr = LightRay.NewLightRayChild(r);
         else if (r.transform.childCount == 1)
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
         else
         {
             while (r.transform.childCount > 1)
-                FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+                r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
+            //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
         }
 
@@ -50,9 +52,9 @@ public class Mirror : OpticalComponent {
         lr.Origin = this;
 
         // Pour un miroir
-       
-        lr.Direction1 = -ao1 + 2*angle;
-        lr.Direction2 = -ao2 + 2*angle;
+
+        lr.Direction1 = -ao1 + 2 * angle;
+        lr.Direction2 = -ao2 + 2 * angle;
         lr.ComputeDir();
     }
 

@@ -27,6 +27,12 @@ public class GameEngine : MonoBehaviour
     {
         RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
         RaysReserve.gameObject.SetActive(false);
+        Rays = GameObject.Find("Rays").transform;
+
+        // Initialize Ray system (static variables)
+        LightRay.RaysReserve = RaysReserve;
+        LightRay.Rays = Rays;
+        LightRay.DepthMax = DepthMax;
 
         StartCoroutine("FillRaysReserve");
     }
@@ -37,60 +43,25 @@ public class GameEngine : MonoBehaviour
         {
             int k = i;
             for (; i < k + 100; i++)
-            {
-                GameObject ray = new GameObject("Ray");
-                ray.transform.SetParent(RaysReserve);
-                ray.transform.localScale = Vector3.one;
-                ray.transform.localPosition = Vector3.zero;
+                LightRay.InstantiateLightRay();
 
-                LightRay r = ray.AddComponent<LightRay>();
-                r.Initiliaze();
-            }
             yield return null;
         }
-
     }
 
     public void StartGameEngine()
     {
-
-        LightSources = FindObjectsOfType<LightSource>();
-        OpticalComponents = FindObjectsOfType<OpticalComponent>();
-        Targets = FindObjectsOfType<Target>();
+        UpdateComponentList();
         Rays = GameObject.Find("Rays").transform;
         Debug.Log("Nombre de ray en reserve : " + RaysReserve.transform.childCount);
-
-        Transform PlayGround = GameObject.Find("Playground").transform;
-
-        foreach (LightSource ls in LightSources)
-        {
-            ls.Rays = Rays;
-            ls.RaysReserve = RaysReserve;
-            ls.InitializeSource();
-            ls.PlayGround = PlayGround;
-        }
-
-        foreach (OpticalComponent op in OpticalComponents)
-        {
-            op.DepthMax = DepthMax;
-            op.Rays = Rays;
-            op.RaysReserve = RaysReserve;
-            op.PlayGround = PlayGround;
-        }
-
         running = true;
     }
 
-
-    int i = 0;
     void Update()
     {
         //Profiler.BeginSample("MyPieceOfCode");
 
         if (!running) return;
-
-
-        //if (i++ == 1) { i = 0; } else return;
 
         bool update = false;
 
@@ -98,14 +69,11 @@ public class GameEngine : MonoBehaviour
         {
             CamPositionPrev = Camera.main.transform.localPosition;
 
-            foreach (Transform t in Rays)
-            {
-                LightRay lr = t.GetComponent<LightRay>();
-                lr.Draw();
-            }
+            foreach (LightRay lr in Rays.GetComponentsInChildren<LightRay>())
+                lr.DrawMesh();
         }
 
-        foreach (LightSource ls in LightSources)
+        /*foreach (LightSource ls in LightSources)
         {
             if (ls.hasChanged)
             {
@@ -118,12 +86,18 @@ public class GameEngine : MonoBehaviour
         {
             UpdateAllRays();
             return;
-        }
+        }*/
 
         foreach (OpticalComponent op in OpticalComponents)
         {
             if (op.hasChanged)
             {
+                if (op.GetComponent<LightSource>()) // C'est une source on update tout par défaut
+                {
+                    UpdateAllRays();
+                    return;
+                }
+
                 UpdateLightRays1OP(op);
                 update = true;
             }
@@ -193,8 +167,8 @@ public class GameEngine : MonoBehaviour
 
             // On retire tous les rayon enfants
             while (lr.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
-                ResetLightRay(lr.transform.GetChild(0).GetComponent<LightRay>());
-
+                                                //ResetLightRay(lr.transform.GetChild(0).GetComponent<LightRay>());
+                lr.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
         }
 
         return false;
@@ -203,10 +177,7 @@ public class GameEngine : MonoBehaviour
     public void ResetLightRay()
     {
         foreach (LightRay r in Rays.GetComponentsInChildren<LightRay>())
-        {
-            r.transform.parent = RaysReserve;
-            r.Origin = r.End = null;
-        }
+            r.FreeLightRay();
     }
 
     private void UpdateLightRays1OP(OpticalComponent op)
@@ -249,24 +220,11 @@ public class GameEngine : MonoBehaviour
         return false;
     }
 
-    private void ResetLightRay(LightRay ray) // remove child recursively
+    public void UpdateComponentList()
     {
-
-        /*while (ray.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
-        {
-            ResetLightRay(ray.transform.GetChild(0).GetComponent<LightRay>());
-        }
-        ray.transform.parent = RaysReserve;
-        ray.End = null;
-        ray.Origin = null;*/
-
-
-        foreach (LightRay r in ray.GetComponentsInChildren<LightRay>())
-        {
-            r.transform.parent = RaysReserve;
-            r.End = null;
-            r.Origin = null;
-        }
+        LightSources = FindObjectsOfType<LightSource>();
+        OpticalComponents = FindObjectsOfType<OpticalComponent>();
+        Targets = FindObjectsOfType<Target>();
     }
 
 }

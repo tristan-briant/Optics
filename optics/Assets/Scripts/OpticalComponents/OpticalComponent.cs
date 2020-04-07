@@ -13,17 +13,11 @@ public class OpticalComponent : MonoBehaviour
     public bool hasChanged = true;
     public Transform Rays;
     public Transform RaysReserve;
-    public int DepthMax = 10;
-    public Transform PlayGround;
-
-
-    void Awake()
-    {
-        PlayGround=GameObject.Find("Playground").transform;
-    }
+    //public int DepthMax = 10;
 
     Vector3 OldPosition;
     Quaternion OldRotation;
+
     virtual public void Update()
     {
         if (OldPosition != transform.position || transform.rotation != OldRotation)
@@ -50,7 +44,8 @@ public class OpticalComponent : MonoBehaviour
 
     public void ComputeDir()
     {
-        Vector3 pos = PlayGround.InverseTransformPoint(transform.position); // Position relative par rapport au playground
+        //Vector3 pos = PlayGround.InverseTransformPoint(transform.position); // Position relative par rapport au playground
+        Vector3 pos = transform.localPosition;
         x = pos.x;
         y = pos.y;
 
@@ -59,7 +54,6 @@ public class OpticalComponent : MonoBehaviour
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;
     }
-
 
     float xc, yc;
     public float Collision(LightRay lr, int i)
@@ -117,28 +111,5 @@ public class OpticalComponent : MonoBehaviour
     }
 
     public virtual void Deflect(LightRay r) { }
-
-    protected LightRay NewRayLightChild(LightRay lr)
-    {
-        if (lr.depth >= DepthMax || RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
-
-        // Preparation du rayon
-        LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
-        r.transform.parent = lr.transform;
-        r.transform.localScale = Vector3.one;
-        r.transform.localPosition=Vector3.zero;
-        r.depth = lr.depth + 1;
-        return r;
-    }
-
-    protected void FreeLightRay(LightRay ray) // remove child recursively
-    {
-        foreach (LightRay r in ray.GetComponentsInChildren<LightRay>())
-        {
-            r.transform.parent = RaysReserve;
-            r.End = null;
-            r.Origin = null;
-        }
-    }
 
 }

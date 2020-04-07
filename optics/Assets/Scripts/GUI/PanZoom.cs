@@ -75,6 +75,7 @@ public class PanZoom : MonoBehaviour
             CamPos.y = Mathf.Clamp(CamPos.y, -rt.rect.height / 2 + camsize, rt.rect.height / 2 - camsize);
 
         Camera.main.transform.position = CamPos;
+
     }
 
 }

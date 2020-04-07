@@ -2,48 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightSource : MonoBehaviour
+public class LightSource : OpticalComponent
 {
-
-    // Use this for initialization
-
-    const int MaxDepth = 10;
-
-    public Transform Rays;
-    public Transform RaysReserve;
-
     public int N = 10;
     public float Div = 0;
     public float Length = 15;
-    public float radius = 0.6f;
     LightRay[] LightRays;
-    public bool hasChanged = true;
     public Color Color = new Color(1, 1, 0.8f, 0.5f);
     public float Intensity = 1;
-    public Transform PlayGround;
+    public float lightRadius = 0;
 
 
-
-
-    private void Start()
+    override public void Update()
     {
-    }
-
-    Vector3 OldPosition;
-    Quaternion OldRotation;
-    void Update()
-    {
-
+        base.Update();
         LaunchStar();
-
-
-        if (OldPosition == transform.localPosition && transform.localRotation == OldRotation)
-            return;
-
-        hasChanged = true;
-        OldPosition = transform.localPosition;
-        OldRotation = transform.localRotation;
-
     }
 
     public void InitializeSource()
@@ -51,20 +24,27 @@ public class LightSource : MonoBehaviour
         LightRays = new LightRay[N];
         for (int i = 0; i < N; i++)
         {
-
-            if (RaysReserve.childCount == 0) return; // Plus de rayons disponible !!
-
-
-            // Preparation du rayon
-            LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
-            r.transform.parent = Rays;
-            r.transform.localScale = Vector3.one;
-            //r.transform.position = Vector3.zero;
-            r.Origin = null;
-            r.depth = 0;
-
-            LightRays[i] = r;
+            LightRay r = LightRay.NewLightRayChild();
+            if (r != null)
+            {
+                r.Origin = this;
+                LightRays[i] = r;
+            }
         }
+    }
+
+    override public void Deflect(LightRay r)
+    { // Simple obstacle
+        while (r.transform.childCount > 0)
+            r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
+
+        float xo1 = r.StartPosition1.x;
+        float yo1 = r.StartPosition1.y;
+        float xo2 = r.StartPosition2.x;
+        float yo2 = r.StartPosition2.y;
+
+        r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
+        r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
 
     }
 
@@ -73,9 +53,11 @@ public class LightSource : MonoBehaviour
         float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
         Vector3 pos = transform.localPosition;
 
+        if (LightRays == null)
+            InitializeSource();
+
         for (int i = 0; i < N; i++)
         {
-
             LightRay r = LightRays[i];
             if (r == null) return;
 
@@ -86,8 +68,8 @@ public class LightSource : MonoBehaviour
             r.Intensity = Intensity / N;
 
             // Calculs des positions et directions
-            float l1 = -radius * (-0.5f + i / (float)N);
-            float l2 = -radius * (-0.5f + (i + 1) / (float)N);
+            float l1 = -lightRadius * (-0.5f + i / (float)N);
+            float l2 = -lightRadius * (-0.5f + (i + 1) / (float)N);
 
             r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
             r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
@@ -98,12 +80,9 @@ public class LightSource : MonoBehaviour
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();
         }
-
-
-
     }
 
-    public void EmitLight2()
+    /*public void EmitLight2()
     {
         float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
         Vector3 pos = transform.localPosition;//+Random.Range(0,0.001f)*Vector3.one;
@@ -130,21 +109,20 @@ public class LightSource : MonoBehaviour
             r.ComputeDir();
             i++;
         }
-
-    }
+    }*/
 
     void LaunchStar()
     {
         const float proba = 0.01f;
 
-        if (PlayGround != null && LightRays[N - 1] != null)
+        if (LightRays != null && LightRays[N - 1] != null)
         {
 
             if (Random.Range(0.0f, 1.0f) < proba)
             {
                 GameObject Star = Instantiate(Resources.Load("Star", typeof(GameObject)) as GameObject);
                 StarFollowRay sf = Star.GetComponent<StarFollowRay>();
-                sf.Initialize(PlayGround, LightRays[Random.Range(0, N)]);
+                sf.Initialize(LightRays[Random.Range(0, N)]);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections;
 
 public class DragAndDrop : MonoBehaviour
 {
@@ -33,7 +33,7 @@ public class DragAndDrop : MonoBehaviour
             }
             else
             {
-                itemSelected=null;
+                itemSelected = null;
             }
 
             selected = value;
@@ -54,7 +54,7 @@ public class DragAndDrop : MonoBehaviour
             GameObject.Destroy(Handle);
     }
 
-    private void Start()
+    void Start()
     {
         rb = transform.GetComponent<Rigidbody2D>();
         positionSet = transform.position;
@@ -75,20 +75,17 @@ public class DragAndDrop : MonoBehaviour
         Constrain(false, false);
     }
 
-
     void OnMouseClick()
     {
         Selected = !Selected;
 
     }
 
-
     void OnMouseDrag()
     {
         Constrain(true, false);
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
     }
-
 
     public void Constrain(bool translation, bool rotation)
     {
@@ -114,6 +111,18 @@ public class DragAndDrop : MonoBehaviour
 
         rb.AddTorque(deltaAngle * 0.1f);
         rb.AddForce(deltaPosition * 100.0f);
+    }
+
+    public void LetFindPlace()
+    { // if droped on other component find the good place
+        StartCoroutine("FixPlace");
+    }
+
+    IEnumerator FixPlace()
+    {
+        yield return 0; // Wait for next frame to let collisions happen
+        positionSet = transform.position;
+        angleSet = transform.eulerAngles.z;
     }
 
 }

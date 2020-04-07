@@ -20,12 +20,13 @@ public class Lens : OpticalComponent {
 
         LightRay lr = null;
         if (r.transform.childCount == 0)
-            lr = NewRayLightChild(r);
+            lr = LightRay.NewLightRayChild(r);
         else if (r.transform.childCount == 1)
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
         else {
             while (r.transform.childCount > 1)
-                FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+                //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+                r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
         }
 

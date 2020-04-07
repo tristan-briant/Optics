@@ -63,24 +63,27 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         else if (item)
         {
             Activate(true);
+            item.transform.SetParent(GameObject.Find("Playground").transform);
+            item.transform.localScale = Vector3.one;
+            item.GetComponent<DragAndDrop>().LetFindPlace();
+
+            FindObjectOfType<GameEngine>().UpdateComponentList();
         }
     }
 
     void SpawnItem()
     {
         item = Instantiate(prefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
-        /*foreach (Collider2D c in item.GetComponentsInChildren<Collider2D>())
-            c.enabled = false;*/
         item.GetComponent<DragAndDrop>().enabled = false;
-        item.transform.parent = GameObject.Find("DragedLayer").transform;
-
+        item.transform.SetParent(GameObject.Find("DragedLayer").transform);
+        item.transform.localScale = Vector3.one;
         Activate(false);
+
     }
 
     void Activate(bool active)
     {
         item.GetComponent<OpticalComponent>().enabled=active;
-
         item.GetComponent<DragAndDrop>().enabled = active;
 
         foreach (Canvas cv in item.GetComponentsInChildren<Canvas>())

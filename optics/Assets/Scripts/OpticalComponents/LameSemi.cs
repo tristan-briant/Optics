@@ -32,13 +32,13 @@ public class LameSemi : OpticalComponent {
         LightRay lt = null;
         if (r.transform.childCount == 0)
         {
-            lr = NewRayLightChild(r);
-            lt = NewRayLightChild(r);
+            lr = LightRay.NewLightRayChild(r);
+            lt = LightRay.NewLightRayChild(r);
         }
         else if (r.transform.childCount == 1)
         {
             lt = r.transform.GetChild(0).GetComponent<LightRay>();
-            lr = NewRayLightChild(r);
+            lr = LightRay.NewLightRayChild(r);
         }
         else if (r.transform.childCount == 2)
         {
@@ -47,7 +47,8 @@ public class LameSemi : OpticalComponent {
         }
         else {
             while (r.transform.childCount > 2)
-                FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+                //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+                r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
 
             lt = r.transform.GetChild(0).GetComponent<LightRay>();
             lr = r.transform.GetChild(1).GetComponent<LightRay>();

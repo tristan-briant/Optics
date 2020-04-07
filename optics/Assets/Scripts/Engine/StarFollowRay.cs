@@ -13,9 +13,9 @@ public class StarFollowRay : MonoBehaviour {
     public float attenuation=0.02f;
     float intensity;
 
-	public void Initialize(Transform Parent,LightRay lr) {   
+	public void Initialize(LightRay lr) {   
         Pos = 0;
-        transform.SetParent(Parent);
+        transform.SetParent(GameObject.Find("Playground").transform);
         Ray = lr;
         transform.localScale = Vector3.one;
         Vector3 SPos;
@@ -56,14 +56,12 @@ public class StarFollowRay : MonoBehaviour {
         }
     }
 
-
     void JumpOnChild()
     {
         int NChild = Ray.transform.childCount;
         if (NChild > 0)
         {
             Ray = Ray.transform.GetChild(Random.Range(0,NChild)).GetComponent<LightRay>();
-
             Pos = 0;
         }
         else

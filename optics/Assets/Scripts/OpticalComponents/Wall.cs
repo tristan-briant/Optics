@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wall : OpticalComponent {
+public class Wall : OpticalComponent
+{
 
     override public void Deflect(LightRay r)
     {
 
         while (r.transform.childCount > 0)
-            FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+            r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
+        //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
 
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;

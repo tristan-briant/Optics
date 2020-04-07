@@ -360,7 +360,6 @@ MonoBehaviour:
   Rays: {fileID: 0}
   RaysReserve: {fileID: 0}
   DepthMax: 10
-  PlayGround: {fileID: 0}
   CollectedIntensity: 0
   TargetIntensity: 1
   Shine: {fileID: 478789287}
@@ -962,7 +961,6 @@ MonoBehaviour:
   Rays: {fileID: 0}
   RaysReserve: {fileID: 0}
   DepthMax: 10
-  PlayGround: {fileID: 0}
   focal: 1
 --- !u!1001 &1634659340
 PrefabInstance:
@@ -1311,7 +1309,6 @@ MonoBehaviour:
   Rays: {fileID: 0}
   RaysReserve: {fileID: 0}
   DepthMax: 10
-  PlayGround: {fileID: 0}
 --- !u!1 &1780249431
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,7 +1390,7 @@ PrefabInstance:
     - target: {fileID: 7942915953751823177, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
         type: 3}
       propertyPath: m_SortingLayerID
-      value: 0
+      value: -1007121673
       objectReference: {fileID: 0}
     - target: {fileID: 7942915953751823177, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
         type: 3}
@@ -1403,7 +1400,7 @@ PrefabInstance:
     - target: {fileID: 7942915954536172460, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
         type: 3}
       propertyPath: m_SortingLayerID
-      value: 0
+      value: 474554351
       objectReference: {fileID: 0}
     - target: {fileID: 7942915954536172460, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
         type: 3}
@@ -1513,6 +1510,11 @@ PrefabInstance:
     - target: {fileID: 7942915955526002386, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
         type: 3}
       propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942915955526002388, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
+        type: 3}
+      propertyPath: radius
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7942915955526002389, guid: a4e6aa1d2e4ec9343a0b91e5bfb66233,
