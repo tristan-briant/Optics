@@ -38,7 +38,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: FineHandle
+    path: ItemHolder
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -63,7 +63,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -88,7 +88,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: FineHandle/TranslationFine2
+    path: ItemHolder/RotationCircle2
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -113,7 +113,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -138,7 +138,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: FineHandle/TranslationFine1
+    path: ItemHolder/TranslationFine2
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
@@ -151,35 +151,35 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3153034729
+      path: 1053202711
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3326471983
+      path: 1039042254
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 783930890
+      path: 2766657396
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1598865045
+      path: 1615265335
       attribute: 4
       script: {fileID: 0}
       typeID: 4
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 3081799600
+      path: 4182749069
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -232,7 +232,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: FineHandle
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -260,7 +260,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: FineHandle
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -288,7 +288,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: FineHandle
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -316,7 +316,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -344,7 +344,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -372,7 +372,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -400,7 +400,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: FineHandle/TranslationFine2
+    path: ItemHolder/RotationCircle2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -428,7 +428,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: FineHandle/TranslationFine2
+    path: ItemHolder/RotationCircle2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -456,7 +456,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: FineHandle/TranslationFine2
+    path: ItemHolder/RotationCircle2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -484,7 +484,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -512,7 +512,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -540,7 +540,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -568,7 +568,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: FineHandle/TranslationFine1
+    path: ItemHolder/TranslationFine2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -596,7 +596,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: FineHandle/TranslationFine1
+    path: ItemHolder/TranslationFine2
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -624,7 +624,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: FineHandle/TranslationFine1
+    path: ItemHolder/TranslationFine2
     classID: 224
     script: {fileID: 0}
   m_EulerEditorCurves:
@@ -634,8 +634,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: FineHandle
+    attribute: m_LocalEulerAngles.z
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -645,37 +645,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: FineHandle
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: FineHandle
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: FineHandle/RotationCircle2
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -685,7 +655,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: FineHandle/RotationCircle2
+    path: ItemHolder/TranslationFine1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -695,7 +665,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -705,7 +675,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -715,7 +685,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: FineHandle/RotationCircle1
+    path: ItemHolder/RotationCircle1
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -725,7 +695,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: FineHandle/TranslationFine1
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -735,7 +705,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: FineHandle/TranslationFine1
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -745,27 +715,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: FineHandle/TranslationFine1
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: FineHandle/TranslationFine2
-    classID: 224
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: FineHandle/TranslationFine2
+    path: ItemHolder
     classID: 224
     script: {fileID: 0}
   - curve:
@@ -775,7 +725,57 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: FineHandle/TranslationFine2
+    path: ItemHolder/RotationCircle2
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: ItemHolder/RotationCircle2
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: ItemHolder/RotationCircle2
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: ItemHolder/TranslationFine2
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: ItemHolder/TranslationFine2
+    classID: 224
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: ItemHolder/TranslationFine2
     classID: 224
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

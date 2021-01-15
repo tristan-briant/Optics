@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
+
 
 public class DragAndDrop : MonoBehaviour
 {
     static DragAndDrop itemSelected = null;
 
-    GameObject Handle;
+    GameObject Handle;   // Handle  or Options
+
+    public bool CanTranslate;
+    public bool CanRotate;
+    
+
     private bool selected = false;
     public Vector3 positionSet;
     public float angleSet;
 
     float PressedTime;
     const float ClickDuration = 0.2f; // maximum click duration 
+    const float LongClickDuration = 1.0f; // long click duration 
+
+    private bool longClicking;
+
     Rigidbody2D rb;
 
     Vector3 offsetTouch;
@@ -21,10 +32,7 @@ public class DragAndDrop : MonoBehaviour
         get => selected;
         set
         {
-            selected = value;
-            EnableHandle(selected);
-
-            if (value)
+            if (value == true)
             {
                 if (itemSelected)// on deslectionne les autres
                     itemSelected.Selected = false;
@@ -34,11 +42,11 @@ public class DragAndDrop : MonoBehaviour
             else
             {
                 itemSelected = null;
+                selected = false;
+                if (Handle)
+                    GameObject.Destroy(Handle);
+
             }
-
-            selected = value;
-            EnableHandle(selected);
-
         }
     }
 
@@ -47,7 +55,6 @@ public class DragAndDrop : MonoBehaviour
         if (enable && !Handle)
         {
             Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
-            //Handle.transform.SetParent(transform);
             Handle.GetComponent<HandleManager>().Target = gameObject;
         }
         if (!enable && Handle)
@@ -67,19 +74,31 @@ public class DragAndDrop : MonoBehaviour
         PressedTime = Time.time;
     }
 
-    void OnMouseUp()
+    void OnShortClick()
     {
-        if (Time.time < PressedTime + ClickDuration) // C'est un click !
-            OnMouseClick();
-
-        Constrain(false, false);
+        if (Selected)
+            Selected = false;
+        else
+        {
+            Selected = true;
+            Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
+            Handle.GetComponent<HandleManager>().Target = gameObject;
+        }
     }
 
-    void OnMouseClick()
-    {
-        Selected = !Selected;
 
+    void OnLongClick()
+    {
+        if (Selected)
+            Selected = false;
+        else
+        {
+            Selected = true;
+            Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
+            Handle.GetComponent<OptionManager>().Target = gameObject;
+        }
     }
+
 
     void OnMouseDrag()
     {
@@ -89,6 +108,8 @@ public class DragAndDrop : MonoBehaviour
 
     public void Constrain(bool translation, bool rotation)
     {
+        //if (!rb) return;
+
         if (rotation && translation)
             rb.constraints = RigidbodyConstraints2D.None;
 
@@ -124,5 +145,6 @@ public class DragAndDrop : MonoBehaviour
         positionSet = transform.position;
         angleSet = transform.eulerAngles.z;
     }
+
 
 }

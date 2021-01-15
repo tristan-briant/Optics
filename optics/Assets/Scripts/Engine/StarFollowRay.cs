@@ -11,8 +11,7 @@ public class StarFollowRay : MonoBehaviour {
     public float velocity=10f;
     Vector2 Direction;
     public float attenuation=0.02f;
-    float intensity;
-
+    
 	public void Initialize(LightRay lr) {   
         Pos = 0;
         transform.SetParent(GameObject.Find("Playground").transform);
@@ -23,7 +22,7 @@ public class StarFollowRay : MonoBehaviour {
         SPos.y = Ray.StartPosition1.y;
         SPos.z = 0;
         transform.localPosition = SPos;
-        intensity = 1;
+        //intensity = 1;
         SetColor(10.0f);
     }
 

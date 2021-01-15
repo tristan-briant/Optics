@@ -11,10 +11,13 @@ public class HandleManager : MonoBehaviour
 
     void Start()
     {
-        Transform fineHandle = transform.Find("FineHandle");
+        Transform fineHandle = transform.Find("ItemHolder");
         if (fineHandle)
             foreach (Canvas c in fineHandle.GetComponentsInChildren<Canvas>())
                 c.sortingLayerName = "Handle";
+
+        transform.position = Target.transform.position;
+        transform.rotation = Quaternion.identity;
     }
 
     public void SetTargetDeltaAngle(float deltaAngle)

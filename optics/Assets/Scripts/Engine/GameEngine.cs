@@ -12,7 +12,6 @@ public class GameEngine : MonoBehaviour
     public Target[] Targets;
     public int NRaysMax = 1000;
     public float LengthMax = 15.0f;
-
     public Transform Rays;
     public Transform RaysReserve;
     public int DepthMax = 10;

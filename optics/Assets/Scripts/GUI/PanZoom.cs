@@ -8,7 +8,6 @@ public class PanZoom : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         rt = (RectTransform)transform;
         zoomInit = Camera.main.orthographicSize = rt.rect.height / 2;
         //Debug.Log("Camera Size : " + zoomInit + "Pg size : " + x + "   -  " + y);
@@ -59,7 +58,7 @@ public class PanZoom : MonoBehaviour
     }
 
     void ClampCamera()
-    {// Clamp teh camera in the rectangle of the PG
+    {// Clamp the camera in the rectangle of the PG
         Vector3 CamPos = Camera.main.transform.position;
         float camsize = Camera.main.orthographicSize;
         float ratio = Camera.main.aspect;

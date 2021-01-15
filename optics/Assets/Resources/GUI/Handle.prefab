@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -239,7 +240,7 @@ GameObject:
   - component: {fileID: 1377190118060699543}
   - component: {fileID: 1269213169179119761}
   m_Layer: 5
-  m_Name: TranslationGross
+  m_Name: HighLightCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,6 +288,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -459,6 +461,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -632,7 +635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4345284011150043857}
   m_Layer: 5
-  m_Name: FineHandle
+  m_Name: ItemHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -725,6 +728,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -952,6 +956,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

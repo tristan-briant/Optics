@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
 {
 
     const float longClickTime = 0.3f;
@@ -15,14 +15,15 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
 
     GameObject item;
 
-    void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         longClicking = false;
         item = null;
         StartCoroutine("OnLongClick");
+        Debug.Log("click");
     }
 
-    void OnMouseUp()
+    public void OnPointerUp(PointerEventData eventData)
     {
         StopCoroutine("OnLongClick");
     }
@@ -49,6 +50,7 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("toto");
         if (!longClicking)
         {
             StopCoroutine("OnLongClick");

@@ -9,11 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224803810575661914}
+  - component: {fileID: 5537106794659320989}
   - component: {fileID: 114436401197558634}
   - component: {fileID: 61036413601446678}
   - component: {fileID: 50457244796565126}
   - component: {fileID: 58199938421937368}
   - component: {fileID: 58951147948967160}
+  - component: {fileID: 1821416354490942849}
+  - component: {fileID: 2839319849618599782}
   m_Layer: 5
   m_Name: ChessPiece
   m_TagString: Untagged
@@ -42,6 +45,18 @@ RectTransform:
   m_AnchoredPosition: {x: -2.67, y: -1.67}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5537106794659320989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237728451439292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114436401197558634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,14 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a8992178a25bf4591fea2a2d4f4775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragging: 0
-  moving: 0
-  rotating: 0
-  RotationCircle: {fileID: 0}
-  Handle: {fileID: 0}
-  selected: 0
-  angleMouse0: 0
-  angleAct: 0
+  positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
 --- !u!61 &61036413601446678
 BoxCollider2D:
@@ -142,6 +150,43 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.7
+--- !u!222 &1821416354490942849
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237728451439292}
+  m_CullTransparentMesh: 0
+--- !u!114 &2839319849618599782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237728451439292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1411937281982494
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +248,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -298,6 +344,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
