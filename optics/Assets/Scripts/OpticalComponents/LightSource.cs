@@ -5,13 +5,14 @@ using UnityEngine;
 public class LightSource : OpticalComponent
 {
     public int N = 10;
-    public float Div = 0;
+    public float div = 0;
     public float Length = 15;
     LightRay[] LightRays;
     public Color Color = new Color(1, 1, 0.8f, 0.5f);
     public float Intensity = 1;
     public float lightRadius = 0;
 
+    public float Div { get => div; set => div = value; }
 
     override public void Update()
     {
@@ -128,4 +129,9 @@ public class LightSource : OpticalComponent
 
     }
 
+    public override void Delete(){
+        foreach(LightRay lr in LightRays){
+            lr.FreeLightRay();
+        }
+    }
 }

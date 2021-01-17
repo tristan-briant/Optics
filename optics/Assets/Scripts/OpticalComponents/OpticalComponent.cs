@@ -112,4 +112,6 @@ public class OpticalComponent : MonoBehaviour
 
     public virtual void Deflect(LightRay r) { }
 
+    public virtual void Delete() { }
+
 }

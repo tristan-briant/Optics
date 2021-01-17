@@ -224,6 +224,8 @@ public class GameEngine : MonoBehaviour
         LightSources = FindObjectsOfType<LightSource>();
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
+
+        UpdateAllRays();
     }
 
 }

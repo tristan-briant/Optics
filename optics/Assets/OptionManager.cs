@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class OptionManager : MonoBehaviour
 {
-    public GameObject Target;
+    public ChessPiece CP;
+
+    public Slider slider;
 
     public Color EnableColor;
     public Color DisableColor;
@@ -20,19 +22,57 @@ public class OptionManager : MonoBehaviour
             foreach (Canvas c in itemHandle.GetComponentsInChildren<Canvas>())
                 c.sortingLayerName = "Handle";
 
-        transform.position = Target.transform.position;
+        transform.position = CP.transform.position;
         transform.rotation = Quaternion.identity;
 
-        /*if(Target.GetComponent<DragAndDrop>().)
-        RotationSwitch
-*/
+        ChangeColorButton(CP.CanRotate, RotationSwitch);
+        ChangeColorButton(CP.CanTranslate, TranslationSwitch);
+
+        ShowParameters();
+
     }
+
+    void ChangeColorButton(bool enable, GameObject button)
+    {
+        if (enable)
+            button.GetComponent<Image>().color = EnableColor;
+        else
+            button.GetComponent<Image>().color = DisableColor;
+    }
+
 
     void Update()
     {
-        transform.position = Target.transform.position;
+        transform.position = CP.transform.position;
         transform.rotation = Quaternion.identity;
     }
 
+
+    public void ToggleRotation()
+    {
+        CP.CanRotate = !CP.CanRotate;
+        ChangeColorButton(CP.CanRotate, RotationSwitch);
+    }
+
+    public void ToggleRTranslation()
+    {
+        CP.CanTranslate = !CP.CanTranslate;
+        ChangeColorButton(CP.CanTranslate, TranslationSwitch);
+    }
+
+    public void DeleteComposant(){
+        CP.GetComponent<OpticalComponent>().Delete();
+        GameObject.DestroyImmediate(CP.gameObject);
+        GameObject.DestroyImmediate(gameObject);
+        FindObjectOfType<GameEngine>().UpdateComponentList();
+    }
+
+
+    public void ShowParameters(){
+        if(CP.GetComponent<LightSource>()){
+            CP.GetComponent<LightSource>().Invoke("Div", 0);
+            slider.onValueChanged.AddListener(delegate {CP.GetComponent<LightSource>().Div=slider.value;} );
+        }
+    }
 
 }

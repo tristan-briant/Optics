@@ -67,7 +67,7 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
             Activate(true);
             item.transform.SetParent(GameObject.Find("Playground").transform);
             item.transform.localScale = Vector3.one;
-            item.GetComponent<DragAndDrop>().LetFindPlace();
+            item.GetComponent<ChessPiece>().LetFindPlace();
 
             FindObjectOfType<GameEngine>().UpdateComponentList();
         }
@@ -76,7 +76,7 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     void SpawnItem()
     {
         item = Instantiate(prefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
-        item.GetComponent<DragAndDrop>().enabled = false;
+        item.GetComponent<ChessPiece>().enabled = false;
         item.transform.SetParent(GameObject.Find("DragedLayer").transform);
         item.transform.localScale = Vector3.one;
         Activate(false);
@@ -86,7 +86,7 @@ public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     void Activate(bool active)
     {
         item.GetComponent<OpticalComponent>().enabled=active;
-        item.GetComponent<DragAndDrop>().enabled = active;
+        item.GetComponent<ChessPiece>().enabled = active;
 
         foreach (Canvas cv in item.GetComponentsInChildren<Canvas>())
             cv.overrideSorting = active;

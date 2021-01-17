@@ -43,6 +43,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
 
     bool dragged = false;
     Vector3 offset;
+
     public void OnPointerDown(PointerEventData ev)
     {
         offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -65,9 +66,11 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData ev)
     {
+        handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
         animator.SetBool("controled", false);
         StartCoroutine("BackInPlace");
         dragged = false;
+        handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
     }
 
     IEnumerator BackInPlace()
@@ -97,10 +100,17 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
     {
         if (dragged)
         {
-            Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
+            Vector3 direction;
+            if (rotation)
+                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
+            else
+                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) -  offset;
             direction.z = 0;
 
-            XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
+            if (rotation)
+                XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
+            else
+                XYPosition(direction);
 
             float angleMouse1 = AngleFromXY(direction.x, direction.y, -startAngle);
 
@@ -118,14 +128,13 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
                 handle.GetComponent<HandleManager>().SetTargetDeltaPosition(positionMouse1 - positionMouse0);
                 positionMouse0 = positionMouse1;
             }
-
-            animator.SetFloat("rotation", angleMouse1 / 360.0f);
+            if (rotation)
+                animator.SetFloat("rotation", angleMouse1 / 360.0f);
         }
 
         lr.SetPosition(0, handle.position);
         lr.SetPosition(1, transform.position);
     }
-
 
     void XYLocalPosition(Vector3 newPos)
     {
@@ -135,4 +144,11 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
         transform.localPosition = pos;
     }
 
+    void XYPosition(Vector3 newPos)
+    {
+        // Modifie uniquement le X et Y
+        Vector3 pos = newPos;
+        pos.z = transform.position.z;
+        transform.position = pos;
+    }
 }

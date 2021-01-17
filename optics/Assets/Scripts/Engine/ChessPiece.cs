@@ -3,15 +3,15 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 
-public class DragAndDrop : MonoBehaviour
+public class ChessPiece : MonoBehaviour
 {
-    static DragAndDrop itemSelected = null;
+    static ChessPiece itemSelected = null;
 
     GameObject Handle;   // Handle  or Options
 
-    public bool CanTranslate;
-    public bool CanRotate;
-    
+    public bool CanTranslate = true;
+    public bool CanRotate = true;
+
 
     private bool selected = false;
     public Vector3 positionSet;
@@ -45,7 +45,6 @@ public class DragAndDrop : MonoBehaviour
                 selected = false;
                 if (Handle)
                     GameObject.Destroy(Handle);
-
             }
         }
     }
@@ -55,7 +54,7 @@ public class DragAndDrop : MonoBehaviour
         if (enable && !Handle)
         {
             Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
-            Handle.GetComponent<HandleManager>().Target = gameObject;
+            Handle.GetComponent<HandleManager>().CP = this;
         }
         if (!enable && Handle)
             GameObject.Destroy(Handle);
@@ -64,6 +63,7 @@ public class DragAndDrop : MonoBehaviour
     void Start()
     {
         rb = transform.GetComponent<Rigidbody2D>();
+        Constrain(false, false);
         positionSet = transform.position;
         angleSet = transform.eulerAngles.z;
     }
@@ -82,28 +82,33 @@ public class DragAndDrop : MonoBehaviour
         {
             Selected = true;
             Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
-            Handle.GetComponent<HandleManager>().Target = gameObject;
+            Handle.GetComponent<HandleManager>().CP = this;
         }
     }
-
 
     void OnLongClick()
     {
-        if (Selected)
-            Selected = false;
-        else
-        {
-            Selected = true;
-            Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
-            Handle.GetComponent<OptionManager>().Target = gameObject;
-        }
+        if (Handle)
+            GameObject.Destroy(Handle);
+
+        Selected = true;
+        Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
+        Handle.GetComponent<OptionManager>().CP = this;
     }
 
+    void OnMouseBeginDrag()
+    {
+        Constrain(true, false);
+    }
 
     void OnMouseDrag()
     {
-        Constrain(true, false);
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
+    }
+
+    void OnMouseEndDrag()
+    {
+        Constrain(false, false);
     }
 
     public void Constrain(bool translation, bool rotation)
@@ -145,6 +150,5 @@ public class DragAndDrop : MonoBehaviour
         positionSet = transform.position;
         angleSet = transform.eulerAngles.z;
     }
-
 
 }
