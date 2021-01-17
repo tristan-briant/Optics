@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 public class ChessPiece : MonoBehaviour
 {
     static ChessPiece itemSelected = null;
-    public GameObject Options;
 
     GameObject Handle;   // Handle  or Options
 
@@ -93,12 +92,7 @@ public class ChessPiece : MonoBehaviour
             GameObject.Destroy(Handle);
 
         Selected = true;
-        //Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
-        if (Options)
-            Handle = Instantiate(Options);
-        else
-            Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
-            
+        Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
         Handle.GetComponent<OptionManager>().CP = this;
     }
 

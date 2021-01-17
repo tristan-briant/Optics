@@ -17,6 +17,11 @@ public class OptionManager : MonoBehaviour
 
     void Start()
     {
+        Transform itemHandle = transform.Find("ItemHolder");
+        if (itemHandle)
+            foreach (Canvas c in itemHandle.GetComponentsInChildren<Canvas>())
+                c.sortingLayerName = "Handle";
+
         transform.position = CP.transform.position;
         transform.rotation = Quaternion.identity;
 
@@ -24,6 +29,7 @@ public class OptionManager : MonoBehaviour
         ChangeColorButton(CP.CanTranslate, TranslationSwitch);
 
         ShowParameters();
+
     }
 
     void ChangeColorButton(bool enable, GameObject button)
@@ -54,8 +60,7 @@ public class OptionManager : MonoBehaviour
         ChangeColorButton(CP.CanTranslate, TranslationSwitch);
     }
 
-    public void DeleteComposant()
-    {
+    public void DeleteComposant(){
         CP.GetComponent<OpticalComponent>().Delete();
         GameObject.DestroyImmediate(CP.gameObject);
         GameObject.DestroyImmediate(gameObject);
@@ -63,12 +68,10 @@ public class OptionManager : MonoBehaviour
     }
 
 
-    public void ShowParameters()
-    {
-        if (CP.GetComponent<LightSource>())
-        {
-            //CP.GetComponent<LightSource>().Invoke("Div", 0);
-            slider.onValueChanged.AddListener(delegate { CP.GetComponent<LightSource>().Div = slider.value; });
+    public void ShowParameters(){
+        if(CP.GetComponent<LightSource>()){
+            CP.GetComponent<LightSource>().Invoke("Div", 0);
+            slider.onValueChanged.AddListener(delegate {CP.GetComponent<LightSource>().Div=slider.value;} );
         }
     }
 
