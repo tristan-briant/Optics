@@ -5,17 +5,20 @@ public class PanZoom : MonoBehaviour
     Vector3 touchStart;
     float zoomInit;
     RectTransform rt;
-    // Start is called before the first frame update
+
+    const float SizeOffset = 3.75f-1f; // Camera field bigger of SizeOffset than playground (size of options)
+
     void Start()
     {
         rt = (RectTransform)transform;
-        zoomInit = Camera.main.orthographicSize = rt.rect.height / 2;
+        zoomInit = Camera.main.orthographicSize = (rt.rect.height + SizeOffset) / 2;
         //Debug.Log("Camera Size : " + zoomInit + "Pg size : " + x + "   -  " + y);
     }
 
     void OnMouseDown()
     {
         touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        ChessPiece.UnSelectAll();
     }
     void OnMouseDrag()
     {
@@ -63,15 +66,15 @@ public class PanZoom : MonoBehaviour
         float camsize = Camera.main.orthographicSize;
         float ratio = Camera.main.aspect;
 
-        if (2 * camsize * ratio > rt.rect.width)
+        if (2 * camsize * ratio > rt.rect.width + SizeOffset)
             CamPos.x = 0;
         else
-            CamPos.x = Mathf.Clamp(CamPos.x, -rt.rect.width / 2 + camsize * ratio, rt.rect.width / 2 - camsize * ratio);
+            CamPos.x = Mathf.Clamp(CamPos.x, -(rt.rect.width + SizeOffset) / 2 + camsize * ratio, (rt.rect.width + SizeOffset) / 2 - camsize * ratio);
 
-        if (2 * camsize > rt.rect.height)
+        if (2 * camsize > rt.rect.height + SizeOffset)
             CamPos.y = 0;
         else
-            CamPos.y = Mathf.Clamp(CamPos.y, -rt.rect.height / 2 + camsize, rt.rect.height / 2 - camsize);
+            CamPos.y = Mathf.Clamp(CamPos.y, -(rt.rect.height + SizeOffset) / 2 + camsize, (rt.rect.height + SizeOffset) / 2 - camsize);
 
         Camera.main.transform.position = CamPos;
 

@@ -7,6 +7,7 @@ public class ChessPiece : MonoBehaviour
 {
     static ChessPiece itemSelected = null;
     public GameObject Options;
+    public GameObject PG;
 
     GameObject Handle;   // Handle  or Options
 
@@ -50,6 +51,12 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
+    static public void UnSelectAll()
+    {
+        if (itemSelected)// on deslectionne 
+            itemSelected.Selected = false;
+    }
+
     void EnableHandle(bool enable)
     {
         if (enable && !Handle)
@@ -67,6 +74,9 @@ public class ChessPiece : MonoBehaviour
         Constrain(false, false);
         positionSet = transform.position;
         angleSet = transform.eulerAngles.z;
+        PG = GameObject.FindGameObjectWithTag("Playground");
+
+        GetComponent<OpticalComponent>().ChangeVisual();
     }
 
     void OnMouseDown()
@@ -98,7 +108,7 @@ public class ChessPiece : MonoBehaviour
             Handle = Instantiate(Options);
         else
             Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
-            
+
         Handle.GetComponent<OptionManager>().CP = this;
     }
 
@@ -107,14 +117,16 @@ public class ChessPiece : MonoBehaviour
         Constrain(true, false);
     }
 
-    void OnMouseDrag()
+    void OnMouseDragging()
     {
+        Debug.Log("dragg");
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
     }
 
     void OnMouseEndDrag()
     {
-        Constrain(false, false);
+        LetFindPlace();
+        //Constrain(false, false);
     }
 
     public void Constrain(bool translation, bool rotation)
@@ -143,6 +155,23 @@ public class ChessPiece : MonoBehaviour
 
         rb.AddTorque(deltaAngle * 0.1f);
         rb.AddForce(deltaPosition * 100.0f);
+
+
+        if (PG)
+        {
+            Vector3 pos = transform.position;
+            RectTransform rt = (RectTransform)PG.transform;
+
+            pos.x = Mathf.Clamp(pos.x, rt.rect.xMin, rt.rect.xMax);
+            pos.y = Mathf.Clamp(pos.y, rt.rect.yMin, rt.rect.yMax);
+
+            transform.position = pos;
+        }
+    }
+
+    void LateUpdate()
+    {
+
     }
 
     public void LetFindPlace()
@@ -152,9 +181,11 @@ public class ChessPiece : MonoBehaviour
 
     IEnumerator FixPlace()
     {
-        yield return 0; // Wait for next frame to let collisions happen
+        Constrain(true, false);
+        yield return new WaitForSeconds(0.5f); // Wait for next frame to let collisions happen
         positionSet = transform.position;
         angleSet = transform.eulerAngles.z;
+        Constrain(false, false);
     }
 
 }

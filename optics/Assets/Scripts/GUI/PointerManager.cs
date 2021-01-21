@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PointerManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     const float ShortClickTime = 0.2f;
-    const float LongClickTime = 0.8f;
+    const float LongClickTime = 0.5f;
 
     float BeginClickTime;
 
@@ -37,7 +37,7 @@ public class PointerManager : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     public void OnDrag(PointerEventData eventData)
     {
-        SendMessage("OnMouseDrag", SendMessageOptions.DontRequireReceiver);
+        SendMessage("OnMouseDragging", SendMessageOptions.DontRequireReceiver);
     }
 
     public void OnEndDrag(PointerEventData eventData)

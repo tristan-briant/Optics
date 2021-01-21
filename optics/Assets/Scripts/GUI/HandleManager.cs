@@ -8,6 +8,8 @@ public class HandleManager : MonoBehaviour
     public float angleSet;
     public Vector3 PositionSet;
     float angleAct, angleMouse0, angleMouse1;
+    const float incrementRotation = 11.25f;
+
 
     void Start()
     {
@@ -31,9 +33,28 @@ public class HandleManager : MonoBehaviour
 
     }
 
-    public void SetTargetDeltaAngle(float deltaAngle)
+    float DeltaAngleSet;
+    public void SetTargetDeltaAngle(float deltaAngle, bool clamped = false)
     {
-        CP.GetComponent<ChessPiece>().angleSet += deltaAngle;
+
+        if (!clamped)
+            CP.GetComponent<ChessPiece>().angleSet += deltaAngle;
+
+        if (clamped)
+        {
+            float a, b;
+
+            //CP.GetComponent<ChessPiece>().angleSet = Mathf.Round(CP.GetComponent<ChessPiece>().angleSet / incrementRotation) * incrementRotation;
+            a = CP.GetComponent<ChessPiece>().angleSet;
+            DeltaAngleSet += deltaAngle;
+
+            a += DeltaAngleSet;
+            b = Mathf.Round(a / incrementRotation) * incrementRotation;
+            DeltaAngleSet = a - b;
+
+            CP.GetComponent<ChessPiece>().angleSet = b;
+        }
+
     }
 
     public void SetTargetDeltaPosition(Vector3 deltaPosition)
@@ -44,7 +65,7 @@ public class HandleManager : MonoBehaviour
     public void ConstrainTarget(bool translation, bool rotation)
     {
         CP.GetComponent<ChessPiece>().Constrain(translation, rotation);
-         Debug.Log(translation + "  " + rotation);
+        Debug.Log(translation + "  " + rotation);
     }
 
     void Update()

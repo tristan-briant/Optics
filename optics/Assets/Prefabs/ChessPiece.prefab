@@ -69,6 +69,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a8992178a25bf4591fea2a2d4f4775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Options: {fileID: 0}
+  CanTranslate: 1
+  CanRotate: 1
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
 --- !u!61 &61036413601446678
@@ -348,7 +351,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300006, guid: 87ce9b832b750f749a6662d5337007d2, type: 3}
+  m_Sprite: {fileID: 21300010, guid: 87ce9b832b750f749a6662d5337007d2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

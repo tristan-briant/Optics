@@ -5,14 +5,14 @@ using UnityEngine;
 public class LightSource : OpticalComponent
 {
     public int N = 10;
-    public float div = 0;
+    public float vergence = 0;
     public float Length = 15;
     LightRay[] LightRays;
     public Color Color = new Color(1, 1, 0.8f, 0.5f);
     public float Intensity = 1;
-    public float lightRadius = 0;
+    //private float lightRadius = 0;
 
-    public float Div { get => div; set => div = value; }
+    public float Vergence { get => vergence; set { vergence = value; hasChanged = true; } }
 
     override public void Update()
     {
@@ -69,14 +69,14 @@ public class LightSource : OpticalComponent
             r.Intensity = Intensity / N;
 
             // Calculs des positions et directions
-            float l1 = -lightRadius * (-0.5f + i / (float)N);
-            float l2 = -lightRadius * (-0.5f + (i + 1) / (float)N);
+            float l1 = -Radius * (-0.5f + i / (float)N);
+            float l2 = -Radius * (-0.5f + (i + 1) / (float)N);
 
             r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
             r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
 
-            r.Direction1 = Div * (-0.5f + i / (float)N) + angle;
-            r.Direction2 = Div * (-0.5f + (i + 1) / (float)N) + angle;
+            r.Direction1 = Vergence * Radius * (-0.5f + i / (float)N) + angle;
+            r.Direction2 = Vergence * Radius * (-0.5f + (i + 1) / (float)N) + angle;
 
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();
@@ -129,8 +129,10 @@ public class LightSource : OpticalComponent
 
     }
 
-    public override void Delete(){
-        foreach(LightRay lr in LightRays){
+    public override void Delete()
+    {
+        foreach (LightRay lr in LightRays)
+        {
             lr.FreeLightRay();
         }
     }

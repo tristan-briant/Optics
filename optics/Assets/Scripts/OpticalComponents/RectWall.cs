@@ -18,7 +18,7 @@ public class RectWall : MonoBehaviour {
         {
             W.localPosition = new Vector3(0, 0, 0);
             W.localRotation = Quaternion.Euler(0, 0, Mathf.Atan2(width,height) * 180 / Mathf.PI);
-            W.GetComponent<OpticalComponent>().radius = Mathf.Sqrt(height*height+width*width)/2;
+            W.GetComponent<OpticalComponent>().Radius = Mathf.Sqrt(height*height+width*width)/2;
         }
 
         W = Diag2;
@@ -26,7 +26,7 @@ public class RectWall : MonoBehaviour {
         {
             W.localPosition = new Vector3(0, 0, 0);
             W.localRotation = Quaternion.Euler(0, 0, -Mathf.Atan2(width,height) * 180 / Mathf.PI);
-            W.GetComponent<OpticalComponent>().radius = Mathf.Sqrt(height*height+width*width)/2;
+            W.GetComponent<OpticalComponent>().Radius = Mathf.Sqrt(height*height+width*width)/2;
         }
 
     }

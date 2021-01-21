@@ -10,6 +10,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
 
     public bool translation;
     public bool rotation;
+    public bool clamped;
 
     public Transform handle;
     LineRenderer lr;
@@ -104,7 +105,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
             if (rotation)
                 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
             else
-                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) -  offset;
+                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
             direction.z = 0;
 
             if (rotation)
@@ -116,7 +117,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
 
             if (rotation)
             {
-                handle.GetComponent<HandleManager>().SetTargetDeltaAngle(angleMouse1 - angleMouse0);
+                handle.GetComponent<HandleManager>().SetTargetDeltaAngle(angleMouse1 - angleMouse0, clamped);
                 angleMouse0 = angleMouse1;
             }
 

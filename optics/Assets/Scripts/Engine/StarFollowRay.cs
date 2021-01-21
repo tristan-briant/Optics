@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StarFollowRay : MonoBehaviour {
+public class StarFollowRay : MonoBehaviour
+{
 
     public LightRay Ray;
     float Pos; // position on the Ray = lenght from startpos
     Color col;
-    public float velocity=10f;
+    public float velocity = 0.1f;
     Vector2 Direction;
-    public float attenuation=0.02f;
-    
-	public void Initialize(LightRay lr) {   
+    public float attenuation = 0.02f;
+
+    public void Initialize(LightRay lr)
+    {
         Pos = 0;
         transform.SetParent(GameObject.Find("Playground").transform);
         Ray = lr;
@@ -37,21 +39,27 @@ public class StarFollowRay : MonoBehaviour {
         GetComponent<Image>().color = Ray.Col * I;
     }
 
-    void Update () {
+    void Update()
+    {
         Pos += velocity * Time.deltaTime;
 
-        if (Pos > Ray.Length1)
-        {
-            JumpOnChild();
-        }
+        if (!Ray.gameObject.activeInHierarchy)  // Ray has been removed so star must disappear
+            GameObject.Destroy(gameObject);
         else
         {
-            Vector3 SPos;
-            SPos.x = Ray.StartPosition1.x + Ray.cos1 * Pos;
-            SPos.y = Ray.StartPosition1.y + Ray.sin1 * Pos;
-            SPos.z = 0;
-            transform.localPosition = SPos;
-            SetColor();
+            if (Pos > Ray.Length1)
+            {
+                JumpOnChild();
+            }
+            else
+            {
+                Vector3 SPos;
+                SPos.x = Ray.StartPosition1.x + Ray.cos1 * Pos;
+                SPos.y = Ray.StartPosition1.y + Ray.sin1 * Pos;
+                SPos.z = 0;
+                transform.localPosition = SPos;
+                SetColor();
+            }
         }
     }
 
@@ -60,7 +68,7 @@ public class StarFollowRay : MonoBehaviour {
         int NChild = Ray.transform.childCount;
         if (NChild > 0)
         {
-            Ray = Ray.transform.GetChild(Random.Range(0,NChild)).GetComponent<LightRay>();
+            Ray = Ray.transform.GetChild(Random.Range(0, NChild)).GetComponent<LightRay>();
             Pos = 0;
         }
         else

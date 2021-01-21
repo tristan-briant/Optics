@@ -55,10 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Alignment.cs" />
-     <Compile Include="Assets\MyRaycaster.cs" />
-     <Compile Include="Assets\OptionManager.cs" />
-     <Compile Include="Assets\PointerManager.cs" />
+     <Compile Include="Assets\Scripts\Alignment.cs" />
      <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
      <Compile Include="Assets\Scripts\Debug\polygon.cs" />
      <Compile Include="Assets\Scripts\Engine\ChessPiece.cs" />
@@ -67,13 +64,19 @@
      <Compile Include="Assets\Scripts\Engine\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Engine\LevelSelector.cs" />
      <Compile Include="Assets\Scripts\Engine\LightRay.cs" />
+     <Compile Include="Assets\Scripts\Engine\MyMathf.cs" />
      <Compile Include="Assets\Scripts\Engine\StarFollowRay.cs" />
      <Compile Include="Assets\Scripts\FixedRotation.cs" />
      <Compile Include="Assets\Scripts\GUI\CreateComponent.cs" />
      <Compile Include="Assets\Scripts\GUI\DragHandle.cs" />
+     <Compile Include="Assets\Scripts\GUI\FloatParameterModifier.cs" />
      <Compile Include="Assets\Scripts\GUI\HandleManager.cs" />
      <Compile Include="Assets\Scripts\GUI\LevelButton.cs" />
+     <Compile Include="Assets\Scripts\GUI\NoRotation.cs" />
+     <Compile Include="Assets\Scripts\GUI\OptionManager.cs" />
      <Compile Include="Assets\Scripts\GUI\PanZoom.cs" />
+     <Compile Include="Assets\Scripts\GUI\PointerManager.cs" />
+     <Compile Include="Assets\Scripts\MyRaycaster.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\LameSemi.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Lens.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\LightSource.cs" />
@@ -633,6 +636,9 @@
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.2D.SpriteShape.Editor">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.SpriteShape.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.Purchasing">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
@@ -641,6 +647,9 @@
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.2D.Path.Editor">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.Path.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
@@ -660,11 +669,23 @@
  <Reference Include="Unity.Rider.Editor">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.Mathematics">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.InternalAPIEngineBridge.001">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.InternalAPIEngineBridge.001.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.2D.Sprite.Editor">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.2D.Common.Runtime">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.2D.Tilemap.Editor">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.2D.SpriteShape.Runtime">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.SpatialTracking">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll</HintPath>
@@ -675,14 +696,23 @@
  <Reference Include="UnityEngine.Advertisements.Editor">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEngine.Advertisements.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.Mathematics.Editor">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.TextMeshPro">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.2D.Common.Editor">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.2D.Common.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Analytics.DataPrivacy">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.XR.LegacyInputHelpers">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.InternalAPIEditorBridge.001">
+ <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.001.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/Users/Tristan Briant/Documents/GitHub/Optics/optics/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>

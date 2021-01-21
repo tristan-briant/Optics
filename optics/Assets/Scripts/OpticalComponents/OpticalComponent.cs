@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,16 +9,21 @@ public class OpticalComponent : MonoBehaviour
 
     public float x = 0, y = 0; // position
     public float angle = 0;
+
     public float radius = 0.5f;
+    public float Radius { get => radius; set { radius = Mathf.Clamp(value, RadiusMin, RadiusMax); hasChanged = true; ChangeVisual(); } }
+    protected float radiusMin = 0.2f, radiusMax = 1.5f;
+    public float RadiusMax { get => radiusMax; set => radiusMax = value; }
+    public float RadiusMin { get => radiusMin; set => radiusMin = value; }
+
+    [System.NonSerialized]
     public float cos, sin, param; // vecteur directeur
+    [System.NonSerialized]
     public bool hasChanged = true;
-    public Transform Rays;
-    public Transform RaysReserve;
-    //public int DepthMax = 10;
+
 
     Vector3 OldPosition;
     Quaternion OldRotation;
-
     virtual public void Update()
     {
         if (OldPosition != transform.position || transform.rotation != OldRotation)
@@ -98,6 +104,8 @@ public class OpticalComponent : MonoBehaviour
     }
 
     protected float xc1, yc1, xc2, yc2;
+
+
     virtual public float Collision2(LightRay lr)
     {
         float l1 = Collision(lr, 1);
@@ -113,5 +121,17 @@ public class OpticalComponent : MonoBehaviour
     public virtual void Deflect(LightRay r) { }
 
     public virtual void Delete() { }
+
+    public virtual void ChangeVisual()
+    {
+        Animator anim = GetComponent<Animator>();
+
+        if (anim)
+        {
+            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, radiusMin, radiusMax));
+        }
+
+        GetComponent<ChessPiece>().LetFindPlace();
+    }
 
 }

@@ -2,8 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lens : OpticalComponent {
-    public float focal=1.0f;
+public class Lens : OpticalComponent
+{
+    public float focal = 1.0f;
+    //public float Focal { get => focal; set { focal = value; hasChanged = true; ChangeVisual(); } }
+    public float Vergence { get => 1f / focal; set { focal = 1 / value; hasChanged = true; ChangeVisual(); } }
+
+    public float VergenceMin { get => vergenceMin; set => vergenceMin = value; }
+    public float VergenceMax { get => vergenceMax; set => vergenceMax = value; }
+    private float vergenceMax = 1.5f, vergenceMin = -1.5f;
+
+    new protected float radiusMin = 0.2f, radiusMax = 1.5f;
 
     override public void Deflect(LightRay r)
     {
@@ -23,7 +32,8 @@ public class Lens : OpticalComponent {
             lr = LightRay.NewLightRayChild(r);
         else if (r.transform.childCount == 1)
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
-        else {
+        else
+        {
             while (r.transform.childCount > 1)
                 //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
                 r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
@@ -75,4 +85,18 @@ public class Lens : OpticalComponent {
         lr.Direction2 = thetaP2 + (angle - Mathf.PI / 2);
         lr.ComputeDir();
     }
+
+    public override void ChangeVisual()
+    {
+        Animator anim = GetComponent<Animator>();
+
+        if (anim)
+        {
+            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, radiusMin, radiusMax));
+            anim.SetFloat("Shape", MyMathf.MapToFrame(Vergence, vergenceMin, vergenceMax));
+
+            GetComponent<ChessPiece>().LetFindPlace();
+        }
+    }
+
 }
