@@ -206,7 +206,6 @@ GameObject:
   m_Component:
   - component: {fileID: 281981036}
   - component: {fileID: 281981037}
-  - component: {fileID: 281981038}
   m_Layer: 0
   m_Name: GameEngine
   m_TagString: Untagged
@@ -252,18 +251,6 @@ MonoBehaviour:
   DepthMax: 10
   running: 0
   levelLoaded: 0
---- !u!114 &281981038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281981035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b5f7bd42229c246925acad08416d38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &369570239
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +406,7 @@ GameObject:
   - component: {fileID: 545057427}
   - component: {fileID: 545057425}
   - component: {fileID: 545057424}
+  - component: {fileID: 545057429}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -492,11 +480,27 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.33, y: 0.07}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &545057429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545057423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &601984429
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,6 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e29cc65e6db35488f0ec71cd76a5ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Level: 0
 --- !u!4 &689272507
 Transform:
   m_ObjectHideFlags: 0
@@ -836,7 +841,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1.4161853, y: -0.08757995}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1149414696
 GameObject:

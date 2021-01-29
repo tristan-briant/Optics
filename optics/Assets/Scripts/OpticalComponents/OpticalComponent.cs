@@ -4,27 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OpticalComponent : MonoBehaviour
+public class OpticalComponent : GenericComponent
 {
+    [System.NonSerialized]
+    public bool simulated = true;
 
-    public float x = 0, y = 0; // position
-    public float angle = 0;
+    //public float x = 0, y = 0; // position
+    //public float angle = 0;
 
     public float radius = 0.5f;
     public float Radius { get => radius; set { radius = Mathf.Clamp(value, RadiusMin, RadiusMax); hasChanged = true; ChangeVisual(); } }
-    protected float radiusMin = 0.2f, radiusMax = 1.5f;
-    public float RadiusMax { get => radiusMax; set => radiusMax = value; }
-    public float RadiusMin { get => radiusMin; set => radiusMin = value; }
+    public float RadiusMax { get => 1.5f; }
+    public float RadiusMin { get => 0.2f; }
 
-    [System.NonSerialized]
+    /*[System.NonSerialized]
     public float cos, sin, param; // vecteur directeur
     [System.NonSerialized]
-    public bool hasChanged = true;
+    public bool hasChanged = true;*/
 
 
-    Vector3 OldPosition;
-    Quaternion OldRotation;
-    virtual public void Update()
+    /*Vector3 OldPosition;
+    Quaternion OldRotation;*/
+
+    /*void Start()
+    {
+        ChangeVisual();
+    }*/
+
+    /*virtual public void Update()
     {
         if (OldPosition != transform.position || transform.rotation != OldRotation)
         {
@@ -33,9 +40,9 @@ public class OpticalComponent : MonoBehaviour
             OldRotation = transform.rotation;
             hasChanged = true;
         }
-    }
+    }*/
 
-    public bool FastCollision(LightRay lr)
+    virtual public bool FastCollision(LightRay lr)
     {
         float p = -lr.sin1 * x + lr.cos1 * y;
         if (p > lr.param1 + radius || p < lr.param1 - radius)
@@ -48,10 +55,10 @@ public class OpticalComponent : MonoBehaviour
         return true;
     }
 
-    public void ComputeDir()
+    /*public void ComputeDir()
     {
         //Vector3 pos = PlayGround.InverseTransformPoint(transform.position); // Position relative par rapport au playground
-        Vector3 pos = transform.localPosition;
+        Vector3 pos = transform.position;
         x = pos.x;
         y = pos.y;
 
@@ -59,7 +66,7 @@ public class OpticalComponent : MonoBehaviour
         cos = Mathf.Cos(angle);
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;
-    }
+    }*/
 
     float xc, yc;
     public float Collision(LightRay lr, int i)
@@ -105,7 +112,6 @@ public class OpticalComponent : MonoBehaviour
 
     protected float xc1, yc1, xc2, yc2;
 
-
     virtual public float Collision2(LightRay lr)
     {
         float l1 = Collision(lr, 1);
@@ -120,15 +126,13 @@ public class OpticalComponent : MonoBehaviour
 
     public virtual void Deflect(LightRay r) { }
 
-    public virtual void Delete() { }
-
-    public virtual void ChangeVisual()
+        override public void ChangeVisual()
     {
         Animator anim = GetComponent<Animator>();
 
         if (anim)
         {
-            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, radiusMin, radiusMax));
+            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, RadiusMin, RadiusMax));
         }
 
         GetComponent<ChessPiece>().LetFindPlace();

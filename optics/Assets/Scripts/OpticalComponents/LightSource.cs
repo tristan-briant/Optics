@@ -51,8 +51,9 @@ public class LightSource : OpticalComponent
 
     public void EmitLight()
     {
-        float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
-        Vector3 pos = transform.localPosition;
+        float angle = transform.rotation.eulerAngles.z * 2 * Mathf.PI / 360;
+       
+        Vector3 pos = new Vector3(x, y, 0);
 
         if (LightRays == null)
             InitializeSource();

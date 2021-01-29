@@ -1,43 +1,63 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PanZoom : MonoBehaviour
+
+public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     Vector3 touchStart;
-    float zoomInit;
+    float zoomMax;
     RectTransform rt;
 
-    const float SizeOffset = 3.75f-1f; // Camera field bigger of SizeOffset than playground (size of options)
+    private float width;
+    private float height;
+
+    const float SizeOffset = 3.75f - 1f; // Camera field bigger of SizeOffset than playground (size of options)
+
+    void Awake()
+    {
+        width = (float)Screen.width / 2.0f;
+        height = (float)Screen.height / 2.0f;
+        Input.simulateMouseWithTouches = false;
+    }
+
 
     void Start()
     {
-        rt = (RectTransform)transform;
-        zoomInit = Camera.main.orthographicSize = (rt.rect.height + SizeOffset) / 2;
+        GameObject PG = GameObject.Find("Playground");
+        rt = (RectTransform)PG.transform;
+        zoomMax = (rt.rect.height + SizeOffset) / 2;
+        Camera.main.orthographicSize = rt.rect.height / 2;
+        Camera.main.transform.position = new Vector3(0, 0, -10);
         //Debug.Log("Camera Size : " + zoomInit + "Pg size : " + x + "   -  " + y);
     }
 
-    void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         ChessPiece.UnSelectAll();
     }
-    void OnMouseDrag()
+
+    public void OnPointerUp(PointerEventData eventData)
     {
-        Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Camera.main.transform.position += direction;
-        ClampCamera();
+        Debug.Log("Up" + Input.touchCount);
+        touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
     }
+
+
 
     void zoom(float increment)
     {
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + increment, 0.5f * zoomInit, zoomInit);
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + increment, 0.5f * zoomMax, zoomMax);
         ClampCamera();
     }
 
-    bool two2oneTouch;
+    PointerManager closest;
     void Update()
     {
-
         zoom(-Input.GetAxis("Mouse ScrollWheel"));
+
+
 
         if (Input.touchCount == 2)
         {
@@ -48,16 +68,58 @@ public class PanZoom : MonoBehaviour
             Vector2 posOld1 = T1.position - T1.deltaPosition;
 
             float deltaMagnitude = (posOld1 - posOld0).magnitude - (T1.position - T0.position).magnitude;
-            zoom(deltaMagnitude * 0.002f);
+            //zoom(deltaMagnitude * 0.002f);
+            Vector3 deltaPos;
+            deltaPos.x = 0.5f * (T0.deltaPosition.x + T1.deltaPosition.x);
+            deltaPos.y = 0.5f * (T0.deltaPosition.y + T1.deltaPosition.y);
+            deltaPos.z = 0;
+            Camera.main.transform.position -= deltaPos/ width * Camera.main.orthographicSize; 
 
-            two2oneTouch = true;
+            zoom(deltaMagnitude / width * Camera.main.orthographicSize);
         }
-        else if (two2oneTouch == true)
+        /*
+                if (Input.touchCount == 1)
+                {
+                    Touch touch = Input.GetTouch(0);
+                    switch (touch.phase)
+                    {
+                        case TouchPhase.Began:
+
+                            closest = FindClosestComponent(Camera.main.ScreenToWorldPoint(touch.position));
+                            if (closest)
+                                closest.OnPointerDown(null);
+                            Debug.Log(closest);
+
+                            break;
+
+                        //Determine if the touch is a moving touch
+                        case TouchPhase.Moved:
+                            //if (closest)
+                                closest.OnDrag(null);//
+                            //touch.position - startPos;
+
+                            break;
+
+                        case TouchPhase.Ended:
+                            if (closest)
+                                closest.OnPointerUp(null);
+                            break;
+                    }
+
+
+                }*/
+
+
+        /*
+        else if (Input.touchCount == 1 && two2oneTouch == true)
         {
             // evite un décalage brusque quand on retire un doigt mais ne marche pas
-            touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            //Touch T0 = Input.GetTouch(0);
+            //touchStart = T0.position;
             two2oneTouch = false;
-        }
+        }*/
     }
 
     void ClampCamera()
@@ -76,8 +138,39 @@ public class PanZoom : MonoBehaviour
         else
             CamPos.y = Mathf.Clamp(CamPos.y, -(rt.rect.height + SizeOffset) / 2 + camsize, (rt.rect.height + SizeOffset) / 2 - camsize);
 
-        Camera.main.transform.position = CamPos;
+        CamPos.z = -10f;
 
+        Camera.main.transform.position = CamPos;
     }
 
+    PointerManager FindClosestComponent(Vector2 position)
+    {
+
+        float distance = 1;  // If nothing under 1 return null
+        PointerManager closest = null;
+        foreach (PointerManager gc in FindObjectsOfType<PointerManager>())
+        {
+
+            Vector3 gcPos = gc.transform.position;
+            Vector2 gcPos2D = new Vector2(gcPos.x, gcPos.y);
+            float d = (gcPos2D - position).magnitude;
+            if (distance < 0 || d < distance)
+            {
+                distance = d;
+                closest = gc;
+            }
+        }
+        return closest;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (Input.touchCount == 1|| Input.GetMouseButtonDown(0))
+        {
+            Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            direction.z = 0;
+            Camera.main.transform.position += direction;
+            ClampCamera();
+        }
+    }
 }

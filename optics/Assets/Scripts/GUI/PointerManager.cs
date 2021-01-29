@@ -10,6 +10,10 @@ public class PointerManager : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
     float BeginClickTime;
 
+    public void Start(){
+        //Input.simulateMouseWithTouches=false;
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         BeginClickTime = Time.time;

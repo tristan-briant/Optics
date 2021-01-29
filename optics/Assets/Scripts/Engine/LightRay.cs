@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class LightRay : MonoBehaviour
 {
-
+    public static int rayNumber;
+    public const int rayNumberMax = 1000;
+    private static bool newRaysAvailable;
     public Vector3 StartPosition1, StartPosition2;
     public float Direction1, Direction2;
     public float Length1, Length2;
@@ -22,6 +24,8 @@ public class LightRay : MonoBehaviour
     static public int DepthMax;
 
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
+
+    public static bool NewRaysAvailable { get { bool value = newRaysAvailable; newRaysAvailable = false; return value; } set => newRaysAvailable = value; }
 
     void InitializeMesh()
     {
@@ -188,6 +192,9 @@ public class LightRay : MonoBehaviour
 
     public void FreeLightRay() // remove child recursively
     {
+        if (RaysReserve.transform.childCount == 0)
+            newRaysAvailable = true;
+            
         foreach (LightRay r in GetComponentsInChildren<LightRay>())
         {
             r.transform.parent = RaysReserve;
@@ -199,7 +206,10 @@ public class LightRay : MonoBehaviour
     static public LightRay NewLightRayChild(LightRay lr = null)
     {
         if (lr && lr.depth >= DepthMax) return null; // profondeur max atteinte !!
-        if (RaysReserve.childCount == 0) return null; // Plus de rayons disponible !!
+        if (RaysReserve.childCount == 0)
+        {
+            return null; // Plus de rayons disponible !!
+        }
 
         // Preparation du rayon
         LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
@@ -221,6 +231,9 @@ public class LightRay : MonoBehaviour
 
     static public LightRay InstantiateLightRay()
     {
+        if (RaysReserve.transform.childCount == 0)
+            newRaysAvailable = true;
+
         GameObject ray = new GameObject("Ray");
         ray.transform.SetParent(RaysReserve);
         ray.transform.localScale = Vector3.one;
@@ -228,6 +241,7 @@ public class LightRay : MonoBehaviour
 
         LightRay r = ray.AddComponent<LightRay>();
         r.InitializeMesh();
+        rayNumber++;
         return r;
     }
 

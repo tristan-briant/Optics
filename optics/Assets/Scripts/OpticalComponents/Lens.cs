@@ -7,12 +7,8 @@ public class Lens : OpticalComponent
     public float focal = 1.0f;
     //public float Focal { get => focal; set { focal = value; hasChanged = true; ChangeVisual(); } }
     public float Vergence { get => 1f / focal; set { focal = 1 / value; hasChanged = true; ChangeVisual(); } }
-
-    public float VergenceMin { get => vergenceMin; set => vergenceMin = value; }
-    public float VergenceMax { get => vergenceMax; set => vergenceMax = value; }
-    private float vergenceMax = 1.5f, vergenceMin = -1.5f;
-
-    new protected float radiusMin = 0.2f, radiusMax = 1.5f;
+    public float VergenceMin { get => -1.5f; }
+    public float VergenceMax { get => +1.5f; }
 
     override public void Deflect(LightRay r)
     {
@@ -92,11 +88,12 @@ public class Lens : OpticalComponent
 
         if (anim)
         {
-            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, radiusMin, radiusMax));
-            anim.SetFloat("Shape", MyMathf.MapToFrame(Vergence, vergenceMin, vergenceMax));
+            anim.SetFloat("Size", MyMathf.MapToFrame(Radius, RadiusMin, RadiusMax));
+            anim.SetFloat("Shape", MyMathf.MapToFrame(Vergence, VergenceMin, VergenceMax));
 
             GetComponent<ChessPiece>().LetFindPlace();
         }
     }
+
 
 }

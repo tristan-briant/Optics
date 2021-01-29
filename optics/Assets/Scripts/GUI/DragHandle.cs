@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandler
+public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Animator animator;
     Vector3 startPos;
@@ -22,7 +22,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
 
     void Start()
     {
-        animator = GetComponentInParent<Animator>();
+        //animator = GetComponentInParent<Animator>();
         startPos = transform.localPosition;
         startPos.z = 0;
         startAngle = AngleFromXY(startPos.x, startPos.y);
@@ -58,7 +58,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
                         + (1 - ratioFineTranslation) * HandleInitialPosition;
 
 
-        animator.SetBool("controled", true);
+        //animator.SetBool("controled", true);
         lr.enabled = true;
         dragged = true;
 
@@ -68,7 +68,7 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
     public void OnPointerUp(PointerEventData ev)
     {
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
-        animator.SetBool("controled", false);
+        //animator.SetBool("controled", false);
         StartCoroutine("BackInPlace");
         dragged = false;
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
@@ -101,40 +101,15 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
     {
         if (dragged)
         {
-            Vector3 direction;
-            if (rotation)
-                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
-            else
-                direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
-            direction.z = 0;
 
-            if (rotation)
-                XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
-            else
-                XYPosition(direction);
-
-            float angleMouse1 = AngleFromXY(direction.x, direction.y, -startAngle);
-
-            if (rotation)
-            {
-                handle.GetComponent<HandleManager>().SetTargetDeltaAngle(angleMouse1 - angleMouse0, clamped);
-                angleMouse0 = angleMouse1;
-            }
-
-            if (translation)
-            {
-                Vector3 positionMouse1 = ratioFineTranslation * transform.position
-                                        + (1 - ratioFineTranslation) * HandleInitialPosition;
-
-                handle.GetComponent<HandleManager>().SetTargetDeltaPosition(positionMouse1 - positionMouse0);
-                positionMouse0 = positionMouse1;
-            }
-            if (rotation)
-                animator.SetFloat("rotation", angleMouse1 / 360.0f);
+            /*if (rotation)
+                animator.SetFloat("rotation", angleMouse1 / 360.0f);*/
         }
 
         lr.SetPosition(0, handle.position);
         lr.SetPosition(1, transform.position);
+
+        transform.rotation = Quaternion.identity;
     }
 
     void XYLocalPosition(Vector3 newPos)
@@ -151,5 +126,49 @@ public class DragHandle : MonoBehaviour//, IPointerDownHandler, IPointerUpHandle
         Vector3 pos = newPos;
         pos.z = transform.position.z;
         transform.position = pos;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector3 direction;
+        if (rotation)
+            direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - handle.position - offset;
+        else
+            direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
+        direction.z = 0;
+
+        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition)- offset;
+
+        /*if (rotation)
+            XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
+        else
+            XYPosition(direction);*/
+
+        float angleMouse1 = AngleFromXY(direction.x, direction.y, -startAngle);
+
+        if (rotation)
+        {
+            handle.GetComponent<HandleManager>().SetTargetDeltaAngle(angleMouse1 - angleMouse0, clamped);
+            angleMouse0 = angleMouse1;
+        }
+
+        if (translation)
+        {
+            Vector3 positionMouse1 = ratioFineTranslation * transform.position
+                                    + (1 - ratioFineTranslation) * HandleInitialPosition;
+
+            handle.GetComponent<HandleManager>().SetTargetDeltaPosition(positionMouse1 - positionMouse0);
+            positionMouse0 = positionMouse1;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
     }
 }

@@ -5,17 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    public int Level = 0;
 
     void Start() // Lance le GameEngine quand le niveau est prêt
     {
-        Application.targetFrameRate = 30;
+        if (SceneManager.sceneCount == 1)
+            SceneManager.LoadScene("MiniMap", LoadSceneMode.Additive);
+
+
         GameEngine GE = GameObject.Find("GameEngine").GetComponent<GameEngine>();
-        StartCoroutine("StartWithDelay", 0.1f);
+        GE.StartGameEngine();
+        //StartCoroutine("StartWithDelay", 0.1f);
     }
 
     IEnumerator StartWithDelay(float second)
     {
-        yield return new WaitForSeconds(second);
+        while (GameObject.Find("GameEngine") == null)
+            yield return 0; // wait next frame
+        //yield return new WaitForSeconds(second);
         GameEngine GE = GameObject.Find("GameEngine").GetComponent<GameEngine>();
         GE.StartGameEngine();
         Debug.Log("Game engine Started!");

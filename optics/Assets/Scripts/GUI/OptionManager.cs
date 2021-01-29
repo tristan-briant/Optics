@@ -15,7 +15,7 @@ public class OptionManager : MonoBehaviour
     public GameObject RotationSwitch;
     public GameObject TranslationSwitch;
 
-    void Start()
+    public virtual void Start()
     {
         transform.SetParent(CP.transform);
 
@@ -23,10 +23,13 @@ public class OptionManager : MonoBehaviour
         itemHolder.GetComponent<Canvas>().sortingLayerName = "Handle";
 
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
+        //transform.localRotation = Quaternion.identity;
+        transform.rotation = Quaternion.identity;
 
-        ChangeColorButton(CP.CanRotate, RotationSwitch);
-        ChangeColorButton(CP.CanTranslate, TranslationSwitch);
+        if (RotationSwitch)
+            ChangeColorButton(CP.CanRotate, RotationSwitch);
+        if (TranslationSwitch)
+            ChangeColorButton(CP.CanTranslate, TranslationSwitch);
     }
 
     void ChangeColorButton(bool enable, GameObject button)
@@ -55,6 +58,12 @@ public class OptionManager : MonoBehaviour
         GameObject.DestroyImmediate(gameObject);
         GameObject.DestroyImmediate(CP.gameObject);
         FindObjectOfType<GameEngine>().UpdateComponentList();
+    }
+
+    void Update()
+    {
+        //transform.position = CP.transform.position;
+        transform.rotation = Quaternion.identity;
     }
 
 }

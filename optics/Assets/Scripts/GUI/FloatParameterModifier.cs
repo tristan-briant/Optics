@@ -18,7 +18,7 @@ public class FloatParameterModifier : MonoBehaviour
 
     private void Start()
     {
-        ob = GetComponentInParent<OptionManager>().CP.GetComponent<OpticalComponent>();
+        ob = GetComponentInParent<OptionManager>().CP.GetComponent<GenericComponent>();
 
         slider = GetComponent<Slider>();
 

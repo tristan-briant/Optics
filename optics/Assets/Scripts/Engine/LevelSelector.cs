@@ -16,7 +16,8 @@ public class LevelSelector : MonoBehaviour {
     public void SelectLevel(int n)
     {
         Debug.Log("Loading: " + "Level" + n);
-        SceneManager.LoadScene("Level" + n, LoadSceneMode.Single);
+        SceneManager.LoadScene("Level" + n, LoadSceneMode.Additive);
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("Level" + n));
         SceneManager.UnloadSceneAsync("MiniMap");
         CurrentLevel = n;
     }
@@ -29,7 +30,7 @@ public class LevelSelector : MonoBehaviour {
             {
                 GE.ResetLightRay();
                 SceneManager.UnloadSceneAsync("Level" + CurrentLevel);
-                SceneManager.LoadScene("MiniMap", LoadSceneMode.Single);
+                SceneManager.LoadScene("MiniMap", LoadSceneMode.Additive);
                 GE.running = false;
             }
             else

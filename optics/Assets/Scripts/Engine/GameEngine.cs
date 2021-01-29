@@ -24,6 +24,7 @@ public class GameEngine : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 30;
         RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
         RaysReserve.gameObject.SetActive(false);
         Rays = GameObject.Find("Rays").transform;
@@ -38,10 +39,10 @@ public class GameEngine : MonoBehaviour
 
     IEnumerator FillRaysReserve()
     {
-        for (int i = 0; i < NRaysMax; i++)
+        for (int i = 0; i < LightRay.rayNumberMax; i++)
         {
             int k = i;
-            for (; i < k + 100; i++)
+            for (; i < k + 100 && i < LightRay.rayNumberMax; i++)
                 LightRay.InstantiateLightRay();
 
             yield return null;
@@ -56,7 +57,7 @@ public class GameEngine : MonoBehaviour
         running = true;
     }
 
-    void Update()
+    void LateUpdate()
     {
         //Profiler.BeginSample("MyPieceOfCode");
 
@@ -86,6 +87,13 @@ public class GameEngine : MonoBehaviour
             UpdateAllRays();
             return;
         }*/
+
+        if (LightRay.NewRaysAvailable)
+        {
+            UpdateAllRays();
+            return;
+        }
+
 
         foreach (OpticalComponent op in OpticalComponents)
         {
