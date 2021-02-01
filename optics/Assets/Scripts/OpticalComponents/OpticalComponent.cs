@@ -126,7 +126,7 @@ public class OpticalComponent : GenericComponent
 
     public virtual void Deflect(LightRay r) { }
 
-        override public void ChangeVisual()
+    override public void ChangeVisual()
     {
         Animator anim = GetComponent<Animator>();
 

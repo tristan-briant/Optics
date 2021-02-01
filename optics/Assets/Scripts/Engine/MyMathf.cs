@@ -23,4 +23,28 @@ public class MyMathf
 
     }
 
+    static public float Round(float x, float increment)
+    {
+        if (increment == 0)
+            return x;
+        else
+            return Mathf.Round(x / increment) * increment;
+    }
+
+    static public Vector2 Round(Vector2 v, float increment)
+    {
+        v.x = Round(v.x, increment);
+        v.y = Round(v.y, increment);
+        return v;
+    }
+
+    static public Vector3 Round(Vector3 v, float increment)
+    {
+        v.x = Round(v.x, increment);
+        v.y = Round(v.y, increment);
+        v.z = Round(v.z, increment);
+        return v;
+    }
+
+
 }

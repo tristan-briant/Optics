@@ -10,9 +10,14 @@ public class LightSource : OpticalComponent
     LightRay[] LightRays;
     public Color Color = new Color(1, 1, 0.8f, 0.5f);
     public float Intensity = 1;
-    //private float lightRadius = 0;
+    private float lightRadius = 0.5f;
 
     public float Vergence { get => vergence; set { vergence = value; hasChanged = true; } }
+
+    public float LightRadius { get => lightRadius; set { lightRadius = value; hasChanged = true; } }
+    public float LightRadiusMax { get => 0.7f; }
+    public float LightRadiusMin { get => 0.1f; }
+
 
     override public void Update()
     {
@@ -44,15 +49,17 @@ public class LightSource : OpticalComponent
         float xo2 = r.StartPosition2.x;
         float yo2 = r.StartPosition2.y;
 
-        r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
-        r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
+        //r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
+        //r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
+        r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
+        r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
     }
 
     public void EmitLight()
     {
         float angle = transform.rotation.eulerAngles.z * 2 * Mathf.PI / 360;
-       
+
         Vector3 pos = new Vector3(x, y, 0);
 
         if (LightRays == null)
@@ -70,14 +77,14 @@ public class LightSource : OpticalComponent
             r.Intensity = Intensity / N;
 
             // Calculs des positions et directions
-            float l1 = -Radius * (-0.5f + i / (float)N);
-            float l2 = -Radius * (-0.5f + (i + 1) / (float)N);
+            float l1 = -lightRadius * (-0.5f + i / (float)N);
+            float l2 = -lightRadius * (-0.5f + (i + 1) / (float)N);
 
             r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
             r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
 
-            r.Direction1 = Vergence * Radius * (-0.5f + i / (float)N) + angle;
-            r.Direction2 = Vergence * Radius * (-0.5f + (i + 1) / (float)N) + angle;
+            r.Direction1 = Vergence * lightRadius * (-0.5f + i / (float)N) + angle;
+            r.Direction2 = Vergence * lightRadius * (-0.5f + (i + 1) / (float)N) + angle;
 
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();

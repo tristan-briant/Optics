@@ -28,21 +28,14 @@ public class Mirror : OpticalComponent
         {
             while (r.transform.childCount > 1)
                 r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
-            //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
+
             lr = r.transform.GetChild(0).GetComponent<LightRay>();
         }
 
-        //Transform nextRay = r.transform.GetChild(0);
-        //LightRay lr = nextRay.GetComponent<LightRay>();
-        //LightRay lr = NewRayLightChild(r);
         if (lr == null) return;
-
-        //lr.isVisible = true;
-        //lr.gameObject.SetActive(true);
 
         lr.Col = r.Col;
         lr.Intensity = r.Intensity;
-        //lr.Col.r = lr.Col.r * 0.2f;
         lr.StartPosition1 = new Vector3(xc1, yc1, 0);
         lr.StartPosition2 = new Vector3(xc2, yc2, 0);
         lr.Direction1 = ao1;

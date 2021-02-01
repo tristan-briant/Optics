@@ -10,6 +10,9 @@ public class ChessPiece : MonoBehaviour
     public GameObject Options;
     public GameObject PG;
 
+    [System.NonSerialized]
+    public bool SnapToGrid = true;
+
     GameObject Handle;   // Handle  or Options
 
     public bool CanTranslate = true;
@@ -123,6 +126,9 @@ public class ChessPiece : MonoBehaviour
     void OnMouseDragging()
     {
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
+        if (SnapToGrid)
+            positionSet = MyMathf.Round(positionSet, 0.25f);
+
     }
 
     void OnMouseEndDrag()
@@ -197,8 +203,6 @@ public class ChessPiece : MonoBehaviour
         yield return new WaitForFixedUpdate();
         Constrain(false, false);
     }
-
-
 
 }
 

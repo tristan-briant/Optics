@@ -18,7 +18,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     Vector3 HandleInitialPosition;
     Vector3 newLocalPosition;
 
-    const float ratioFineTranslation = 0.1f;
+    const float ratioFineTranslation = 0.25f;
 
     void Start()
     {
@@ -99,13 +99,6 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     void Update()
     {
-        if (dragged)
-        {
-
-            /*if (rotation)
-                animator.SetFloat("rotation", angleMouse1 / 360.0f);*/
-        }
-
         lr.SetPosition(0, handle.position);
         lr.SetPosition(1, transform.position);
 

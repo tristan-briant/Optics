@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler,IEndDragHandler
 {
     Vector3 touchStart;
     float zoomMax;
@@ -43,8 +43,6 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
     }
-
-
 
     void zoom(float increment)
     {
@@ -165,12 +163,22 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (Input.touchCount == 1|| Input.GetMouseButtonDown(0))
+        if (Input.touchCount == 1|| Input.GetMouseButton(0))
         {
             Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             direction.z = 0;
             Camera.main.transform.position += direction;
             ClampCamera();
         }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
     }
 }
