@@ -7,16 +7,19 @@ public class ChessPiece : MonoBehaviour
 {
     public static ChessPiece itemSelected = null;
     public static ChessPiece manipulated = null;
-    public GameObject Options;
-    public GameObject PG;
 
+
+    //[System.NonSerialized]
+    public GameObject Options;
+    [System.NonSerialized]
+    public GameObject PG;
     [System.NonSerialized]
     public bool SnapToGrid = true;
 
     GameObject Handle;   // Handle  or Options
 
-    public bool CanTranslate = true;
-    public bool CanRotate = true;
+    public bool CanTranslate { get => GetComponent<GenericComponent>().CanTranslate; set => GetComponent<GenericComponent>().CanTranslate = value; }
+    public bool CanRotate { get => GetComponent<GenericComponent>().CanRotate; set => GetComponent<GenericComponent>().CanRotate = value; }
 
     public bool moving;
     bool clamped;
@@ -94,9 +97,15 @@ public class ChessPiece : MonoBehaviour
             Selected = false;
         else
         {
-            Selected = true;
-            Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
-            Handle.GetComponent<HandleManager>().CP = this;
+            if (CanRotate || CanTranslate)
+            {
+                Selected = true;
+                Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
+                Handle.GetComponent<HandleManager>().CP = this;
+            }
+            else
+                Selected = false;
+
         }
     }
 
@@ -118,6 +127,8 @@ public class ChessPiece : MonoBehaviour
     void OnMouseBeginDrag()
     {
         //offsetTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        if (!CanTranslate) return;
+
         Manipulated = this;
         moving = true;
         Constrain(true, false);
@@ -125,6 +136,8 @@ public class ChessPiece : MonoBehaviour
 
     void OnMouseDragging()
     {
+        if (!CanTranslate) return;
+
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
         if (SnapToGrid)
             positionSet = MyMathf.Round(positionSet, 0.25f);
@@ -133,6 +146,8 @@ public class ChessPiece : MonoBehaviour
 
     void OnMouseEndDrag()
     {
+        if (!CanTranslate) return;
+
         moving = false;
         LetFindPlace();
         Manipulated = null;

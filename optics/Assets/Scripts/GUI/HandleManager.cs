@@ -11,6 +11,7 @@ public class HandleManager : MonoBehaviour
     const float incrementRotation = 11.25f;
 
 
+
     void Start()
     {
 
@@ -46,13 +47,11 @@ public class HandleManager : MonoBehaviour
         if (clamped)
         {
             float a, b;
-
-            //CP.GetComponent<ChessPiece>().angleSet = Mathf.Round(CP.GetComponent<ChessPiece>().angleSet / incrementRotation) * incrementRotation;
             a = CP.GetComponent<ChessPiece>().angleSet;
             DeltaAngleSet += deltaAngle;
 
             a += DeltaAngleSet;
-            b = Mathf.Round(a / incrementRotation) * incrementRotation;
+            b = MyMathf.Round(a, incrementRotation);
             DeltaAngleSet = a - b;
 
             CP.GetComponent<ChessPiece>().angleSet = b;
@@ -71,16 +70,6 @@ public class HandleManager : MonoBehaviour
         if (translation || rotation)
             ChessPiece.Manipulated = CP;
         else ChessPiece.Manipulated = null;
-
-        Debug.Log(translation + "  " + rotation);
     }
-
-    void Update()
-    {
-        //transform.position = CP.transform.position;
-        //transform.rotation = Quaternion.identity;
-    }
-
-
 
 }

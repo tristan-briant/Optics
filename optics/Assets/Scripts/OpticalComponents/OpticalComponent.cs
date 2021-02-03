@@ -14,8 +14,8 @@ public class OpticalComponent : GenericComponent
 
     public float radius = 0.5f;
     public float Radius { get => radius; set { radius = Mathf.Clamp(value, RadiusMin, RadiusMax); hasChanged = true; ChangeVisual(); } }
-    public float RadiusMax { get => 1.5f; }
-    public float RadiusMin { get => 0.2f; }
+    virtual public float RadiusMax { get => 1.5f; }
+    virtual public float RadiusMin { get => 0.2f; }
 
     /*[System.NonSerialized]
     public float cos, sin, param; // vecteur directeur

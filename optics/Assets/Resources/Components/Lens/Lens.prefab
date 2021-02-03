@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5537106794659320989}
   - component: {fileID: 114436401197558634}
   - component: {fileID: 50457244796565126}
-  - component: {fileID: 1821416354490942849}
   - component: {fileID: -3893915406522161320}
   - component: {fileID: 3059964434704241169}
   - component: {fileID: 271052005}
@@ -70,9 +69,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Options: {fileID: 7190625865546143246, guid: 40a9aa683859f0942ae90fc5786b5a22, type: 3}
-  PG: {fileID: 0}
-  CanTranslate: 1
-  CanRotate: 1
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
@@ -97,14 +93,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 7
---- !u!222 &1821416354490942849
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237728451439292}
-  m_CullTransparentMesh: 0
 --- !u!114 &-3893915406522161320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,9 +105,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207aca1181379e049b868c45fbd636d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabPath: Components/Lens/Lens
   x: 0
   y: 0
   angle: 0
+  CanTranslate: 1
+  CanRotate: 1
   radius: 1
   focal: 1
 --- !u!95 &3059964434704241169
@@ -352,9 +343,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300010, guid: 87ce9b832b750f749a6662d5337007d2, type: 3}
+  m_Sprite: {fileID: -8331362397192222888, guid: ce7d096d8d1b47747ad105d31bd102be,
+    type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

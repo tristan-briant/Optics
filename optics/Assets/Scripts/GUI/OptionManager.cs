@@ -7,20 +7,18 @@ public class OptionManager : MonoBehaviour
 {
     public ChessPiece CP;
 
-    public Slider slider;
-
     public Color EnableColor;
     public Color DisableColor;
 
     public GameObject RotationSwitch;
     public GameObject TranslationSwitch;
 
+    Transform itemHolder;
+
     public virtual void Start()
     {
         transform.SetParent(CP.transform);
 
-        Transform itemHolder = transform.Find("ItemHolder");
-        itemHolder.GetComponent<Canvas>().sortingLayerName = "Handle";
 
         transform.localPosition = Vector3.zero;
         //transform.localRotation = Quaternion.identity;
@@ -30,6 +28,37 @@ public class OptionManager : MonoBehaviour
             ChangeColorButton(CP.CanRotate, RotationSwitch);
         if (TranslationSwitch)
             ChangeColorButton(CP.CanTranslate, TranslationSwitch);
+
+        itemHolder = transform.Find("ItemHolder");
+        if (itemHolder)
+        {
+            itemHolder.GetComponent<Canvas>().sortingLayerName = "Handle";
+
+            if (CP.transform.position.x >= Camera.main.transform.position.x && CP.transform.position.y >= Camera.main.transform.position.y)
+            {
+                ((RectTransform)itemHolder.transform).anchoredPosition = new Vector2(-0.5f, -0.5f);
+                ((RectTransform)itemHolder.transform).pivot = new Vector2(1, 1);
+            }
+            if (CP.transform.position.x < Camera.main.transform.position.x && CP.transform.position.y >= Camera.main.transform.position.y)
+            {
+                ((RectTransform)itemHolder.transform).anchoredPosition = new Vector2(0.5f, -0.5f);
+                ((RectTransform)itemHolder.transform).pivot = new Vector2(0, 1);
+            }
+            if (CP.transform.position.x >= Camera.main.transform.position.x && CP.transform.position.y < Camera.main.transform.position.y)
+            {
+                ((RectTransform)itemHolder.transform).anchoredPosition = new Vector2(-0.5f, 0.5f);
+                ((RectTransform)itemHolder.transform).pivot = new Vector2(1, 0);
+            }
+            if (CP.transform.position.x < Camera.main.transform.position.x && CP.transform.position.y < Camera.main.transform.position.y)
+            {
+                ((RectTransform)itemHolder.transform).anchoredPosition = new Vector2(0.5f, 0.5f);
+                ((RectTransform)itemHolder.transform).pivot = new Vector2(0, 0);
+            }
+
+            SetSize();
+        }
+
+
     }
 
     void ChangeColorButton(bool enable, GameObject button)
@@ -46,7 +75,7 @@ public class OptionManager : MonoBehaviour
         ChangeColorButton(CP.CanRotate, RotationSwitch);
     }
 
-    public void ToggleRTranslation()
+    public void ToggleTranslation()
     {
         CP.CanTranslate = !CP.CanTranslate;
         ChangeColorButton(CP.CanTranslate, TranslationSwitch);
@@ -54,9 +83,7 @@ public class OptionManager : MonoBehaviour
 
     public void DeleteComposant()
     {
-        CP.GetComponent<OpticalComponent>().Delete();
-        GameObject.DestroyImmediate(gameObject);
-        GameObject.DestroyImmediate(CP.gameObject);
+        CP.GetComponent<GenericComponent>().Delete();
         FindObjectOfType<GameEngine>().UpdateComponentList();
     }
 
@@ -64,6 +91,14 @@ public class OptionManager : MonoBehaviour
     {
         //transform.position = CP.transform.position;
         transform.rotation = Quaternion.identity;
+        SetSize();
+
+    }
+
+    void SetSize()
+    {
+        if (itemHolder)
+            itemHolder.localScale = Mathf.Clamp(Camera.main.orthographicSize / 3f, 0.1f, 10f) * Vector2.one;
     }
 
 }

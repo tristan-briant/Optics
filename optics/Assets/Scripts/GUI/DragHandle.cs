@@ -42,7 +42,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         OnPointerUp(null);
     }
 
-    bool dragged = false;
+    //bool dragged = false;
     Vector3 offset;
 
     public void OnPointerDown(PointerEventData ev)
@@ -60,7 +60,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         //animator.SetBool("controled", true);
         lr.enabled = true;
-        dragged = true;
+        // = true;
 
         handle.GetComponent<HandleManager>().ConstrainTarget(translation, rotation);
     }
@@ -70,7 +70,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
         //animator.SetBool("controled", false);
         StartCoroutine("BackInPlace");
-        dragged = false;
+        //dragged = false;
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
     }
 

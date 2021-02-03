@@ -5,12 +5,15 @@ using UnityEngine;
 public class Wall : OpticalComponent
 {
 
+    override public float RadiusMax { get => Mathf.Infinity; }
+    override public float RadiusMin { get => -Mathf.Infinity; }
+
+
     override public void Deflect(LightRay r)
     {
 
         while (r.transform.childCount > 0)
             r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
-        //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
 
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
@@ -23,5 +26,11 @@ public class Wall : OpticalComponent
         r.Length2 = (xc2 - xo2) * r.cos2 + (yc2 - yo2) * r.sin2;
 
     }
+
+    override public void ChangeVisual()
+    {
+        // Nothing to do 
+    }
+
 
 }

@@ -37,10 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\OptionRailManager.cs" />
+     <Compile Include="Assets\OptionWall.cs" />
      <Compile Include="Assets\RailManager.cs" />
      <Compile Include="Assets\Scripts\Alignment.cs" />
      <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
      <Compile Include="Assets\Scripts\Debug\polygon.cs" />
+     <Compile Include="Assets\Scripts\Designer\Designer.cs" />
+     <Compile Include="Assets\Scripts\Designer\SimpleObject.cs" />
      <Compile Include="Assets\Scripts\Engine\ChessPiece.cs" />
      <Compile Include="Assets\Scripts\Engine\DontDestroyOnLoad.cs" />
      <Compile Include="Assets\Scripts\Engine\GameEngine.cs" />
@@ -50,7 +53,9 @@
      <Compile Include="Assets\Scripts\Engine\MyMathf.cs" />
      <Compile Include="Assets\Scripts\Engine\StarFollowRay.cs" />
      <Compile Include="Assets\Scripts\FixedRotation.cs" />
+     <Compile Include="Assets\Scripts\GUI\BoolParameterModifier.cs" />
      <Compile Include="Assets\Scripts\GUI\CreateComponent.cs" />
+     <Compile Include="Assets\Scripts\GUI\DimensionHandle.cs" />
      <Compile Include="Assets\Scripts\GUI\DragHandle.cs" />
      <Compile Include="Assets\Scripts\GUI\FloatParameterModifier.cs" />
      <Compile Include="Assets\Scripts\GUI\HandleManager.cs" />

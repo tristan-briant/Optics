@@ -6,13 +6,18 @@ using UnityEngine.UI;
 
 public class GenericComponent : MonoBehaviour
 {
+    public string prefabPath;
     public float x = 0, y = 0; // position
     public float angle = 0;
+
+    public bool CanTranslate = true;
+    public bool CanRotate = true;
 
     [System.NonSerialized]
     public float cos, sin, param; // vecteur directeur
     [System.NonSerialized]
     public bool hasChanged = true;
+
 
 
     Vector3 OldPosition;
@@ -42,17 +47,20 @@ public class GenericComponent : MonoBehaviour
         x = pos.x;
         y = pos.y;
 
-        angle = (transform.rotation.eulerAngles.z + 90) * Mathf.PI / 180f;
+        angle = (transform.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
         cos = Mathf.Cos(angle);
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;
     }
 
-    public virtual void Delete() { }
+    public virtual void Delete()
+    {
+        DestroyImmediate(gameObject);
+    }
 
     public virtual void ChangeVisual()
     {
-        
+
     }
 
 }

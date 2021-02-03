@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5537106794659320989}
   - component: {fileID: 114436401197558634}
   - component: {fileID: 50457244796565126}
-  - component: {fileID: 1821416354490942849}
   - component: {fileID: 3059964434704241169}
   - component: {fileID: 2423473356994844927}
   - component: {fileID: 1014612037}
@@ -69,10 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a8992178a25bf4591fea2a2d4f4775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Options: {fileID: 7190625865546143246, guid: d77895fb8bf811049a4bee0ce3cb7cc2, type: 3}
-  PG: {fileID: 0}
-  CanTranslate: 1
-  CanRotate: 1
+  Options: {fileID: 7190625865546143246, guid: f1d16d82575f70c42858eaffe527ee80, type: 3}
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
@@ -97,14 +93,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 7
---- !u!222 &1821416354490942849
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1237728451439292}
-  m_CullTransparentMesh: 0
 --- !u!95 &3059964434704241169
 Animator:
   serializedVersion: 3
@@ -136,9 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0cc7a2eb1a584409e3d596e8fce862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabPath: Components/Semi/Semi
   x: 0
   y: 0
   angle: 0
+  CanTranslate: 1
+  CanRotate: 1
   radius: 0.5
   reflectionCoef: 0.5
 --- !u!58 &1014612037
@@ -323,7 +314,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 0.9999924}
+  m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222333048509928748
 CanvasRenderer:

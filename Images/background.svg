@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="background.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <defs
+     id="defs2">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter959"
+       x="-0.05292"
+       width="1.10584"
+       y="-0.05292"
+       height="1.10584">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.3418344"
+         id="feGaussianBlur961" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#3c3c3c"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="419.00331"
+     inkscape:cy="135.42807"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:pagecheckerboard="false"
+     inkscape:window-width="1540"
+     inkscape:window-height="860"
+     inkscape:window-x="146"
+     inkscape:window-y="199"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:0.292675px;stop-color:#000000"
+       id="rect833"
+       width="67.73333"
+       height="67.73333"
+       x="0"
+       y="0"
+       rx="11.524374"
+       ry="11.524374"
+       inkscape:export-filename="background0.png"
+       inkscape:export-xdpi="96.000008"
+       inkscape:export-ydpi="96.000008" />
+    <rect
+       style="mix-blend-mode:normal;fill:#ffffff;stroke:none;stroke-width:0.26295px;filter:url(#filter959);stop-color:#000000"
+       id="rect837"
+       width="60.854168"
+       height="60.854168"
+       x="67.73333"
+       y="0"
+       rx="5.0711808"
+       ry="5.0711808"
+       transform="matrix(1.006514,0,0,1.006514,2.8001688,3.2413802)" />
+  </g>
+</svg>

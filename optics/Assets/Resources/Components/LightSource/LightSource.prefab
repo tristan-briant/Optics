@@ -239,8 +239,6 @@ GameObject:
   - component: {fileID: 7942915955526002393}
   - component: {fileID: 7942915955526002388}
   - component: {fileID: 8958442786690273634}
-  - component: {fileID: 8354041222353579836}
-  - component: {fileID: 109532419459721749}
   - component: {fileID: 1254396291}
   m_Layer: 5
   m_Name: LightSource
@@ -283,7 +281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Options: {fileID: 7190625865546143246, guid: 14da6dbb1fa699340af554bd1fdfd593, type: 3}
-  PG: {fileID: 0}
   CanTranslate: 1
   CanRotate: 1
   moving: 0
@@ -322,6 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514ec7bd951a3ac4eab0f5184c7815f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabPath: Components/LightSource/LightSource
   x: 0
   y: 0
   angle: 0
@@ -329,8 +327,12 @@ MonoBehaviour:
   N: 100
   vergence: 0
   Length: 15
-  Color: {r: 1, g: 1, b: 0.8, a: 0.5}
-  Intensity: 1
+  intensity: 1
+  lightRadius: 0.5
+  mini: 0
+  red: 1
+  green: 1
+  blue: 1
 --- !u!114 &8958442786690273634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,43 +345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!222 &8354041222353579836
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7942915955526002389}
-  m_CullTransparentMesh: 0
---- !u!114 &109532419459721749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7942915955526002389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!61 &1254396291
 BoxCollider2D:
   m_ObjectHideFlags: 0

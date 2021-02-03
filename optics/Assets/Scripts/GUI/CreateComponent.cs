@@ -7,7 +7,7 @@ IPointerDownHandler, IPointerUpHandler
 {
 
     const float longClickTime = 0.3f;
-    bool longClicking = false;
+    //bool longClicking = false;
     float clickStartTime;
     Vector3 clickStartPos;
     public GameObject prefab;
@@ -16,7 +16,7 @@ IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        longClicking = false;
+        //longClicking = false;
         item = null;
 
         //StartCoroutine("Wel");
@@ -32,7 +32,7 @@ IPointerDownHandler, IPointerUpHandler
     IEnumerator OnLongClick()
     {
         yield return new WaitForSeconds(longClickTime); // Time before deciding if it is a long click
-        longClicking = true;
+        //longClicking = true;
         Debug.Log("Long click");
 
         SpawnItem();
@@ -100,7 +100,7 @@ IPointerDownHandler, IPointerUpHandler
     {
         const float AnimTime = 0.5f;
         float time = 0;
-        item.transform.SetParent(GameObject.Find("DragedLayer").transform);
+        item.transform.SetParent(GameObject.Find("DragLayer").transform);
         //item.transform.localScale = Vector3.one;
         Activate(false);
         Vector3 FinalPosition= new Vector3(Random.Range(-1f,1f),Random.Range(-1f,1f),Random.Range(-1f,1f));

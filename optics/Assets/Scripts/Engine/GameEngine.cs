@@ -73,21 +73,6 @@ public class GameEngine : MonoBehaviour
                 lr.DrawMesh();
         }
 
-        /*foreach (LightSource ls in LightSources)
-        {
-            if (ls.hasChanged)
-            {
-                update = true;
-                break;
-            }
-        }
-
-        if (update)
-        {
-            UpdateAllRays();
-            return;
-        }*/
-
         if (LightRay.NewRaysAvailable)
         {
             UpdateAllRays();

@@ -8,15 +8,36 @@ public class LightSource : OpticalComponent
     public float vergence = 0;
     public float Length = 15;
     LightRay[] LightRays;
-    public Color Color = new Color(1, 1, 0.8f, 0.5f);
-    public float Intensity = 1;
-    private float lightRadius = 0.5f;
+    private Color Color = new Color(1, 1, 0.8f, 0.5f);
+    public float intensity = 1;
+    public float lightRadius = 0.5f;
+
+    public bool mini = false;
 
     public float Vergence { get => vergence; set { vergence = value; hasChanged = true; } }
 
     public float LightRadius { get => lightRadius; set { lightRadius = value; hasChanged = true; } }
-    public float LightRadiusMax { get => 0.7f; }
+    public float LightRadiusMax { get => mini ? 0.35f : 0.7f; }
     public float LightRadiusMin { get => 0.1f; }
+
+    public bool red = true;
+    public bool Red { get => red; set { red = value; hasChanged = true; } }
+
+    public bool green = true;
+    public bool Green { get => green; set { green = value; hasChanged = true; } }
+
+    public bool blue = true;
+    public bool Blue { get => blue; set { blue = value; hasChanged = true; } }
+
+
+    public float Intensity { get => intensity; set { intensity = value; hasChanged = true; } }
+    public float IntensityMax { get => 1f; }
+    public float IntensityMin { get => 0.1f; }
+
+    Color LightColor()
+    {
+        return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
+    }
 
 
     override public void Update()
@@ -27,14 +48,19 @@ public class LightSource : OpticalComponent
 
     public void InitializeSource()
     {
-        LightRays = new LightRay[N];
+        if (LightRays == null)
+            LightRays = new LightRay[N];
+
         for (int i = 0; i < N; i++)
         {
-            LightRay r = LightRay.NewLightRayChild();
-            if (r != null)
+            if (LightRays[i] == null)
             {
-                r.Origin = this;
-                LightRays[i] = r;
+                LightRay r = LightRay.NewLightRayChild();
+                if (r != null)
+                {
+                    r.Origin = this;
+                    LightRays[i] = r;
+                }
             }
         }
     }
@@ -62,8 +88,10 @@ public class LightSource : OpticalComponent
 
         Vector3 pos = new Vector3(x, y, 0);
 
-        if (LightRays == null)
+        if (LightRays == null || LightRays[N - 1] == null)
             InitializeSource();
+
+        Color SourceColor = LightColor();
 
         for (int i = 0; i < N; i++)
         {
@@ -71,7 +99,8 @@ public class LightSource : OpticalComponent
             if (r == null) return;
 
             // Couleur et intensité
-            Color c = Color;
+
+            Color c = SourceColor;
             c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
             r.Col = c;
             r.Intensity = Intensity / N;
@@ -143,5 +172,7 @@ public class LightSource : OpticalComponent
         {
             lr.FreeLightRay();
         }
+
+        DestroyImmediate(gameObject);
     }
 }
