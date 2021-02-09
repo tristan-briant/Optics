@@ -39,7 +39,6 @@ public class LightSource : OpticalComponent
         return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
     }
 
-
     override public void Update()
     {
         base.Update();
@@ -75,16 +74,28 @@ public class LightSource : OpticalComponent
         float xo2 = r.StartPosition2.x;
         float yo2 = r.StartPosition2.y;
 
-        //r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
-        //r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
-        r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
-        r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
+        r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
+        r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
+        //r.Length1 = Mathf.Sqrt((xc1 - xo1) * (xc1 - xo1) + (yc1 - yo1) * (yc1 - yo1));
+        //r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
+    }
+
+    override public float Collision2(LightRay lr)
+    {
+        float l1 = CircularCollision(lr, 1);
+        xc1 = xc; yc1 = yc;
+        if (l1 < 0) return -1;
+        float l2 = CircularCollision(lr, 2);
+        xc2 = xc; yc2 = yc;
+        if (l2 < 0) return -1;
+
+        return l1;
     }
 
     public void EmitLight()
     {
-        float angle = transform.rotation.eulerAngles.z * 2 * Mathf.PI / 360;
+        float EmitAngle = angle - Mathf.PI / 2;
 
         Vector3 pos = new Vector3(x, y, 0);
 
@@ -109,45 +120,16 @@ public class LightSource : OpticalComponent
             float l1 = -lightRadius * (-0.5f + i / (float)N);
             float l2 = -lightRadius * (-0.5f + (i + 1) / (float)N);
 
-            r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
-            r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
+            r.StartPosition1 = pos + new Vector3(Mathf.Sin(EmitAngle) * l1, -Mathf.Cos(EmitAngle) * l1, 0);
+            r.StartPosition2 = pos + new Vector3(Mathf.Sin(EmitAngle) * l2, -Mathf.Cos(EmitAngle) * l2, 0);
 
-            r.Direction1 = Vergence * lightRadius * (-0.5f + i / (float)N) + angle;
-            r.Direction2 = Vergence * lightRadius * (-0.5f + (i + 1) / (float)N) + angle;
+            r.Direction1 = Vergence * lightRadius * (-0.5f + i / (float)N) + EmitAngle;
+            r.Direction2 = Vergence * lightRadius * (-0.5f + (i + 1) / (float)N) + EmitAngle;
 
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();
         }
     }
-
-    /*public void EmitLight2()
-    {
-        float angle = transform.localRotation.eulerAngles.z * 2 * Mathf.PI / 360;
-        Vector3 pos = transform.localPosition;//+Random.Range(0,0.001f)*Vector3.one;
-
-        int i = 0;
-        foreach (LightRay r in LightRays)
-        {
-            float l1 = -radius * (-0.5f + i / (float)N);
-            float l2 = -radius * (-0.5f + (i + 1) / (float)N);
-
-            r.StartPosition1 = pos + new Vector3(Mathf.Sin(angle) * l1, -Mathf.Cos(angle) * l1, 0);
-            r.StartPosition2 = pos + new Vector3(Mathf.Sin(angle) * l2, -Mathf.Cos(angle) * l2, 0);
-
-            r.Direction1 = Div * (-0.5f + i / (float)N) + angle;
-            r.Direction2 = Div * (-0.5f + (i + 1) / (float)N) + angle;
-
-            r.Length1 = r.Length2 = Length;
-
-            Color c = Color;
-            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
-            r.Col = c;
-            r.Intensity = Intensity / N;
-
-            r.ComputeDir();
-            i++;
-        }
-    }*/
 
     void LaunchStar()
     {
@@ -168,10 +150,11 @@ public class LightSource : OpticalComponent
 
     public override void Delete()
     {
-        foreach (LightRay lr in LightRays)
-        {
-            lr.FreeLightRay();
-        }
+        if (LightRays != null)
+            foreach (LightRay lr in LightRays)
+            {
+                lr.FreeLightRay();
+            }
 
         DestroyImmediate(gameObject);
     }

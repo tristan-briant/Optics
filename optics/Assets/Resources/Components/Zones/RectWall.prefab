@@ -52,6 +52,8 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
+  CanTranslate: 1
+  CanRotate: 1
   radius: 0.5
 --- !u!1 &1281146447401316
 GameObject:
@@ -64,7 +66,6 @@ GameObject:
   - component: {fileID: 224380056637766568}
   - component: {fileID: 114191728737252206}
   - component: {fileID: 114560891331988176}
-  - component: {fileID: 2099397072}
   - component: {fileID: 3584759616454423264}
   m_Layer: 5
   m_Name: RectWall
@@ -112,8 +113,10 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  width: 1
+  CanTranslate: 1
+  CanRotate: 0
   height: 2
+  width: 2
 --- !u!114 &114560891331988176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,32 +130,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Options: {fileID: 7190625865546143246, guid: 5924373cddcdf6a408f52af1547d046b, type: 3}
-  CanTranslate: 1
-  CanRotate: 1
+  RotatingPart: {fileID: 1281146447401316}
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
---- !u!50 &2099397072
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1281146447401316}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 7
+  SnapIncrement: 0.125
 --- !u!114 &3584759616454423264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +322,8 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
+  CanTranslate: 1
+  CanRotate: 1
   radius: 0.5
 --- !u!1 &9110326684367939955
 GameObject:

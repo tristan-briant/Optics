@@ -20,7 +20,7 @@ TagManager:
   - Optics
   - Ground
   - DragLayer
-  - 
+  - Grass
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Grass
+    uniqueID: 1589621785
     locked: 0
   - name: Rails
     uniqueID: 1272711347

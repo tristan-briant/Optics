@@ -21,13 +21,18 @@ public class GameEngine : MonoBehaviour
 
     Vector3 CamPositionPrev = Vector3.zero;
 
+    void Awake()
+    {
+
+    }
+
 
     void Start()
     {
         Application.targetFrameRate = 30;
-        RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
+        //RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
         RaysReserve.gameObject.SetActive(false);
-        Rays = GameObject.Find("Rays").transform;
+        //Rays = GameObject.Find("Rays").transform;
 
         // Initialize Ray system (static variables)
         LightRay.RaysReserve = RaysReserve;
@@ -218,7 +223,7 @@ public class GameEngine : MonoBehaviour
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
 
-        UpdateAllRays();
+        //UpdateAllRays();
     }
 
 }

@@ -8,13 +8,14 @@ public class ChessPiece : MonoBehaviour
     public static ChessPiece itemSelected = null;
     public static ChessPiece manipulated = null;
 
-
-    //[System.NonSerialized]
     public GameObject Options;
     [System.NonSerialized]
     public GameObject PG;
     [System.NonSerialized]
     public bool SnapToGrid = true;
+
+    public GameObject RotatingPart;
+    Rigidbody2D rigidbodyPart;
 
     GameObject Handle;   // Handle  or Options
 
@@ -22,6 +23,7 @@ public class ChessPiece : MonoBehaviour
     public bool CanRotate { get => GetComponent<GenericComponent>().CanRotate; set => GetComponent<GenericComponent>().CanRotate = value; }
 
     public bool moving;
+    private bool rotating;
     bool clamped;
 
     private bool selected = false;
@@ -32,6 +34,7 @@ public class ChessPiece : MonoBehaviour
     const float LongClickDuration = 1.0f; // long click duration 
 
     private bool longClicking;
+    public float SnapIncrement = 0.25f;
 
 
     Vector3 offsetTouch;
@@ -65,6 +68,7 @@ public class ChessPiece : MonoBehaviour
     {
         if (itemSelected)// on deslectionne 
             itemSelected.Selected = false;
+
     }
 
     void EnableHandle(bool enable)
@@ -78,8 +82,11 @@ public class ChessPiece : MonoBehaviour
             GameObject.Destroy(Handle);
     }
 
-    void Start()
+    void Awake()
     {
+        if (RotatingPart == null)
+            RotatingPart = gameObject;
+
         Constrain(false, false);
         PositionSet = transform.position;
         angleSet = transform.eulerAngles.z;
@@ -126,7 +133,7 @@ public class ChessPiece : MonoBehaviour
 
     void OnMouseBeginDrag()
     {
-        //offsetTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        offsetTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         if (!CanTranslate) return;
 
         Manipulated = this;
@@ -140,7 +147,7 @@ public class ChessPiece : MonoBehaviour
 
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
         if (SnapToGrid)
-            positionSet = MyMathf.Round(positionSet, 0.25f);
+            positionSet = MyMathf.Round(positionSet, SnapIncrement);
 
     }
 
@@ -148,18 +155,34 @@ public class ChessPiece : MonoBehaviour
     {
         if (!CanTranslate) return;
 
+        PositionSet = MyMathf.Round(transform.position, SnapIncrement / 2);
         moving = false;
         LetFindPlace();
         Manipulated = null;
-        //Constrain(false, false);
     }
 
     public void Constrain(bool translation, bool rotation)
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb) DestroyImmediate(rb);
+        rb = RotatingPart.GetComponent<Rigidbody2D>();
+        if (rb) DestroyImmediate(rb);
 
-        if (rotation && translation)
-            rb.constraints = RigidbodyConstraints2D.None;
+        if (translation)
+        {
+            rigidbodyPart = gameObject.AddComponent<Rigidbody2D>();
+            rigidbodyPart.gravityScale = 0;
+            rigidbodyPart.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+
+        if (rotation)
+        {
+            rigidbodyPart = RotatingPart.AddComponent<Rigidbody2D>();
+            rigidbodyPart.constraints = RigidbodyConstraints2D.FreezePosition;
+        }
+
+        /*    if (rotation && translation)
+                rb.constraints = RigidbodyConstraints2D.None;
 
         if (!rotation && translation)
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -174,6 +197,7 @@ public class ChessPiece : MonoBehaviour
             PositionSet = transform.position;
         if (!rotation)
             angleSet = transform.eulerAngles.z;
+            */
 
         clamped = !(rotation || translation);
     }
@@ -187,12 +211,12 @@ public class ChessPiece : MonoBehaviour
     {
         if (!clamped)
         {
-            float angleAct = transform.localEulerAngles.z;
+            float angleAct = RotatingPart.transform.localEulerAngles.z;
 
             float deltaAngle = Mathf.DeltaAngle(angleAct, angleSet);
             Vector3 deltaPosition = PositionSet - transform.position;
 
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            //Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
             if (PG)
             {
@@ -206,8 +230,23 @@ public class ChessPiece : MonoBehaviour
                 PositionSet = pos;
             }
 
-            rb.angularVelocity = deltaAngle / Time.fixedDeltaTime;
-            rb.MovePosition(new Vector2(PositionSet.x, PositionSet.y));
+            if (moving || ChessPiece.manipulated == this) // smooth moves
+            {
+                //rigidbodyPart.angularVelocity = 0.5f * deltaAngle / Time.fixedDeltaTime;
+
+                const float alpha = 0.5f;
+                Vector2 goToPos = alpha * transform.position + (1 - alpha) * PositionSet;
+                rigidbodyPart.MovePosition(goToPos);
+
+                rigidbodyPart.MoveRotation(angleAct + alpha * deltaAngle);
+            }
+            else  // Go Final position
+            {
+                TeleportTo(new Vector2(PositionSet.x, PositionSet.y));
+                //rigidbodyPart.position = (new Vector2(PositionSet.x, PositionSet.y));
+                //rigidbodyPart.rotation = (angleSet);
+            }
+
         }
 
     }
@@ -216,7 +255,18 @@ public class ChessPiece : MonoBehaviour
     {
         Constrain(true, false);
         yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+
         Constrain(false, false);
+    }
+
+    public void TeleportTo(Vector3 vector)
+    {
+        transform.position = vector;
+        positionSet = vector;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb)
+            rb.position = vector;
     }
 
 }

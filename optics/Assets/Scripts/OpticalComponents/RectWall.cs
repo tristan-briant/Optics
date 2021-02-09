@@ -5,11 +5,10 @@ using UnityEngine;
 public class RectWall : GenericComponent
 {
 
+    const float offsetColision = 0.015f; // Use in physics 2D to determine collision
+
     public float height;
     public float width;
-
-    //public Transform Diag1, Diag2;
-    const float EPSILON = 0.01f;
 
     public float Width { get => width; set { width = Mathf.Clamp(value, WidthMin, Mathf.Infinity); hasChanged = true; ChangeVisual(); } }
     public float Height { get => height; set { height = Mathf.Clamp(value, HeightMin, Mathf.Infinity); hasChanged = true; ChangeVisual(); } }
@@ -17,8 +16,14 @@ public class RectWall : GenericComponent
     public float HeightMin { get => 0.25f; }
 
 
-    void Start()
+    override public void Start()
     {
+        
+        GetComponent<ChessPiece>().LetFindPlace();
+        GetComponent<Rigidbody2D>().drag = 0f;
+
+        width = ((RectTransform)transform).rect.width;
+        height = ((RectTransform)transform).rect.height;
 
         ChangeVisual();
 
@@ -26,18 +31,17 @@ public class RectWall : GenericComponent
 
     public override void ChangeVisual()
     {
+        Transform W;
+
         RectTransform rt = (RectTransform)transform;
-        Debug.Log(width);
         rt.sizeDelta = new Vector2(width, height);
 
-
-        Transform W = transform.Find("Diag1");
+        W = transform.Find("Diag1");
         if (W)
         {
             W.localPosition = new Vector3(0, 0, 0);
             W.localRotation = Quaternion.Euler(0, 0, Mathf.Atan2(width, height) * 180 / Mathf.PI);
             W.GetComponent<OpticalComponent>().Radius = Mathf.Sqrt(height * height + width * width) / 2;
-
         }
 
         W = transform.Find("Diag2");
@@ -49,11 +53,20 @@ public class RectWall : GenericComponent
         }
 
         foreach (BoxCollider2D bc in transform.Find("Optics").GetComponentsInChildren<BoxCollider2D>())
-            bc.size = new Vector2(width, height);
+            bc.size = new Vector2(width - offsetColision, height - offsetColision);
         foreach (BoxCollider2D bc in transform.Find("Base").GetComponentsInChildren<BoxCollider2D>())
-            bc.size = new Vector2(width, height);
+            bc.size = new Vector2(width - offsetColision, height - offsetColision);
 
-        GetComponent<ChessPiece>().LetFindPlace();
+        //GetComponent<ChessPiece>().LetFindPlace();
+    }
+
+    public override void OnInstantiate()
+    {
+        base.OnInstantiate();
+        RectTransform rt = (RectTransform)transform;
+        rt.sizeDelta = new Vector2(width, height);
+
+        ChangeVisual();
     }
 
 }

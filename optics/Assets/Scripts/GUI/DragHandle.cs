@@ -137,10 +137,10 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition)- offset;
 
-        /*if (rotation)
+        if (rotation)
             XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
         else
-            XYPosition(direction);*/
+            XYPosition(direction);
 
         float angleMouse1 = AngleFromXY(direction.x, direction.y, -startAngle);
 

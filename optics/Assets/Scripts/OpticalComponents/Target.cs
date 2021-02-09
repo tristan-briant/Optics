@@ -9,14 +9,41 @@ public class Target : OpticalComponent
     public float CollectedIntensity;
     public float TargetIntensity;
 
-    public GameObject Shine;
-    public GameObject ScoreText;
+    Transform Shine;
+    Transform ScoreText;
 
     float score = 0, scoreSpeed = 0.5f;
+
+    public bool red = true;
+    public bool Red { get => red; set { red = value; hasChanged = true; ChangeVisual(); } }
+
+    public bool green = true;
+    public bool Green { get => green; set { green = value; hasChanged = true; ChangeVisual(); } }
+
+    public bool blue = true;
+    public bool Blue { get => blue; set { blue = value; hasChanged = true; ChangeVisual(); } }
+
+    public float intensity = 1;
+    public float Intensity { get => intensity; set { intensity = value; hasChanged = true; ChangeVisual(); } }
+    public float IntensityMax { get => 1f; }
+    public float IntensityMin { get => 0.1f; }
+
+
+    public override void Start()
+    {
+        base.Start();
+        Shine = transform.Find("Optics/Shine");
+        ScoreText = transform.Find("Optics/Score");
+    }
 
     public void ResetTarget()
     {
         CollectedIntensity = 0;
+    }
+
+    Color LightColor()
+    {
+        return new Color(red ? 1f : 0.4f, green ? 1f : 0.4f, blue ? 0.8f : 0.4f, 1);
     }
 
     /*override public float Collision2(LightRay lr)
@@ -48,12 +75,22 @@ public class Target : OpticalComponent
 
     }*/
 
+    override public float Collision2(LightRay lr)
+    {
+        float l1 = CircularCollision(lr, 1);
+        xc1 = xc; yc1 = yc;
+        if (l1 < 0) return -1;
+        float l2 = CircularCollision(lr, 2);
+        xc2 = xc; yc2 = yc;
+        if (l2 < 0) return -1;
+
+        return l1;
+    }
+
     override public void Deflect(LightRay r)
     {
-
         while (r.transform.childCount > 0)
             r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
-        //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
 
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
@@ -62,9 +99,7 @@ public class Target : OpticalComponent
 
         r.Length1 = Mathf.Sqrt((x - xo1) * (x - xo1) + (y - yo1) * (y - yo1));
         r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
-
     }
-
 
     override public void Update()
     {
@@ -89,7 +124,6 @@ public class Target : OpticalComponent
         ScoreText.GetComponent<Text>().fontSize = (int)(20 + 40 * score);
     }
 
-
     public void ComputeScore()
     {
         CollectedIntensity = 0;
@@ -100,6 +134,16 @@ public class Target : OpticalComponent
                 CollectedIntensity += lr.Intensity;
             }
         }
+    }
+
+    public override void ChangeVisual()
+    {
+        base.ChangeVisual();
+
+        Transform diamond = transform.Find("Optics/Diamond");
+        diamond.GetComponent<Image>().color = LightColor();
+        Transform shine = transform.Find("Optics/Shine");
+        shine.GetComponent<Image>().color = LightColor();
     }
 
 }

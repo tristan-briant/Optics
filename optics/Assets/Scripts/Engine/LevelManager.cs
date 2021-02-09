@@ -13,9 +13,9 @@ public class LevelManager : MonoBehaviour
             SceneManager.LoadScene("MiniMap", LoadSceneMode.Additive);
 
 
-        GameEngine GE = GameObject.Find("GameEngine").GetComponent<GameEngine>();
-        GE.StartGameEngine();
-        //StartCoroutine("StartWithDelay", 0.1f);
+        //GameEngine GE = GameObject.Find("GameEngine").GetComponent<GameEngine>();
+        //GE.StartGameEngine();
+        StartCoroutine("StartWithDelay", 0.1f);
     }
 
     IEnumerator StartWithDelay(float second)

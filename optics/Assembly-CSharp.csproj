@@ -36,9 +36,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\OptionRailManager.cs" />
-     <Compile Include="Assets\OptionWall.cs" />
-     <Compile Include="Assets\RailManager.cs" />
+     <Compile Include="Assets\GrasManager.cs" />
+     <Compile Include="Assets\GroundManager.cs" />
      <Compile Include="Assets\Scripts\Alignment.cs" />
      <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
      <Compile Include="Assets\Scripts\Debug\polygon.cs" />
@@ -52,6 +51,7 @@
      <Compile Include="Assets\Scripts\Engine\LightRay.cs" />
      <Compile Include="Assets\Scripts\Engine\MyMathf.cs" />
      <Compile Include="Assets\Scripts\Engine\StarFollowRay.cs" />
+     <Compile Include="Assets\Scripts\ExecInEdit.cs" />
      <Compile Include="Assets\Scripts\FixedRotation.cs" />
      <Compile Include="Assets\Scripts\GUI\BoolParameterModifier.cs" />
      <Compile Include="Assets\Scripts\GUI\CreateComponent.cs" />
@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\GUI\OptionManager.cs" />
      <Compile Include="Assets\Scripts\GUI\PanZoom.cs" />
      <Compile Include="Assets\Scripts\GUI\PointerManager.cs" />
+     <Compile Include="Assets\Scripts\LevelDescriptor.cs" />
      <Compile Include="Assets\Scripts\MyRaycaster.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\GenericComponent.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\LameSemi.cs" />
@@ -74,8 +75,11 @@
      <Compile Include="Assets\Scripts\OpticalComponents\RectWall.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Target.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Wall.cs" />
-     <Compile Include="Assets\VerboseRaycaster.cs" />
-     <Compile Include="Assets\ZoneManager.cs" />
+     <Compile Include="Assets\Scripts\OptionRailManager.cs" />
+     <Compile Include="Assets\Scripts\OptionWall.cs" />
+     <Compile Include="Assets\Scripts\RailManager.cs" />
+     <Compile Include="Assets\Scripts\VerboseRaycaster.cs" />
+     <Compile Include="Assets\Scripts\ZoneManager.cs" />
      <None Include="Assets\Resources\Materials\RayDiv.shader" />
      <None Include="Assets\Resources\Materials\NewSurfaceShader.shader" />
     <Reference Include="UnityEngine">

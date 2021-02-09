@@ -194,7 +194,7 @@ public class LightRay : MonoBehaviour
     {
         if (RaysReserve.transform.childCount == 0)
             newRaysAvailable = true;
-            
+
         foreach (LightRay r in GetComponentsInChildren<LightRay>())
         {
             r.transform.parent = RaysReserve;
@@ -206,7 +206,7 @@ public class LightRay : MonoBehaviour
     static public LightRay NewLightRayChild(LightRay lr = null)
     {
         if (lr && lr.depth >= DepthMax) return null; // profondeur max atteinte !!
-        if (RaysReserve.childCount == 0)
+        if (RaysReserve == null || RaysReserve.childCount == 0)
         {
             return null; // Plus de rayons disponible !!
         }

@@ -17,7 +17,7 @@ public class MyMathf
     /// map float to 0 -> 0.999f for frame
     {
         if (xmin != xmax)
-            return (x - xmin) / (xmax - xmin) * 0.999f;
+            return Mathf.Clamp((x - xmin) / (xmax - xmin),0, 0.99f);
         else
             return 0;
 

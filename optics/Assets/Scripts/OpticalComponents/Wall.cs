@@ -32,5 +32,20 @@ public class Wall : OpticalComponent
         // Nothing to do 
     }
 
+    override public float Collision2(LightRay lr)
+    {
+        float l1 = FlatCollision(lr, 1);
+        xc1 = xc; yc1 = yc;
+        //if (l1 < 0) return -1;
+        float l2 = FlatCollision(lr, 2);
+        xc2 = xc; yc2 = yc;
+         if (l2 >= 0)
+            return l2;
+        if (l1 > 0)
+            return l1;
+
+        return -1;
+    }
+
 
 }

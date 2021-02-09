@@ -6,41 +6,48 @@ using UnityEngine.UI;
 
 public class OpticalComponent : GenericComponent
 {
-    [System.NonSerialized]
-    public bool simulated = true;
+    protected Transform Optics;
 
-    //public float x = 0, y = 0; // position
-    //public float angle = 0;
+
 
     public float radius = 0.5f;
     public float Radius { get => radius; set { radius = Mathf.Clamp(value, RadiusMin, RadiusMax); hasChanged = true; ChangeVisual(); } }
     virtual public float RadiusMax { get => 1.5f; }
     virtual public float RadiusMin { get => 0.2f; }
 
-    /*[System.NonSerialized]
-    public float cos, sin, param; // vecteur directeur
-    [System.NonSerialized]
-    public bool hasChanged = true;*/
-
-
-    /*Vector3 OldPosition;
-    Quaternion OldRotation;*/
-
-    /*void Start()
+    override public void Start()
     {
+        Optics = transform.Find("Optics"); // S'il y a une partie optique
+        if (Optics == null)
+            Optics = this.transform;
+
         ChangeVisual();
-    }*/
+    }
 
-    /*virtual public void Update()
+    Vector3 OldPosition;
+    Quaternion OldRotation;
+    virtual public void Update()
     {
-        if (OldPosition != transform.position || transform.rotation != OldRotation)
+        if (OldPosition != Optics.position || Optics.rotation != OldRotation)
         {
             ComputeDir();
-            OldPosition = transform.position;
-            OldRotation = transform.rotation;
+            OldPosition = Optics.position;
+            OldRotation = Optics.rotation;
             hasChanged = true;
         }
-    }*/
+    }
+
+    public void ComputeDir()
+    {
+        Vector3 pos = transform.position;
+        x = pos.x;
+        y = pos.y;
+
+        angle = (Optics.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
+        cos = Mathf.Cos(angle);
+        sin = Mathf.Sin(angle);
+        param = -sin * x + cos * y;
+    }
 
     virtual public bool FastCollision(LightRay lr)
     {
@@ -55,21 +62,8 @@ public class OpticalComponent : GenericComponent
         return true;
     }
 
-    /*public void ComputeDir()
-    {
-        //Vector3 pos = PlayGround.InverseTransformPoint(transform.position); // Position relative par rapport au playground
-        Vector3 pos = transform.position;
-        x = pos.x;
-        y = pos.y;
-
-        angle = (transform.rotation.eulerAngles.z + 90) * Mathf.PI / 180f;
-        cos = Mathf.Cos(angle);
-        sin = Mathf.Sin(angle);
-        param = -sin * x + cos * y;
-    }*/
-
-    float xc, yc;
-    public float Collision(LightRay lr, int i)
+    protected float xc, yc;
+    public float FlatCollision(LightRay lr, int i) //Collision with linear object
     {
         float cosr, sinr, xr, yr, br;
         if (i == 1)
@@ -110,14 +104,39 @@ public class OpticalComponent : GenericComponent
         return -1;
     }
 
+    public float CircularCollision(LightRay lr, int i) //Collision with circular object
+    {
+        float cosr, sinr, xr, yr, br;
+        if (i == 1)
+        {
+            if (FastCollision(lr) == false) return -1;  // Pas de collision
+            cosr = lr.cos1;
+            sinr = lr.sin1;
+            xr = lr.StartPosition1.x;
+            yr = lr.StartPosition1.y;
+            br = lr.param1;
+        }
+        else
+        {
+            cosr = lr.cos2;
+            sinr = lr.sin2;
+            xr = lr.StartPosition2.x;
+            yr = lr.StartPosition2.y;
+            br = lr.param2;
+        }
+
+        float p = cosr * (x - xr) + sinr * (y - yr);
+        return p * p;
+    }
+
     protected float xc1, yc1, xc2, yc2;
 
     virtual public float Collision2(LightRay lr)
     {
-        float l1 = Collision(lr, 1);
+        float l1 = FlatCollision(lr, 1);
         xc1 = xc; yc1 = yc;
         if (l1 < 0) return -1;
-        float l2 = Collision(lr, 2);
+        float l2 = FlatCollision(lr, 2);
         xc2 = xc; yc2 = yc;
         if (l2 < 0) return -1;
 
@@ -128,6 +147,7 @@ public class OpticalComponent : GenericComponent
 
     override public void ChangeVisual()
     {
+        base.ChangeVisual();
         Animator anim = GetComponent<Animator>();
 
         if (anim)
@@ -136,6 +156,11 @@ public class OpticalComponent : GenericComponent
         }
 
         GetComponent<ChessPiece>().LetFindPlace();
+    }
+
+    override public void ClampParameters() // Used to clamp all params between min and max, used in editor mode
+    {
+        radius = Mathf.Clamp(radius, RadiusMin, RadiusMax);
     }
 
 }

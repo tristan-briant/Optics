@@ -121,7 +121,7 @@ public class Designer : MonoBehaviour
     */
 
     [ContextMenu("SaveToString")]
-    void SaveToString()
+    static public void SaveToString()
     {
         GameObject PG = GameObject.Find("Playground");
 
@@ -171,7 +171,7 @@ public class Designer : MonoBehaviour
         }
 */
     [ContextMenu("Clear Field")]
-    public void ClearPlayground()
+    static public void ClearPlayground()
     {
         GameObject PG = GameObject.Find("Playground/Components");
 
@@ -184,7 +184,7 @@ public class Designer : MonoBehaviour
     }
 
     [ContextMenu("LoadFromString")]
-    public void LoadFromString()
+    static public void LoadFromString()
     {
         if (PGdata == null) return;
 
@@ -214,9 +214,9 @@ public class Designer : MonoBehaviour
 
             GenericComponent gc = component.GetComponent<GenericComponent>();
             JsonUtility.FromJsonOverwrite(tokens[i], gc);
-            component.transform.position = new Vector2(gc.x, gc.y);
-            component.transform.localScale = Vector3.one;
-            component.transform.rotation = Quaternion.Euler(0, 0, gc.angle * Mathf.Rad2Deg - 90f);
+            //component.transform.position = new Vector2(gc.x, gc.y);
+
+            gc.OnInstantiate(); //finish setup
 
         }
 

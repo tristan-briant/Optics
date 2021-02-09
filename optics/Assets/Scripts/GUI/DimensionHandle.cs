@@ -27,6 +27,18 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         if (!dragged)
             transform.localPosition = handle.GetComponent<OptionWall>().GetHandleLocalPosition(left, right, up, down);
+        else
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
+            if (!left && !right) //only up and down
+            {
+                transform.localPosition = new Vector2(0, transform.localPosition.y);
+            }
+            if (!up && !down) //only up and down
+            {
+                transform.localPosition = new Vector2(transform.localPosition.x, 0);
+            }
+        }
     }
 
     float angleMouse0;
@@ -49,9 +61,9 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
         HandleInitialPosition = handle.position;
-        positionMouse0 = transform.localPosition;
+        positionMouse0 = transform.position;
 
-
+        handle.GetComponent<OptionWall>().ResetPosition();
 
         dragged = true;
     }
@@ -60,6 +72,7 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         StartCoroutine("BackInPlace");
         dragged = false;
+
     }
 
     IEnumerator BackInPlace()
@@ -85,14 +98,7 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 direction;
-
-        direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
-        direction.z = 0;
-
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
-
-
         if (!left && !right) //only up and down
         {
             transform.localPosition = new Vector2(0, transform.localPosition.y);
@@ -102,20 +108,28 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             transform.localPosition = new Vector2(transform.localPosition.x, 0);
         }
 
-
-        Vector3 delta = transform.localPosition - positionMouse0;
+        Vector3 delta = transform.position - positionMouse0;
         if (left)
             delta.x = -delta.x;
         if (down)
             delta.y = -delta.y;
 
-        handle.GetComponent<OptionWall>().ChangeSize(new Vector2(delta.x, delta.y), right, up);
-        positionMouse0 = transform.localPosition;
+        if (!left && !right)
+            delta.x = 0;
+
+        if (!up && !down)
+            delta.y = 0;
+
+        handle.GetComponent<OptionWall>().ChangeSize(new Vector2(delta.x, delta.y), left, right, up, down);
+        positionMouse0 = transform.position;
 
     }
+
 
     public void OnEndDrag(PointerEventData eventData)
     {
         //throw new System.NotImplementedException();
     }
+
+   
 }

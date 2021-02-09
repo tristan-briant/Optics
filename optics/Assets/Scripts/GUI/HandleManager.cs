@@ -9,7 +9,7 @@ public class HandleManager : MonoBehaviour
     public Vector3 PositionSet;
     float angleAct, angleMouse0, angleMouse1;
     const float incrementRotation = 11.25f;
-
+    Transform itemHolder;
 
 
     void Start()
@@ -17,9 +17,9 @@ public class HandleManager : MonoBehaviour
 
         transform.SetParent(CP.transform);
 
-        Transform fineHandle = transform.Find("ItemHolder");
-        if (fineHandle)
-            foreach (Canvas c in fineHandle.GetComponentsInChildren<Canvas>())
+        itemHolder = transform.Find("ItemHolder");
+        if (itemHolder)
+            foreach (Canvas c in itemHolder.GetComponentsInChildren<Canvas>())
                 c.sortingLayerName = "Handle";
 
         transform.position = CP.transform.position;
@@ -55,7 +55,10 @@ public class HandleManager : MonoBehaviour
             DeltaAngleSet = a - b;
 
             CP.GetComponent<ChessPiece>().angleSet = b;
+
         }
+
+        itemHolder.transform.rotation = Quaternion.Euler(0, 0, CP.GetComponent<ChessPiece>().angleSet);
 
     }
 

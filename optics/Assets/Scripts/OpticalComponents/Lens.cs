@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Lens : OpticalComponent
 {
     public float focal = 1.0f;
     //public float Focal { get => focal; set { focal = value; hasChanged = true; ChangeVisual(); } }
     public float Vergence { get => 1f / focal; set { focal = 1 / value; hasChanged = true; ChangeVisual(); } }
-    public float VergenceMin { get => -1.5f; }
-    public float VergenceMax { get => +1.5f; }
+    public float VergenceMin { get => -2f; }
+    public float VergenceMax { get => +2f; }
 
     override public void Deflect(LightRay r)
     {
@@ -84,16 +82,26 @@ public class Lens : OpticalComponent
 
     public override void ChangeVisual()
     {
-        Animator anim = GetComponent<Animator>();
 
+        base.ChangeVisual();
+        Animator anim = GetComponent<Animator>();
         if (anim)
         {
             anim.SetFloat("Size", MyMathf.MapToFrame(Radius, RadiusMin, RadiusMax));
             anim.SetFloat("Shape", MyMathf.MapToFrame(Vergence, VergenceMin, VergenceMax));
 
+            //anim.Update(0);
+
+            //if (Application.isPlaying)
             GetComponent<ChessPiece>().LetFindPlace();
         }
     }
 
+    override public void ClampParameters() // Used to clamp all params between min and max, used in editor mode
+    {
+        radius = Mathf.Clamp(radius, RadiusMin, RadiusMax);
+        if (focal > 0) focal = Mathf.Max(focal, 1 / VergenceMax);
+        if (focal < 0) focal = Mathf.Min(focal, 1 / VergenceMin);
+    }
 
 }

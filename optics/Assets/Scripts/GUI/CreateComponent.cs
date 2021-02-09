@@ -114,7 +114,7 @@ IPointerDownHandler, IPointerUpHandler
         }
 
         Activate(true);
-        item.transform.SetParent(GameObject.Find("Playground").transform);
+        item.transform.SetParent(GameObject.Find("Playground/Components").transform);
         item.transform.localScale = Vector3.one;
         item.GetComponent<ChessPiece>().LetFindPlace();
 

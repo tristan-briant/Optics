@@ -13,7 +13,8 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     private float screenHeight;
 
     const float SizeOffset = 3.75f - 1f; // Camera field bigger of SizeOffset than playground (size of options)
-
+    const float PerspectiveEffect = 0.5f;  // ratio for panning / moving the grass and give perspecive
+    public GameObject Grass;
 
     void Start()
     {
@@ -32,6 +33,7 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         Camera.main.transform.position = new Vector3(0, 0, -10);
 
         GetComponent<BoxCollider2D>().size = new Vector2(rt.rect.width, rt.rect.height);
+
     }
 
     public void SetPlaygroundSize(float width, float height)
@@ -58,7 +60,7 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + increment, CamSizeMin, CamSizeMax);
         ClampCamera();
     }
-    
+
     void Update()
     {
         zoom(-Input.GetAxis("Mouse ScrollWheel"));
@@ -80,14 +82,14 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
             zoom(deltaMagnitude / screenWidth * Camera.main.orthographicSize);
         }
-        
+
     }
 
     void ClampCamera()
     {// Clamp the camera in the rectangle of the PG
         Vector3 CamPos = Camera.main.transform.position;
         float camsize = Camera.main.orthographicSize;
-        float ratio = Camera.main.aspect;
+        float ratio = Camera.main.aspect*0.5f;
 
         if (2 * camsize * ratio > rt.rect.width + SizeOffset)
             CamPos.x = 0;
@@ -102,6 +104,14 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         CamPos.z = -10f;
 
         Camera.main.transform.position = CamPos;
+
+
+        Vector3 GrassPos = CamPos * PerspectiveEffect; // To give a perspective effect
+        GrassPos.z = 2;
+        Grass.transform.position = GrassPos;
+
+        Grass.transform.localScale = Vector3.one * Mathf.Sqrt(camsize) ;
+
     }
 
     public void OnDrag(PointerEventData eventData)
