@@ -76,12 +76,14 @@ public class GameEngine : MonoBehaviour
 
         bool update = false;
 
-        if (Camera.main.transform.localPosition != CamPositionPrev)
+        Vector3 CamPosCurent = Camera.main.transform.localPosition;
+        if (CamPosCurent != CamPositionPrev)
         {
-            CamPositionPrev = Camera.main.transform.localPosition;
 
             foreach (LightRay lr in Rays.GetComponentsInChildren<LightRay>())
-                lr.DrawMesh();
+                lr.SetRelativePosition(CamPosCurent - CamPositionPrev);
+
+            CamPositionPrev = CamPosCurent;
         }
 
         if (LightRay.NewRaysAvailable)
@@ -122,11 +124,12 @@ public class GameEngine : MonoBehaviour
             ls.EmitLight();
         }
 
+        Vector3 camPos = Camera.main.transform.position;
         foreach (Transform t in Rays)
         {
             LightRay lr = t.GetComponent<LightRay>();
             Collision(lr);
-            lr.Draw();
+            lr.Draw(camPos);
         }
 
         foreach (LightSource ls in LightSources) ls.hasChanged = false;
@@ -200,7 +203,7 @@ public class GameEngine : MonoBehaviour
         if (Collision1OP(lr, op)) // si nouvelle collision ou perte de collision
         {
             Collision(lr);
-            lr.Draw();
+            lr.Draw(Camera.main.transform.position);
         }
         else
         {

@@ -64,13 +64,13 @@ public class LightRay : MonoBehaviour
 
     }
 
-    public void Draw()
+    public void Draw(Vector3 CameraPosition)
     {
         // Draw the rays recursively;
-        DrawMesh();
+        DrawMesh(CameraPosition);
         foreach (Transform child in transform)
         {
-            child.GetComponent<LightRay>().Draw();
+            child.GetComponent<LightRay>().Draw(CameraPosition);
         }
     }
 
@@ -90,7 +90,7 @@ public class LightRay : MonoBehaviour
         if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
     }
 
-    public void DrawMesh()
+    public void DrawMesh(Vector3 CameraPosition)
     {
         //Test if a waist exists
         Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(cos1, sin1, 0);
@@ -178,15 +178,25 @@ public class LightRay : MonoBehaviour
             uv[0].y = uv[1].y = uv[2].y = uv[3].y = uv[4].y = uv[5].y = 0f;
         }
 
-        Vector3 OffsetPosition = Camera.main.transform.position;
+
         for (int i = 0; i < 6; i++)
-            vertices[i] -= OffsetPosition;
+            vertices[i] -= CameraPosition;
+
 
         mesh.vertices = vertices;
         mesh.uv = uv;
         meshRenderer.material.color = Col;
 
     }
+
+    public void SetRelativePosition(Vector3 CameraDeltaPosition)
+    {
+        for (int i = 0; i < 6; i++)
+            vertices[i] -= CameraDeltaPosition;
+
+        mesh.vertices = vertices;
+    }
+
 
     public void FreeLightRay() // remove child recursively
     {
