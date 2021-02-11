@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +19,8 @@ public class LightRay : MonoBehaviour
     public OpticalComponent End;
     public int depth;
 
+    public List<LightRay> Children;
+
     static public Transform RaysReserve;
     static public Transform Rays;
     static public int DepthMax;
@@ -27,29 +29,39 @@ public class LightRay : MonoBehaviour
 
     public static bool NewRaysAvailable { get { bool value = newRaysAvailable; newRaysAvailable = false; return value; } set => newRaysAvailable = value; }
 
+    Vector3[] vertices;
+    Vector2[] uv;
+
+    Mesh mesh;
+    MeshRenderer meshRenderer;
+
     void InitializeMesh()
     {
         MeshFilter mf = gameObject.AddComponent<MeshFilter>();
         Material mat = Resources.Load("Materials/RayDiv", typeof(Material)) as Material;
-        MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
-        mr.material = mat;
-        mr.material.color = Col;
-        mr.sortingLayerName = "Rays";
+        meshRenderer = gameObject.AddComponent<MeshRenderer>();
+        meshRenderer.material = mat;
+        meshRenderer.material.color = Col;
+        meshRenderer.sortingLayerName = "Rays";
 
-        Mesh m = new Mesh
+        mesh = new Mesh
         {
             vertices = new Vector3[6],
             triangles = new int[6] { 0, 1, 2, 3, 4, 5 }
         };
 
-        m.normals = new Vector3[6] {
+        mesh.normals = new Vector3[6] {
                 -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward
             };
-        m.uv = new Vector2[6] {
+        mesh.uv = new Vector2[6] {
                  new Vector2(0f,0f),new Vector2(0f,0f),new Vector2(1f,0f),new Vector2(1f,0f),new Vector2(0f,0f),new Vector2(1f,0f)
             };
 
-        mf.mesh = m;
+        mf.mesh = mesh;
+
+        vertices = new Vector3[6];
+        uv = new Vector2[6];
+
     }
 
     public void Draw()
@@ -80,10 +92,6 @@ public class LightRay : MonoBehaviour
 
     public void DrawMesh()
     {
-
-        Vector3[] vertices;
-        Vector2[] uv;
-
         //Test if a waist exists
         Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(cos1, sin1, 0);
         Vector3 EndPosition2 = StartPosition2 + Length2 * new Vector3(cos2, sin2, 0);
@@ -109,24 +117,21 @@ public class LightRay : MonoBehaviour
             ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * Ilum;
             if (ce2 < 0) ce2 = -ce2;
 
-            //cs1 = Vector3.Distance(StartPosition1,WaistPos) * div ; 
-            //cs2 = Vector3.Distance(StartPosition2,WaistPos) * div; 
-            //ce1 = Vector3.Distance(EndPosition1,WaistPos) * div; 
-            //ce2 = Vector3.Distance(EndPosition2,WaistPos) * div;
+            vertices[0] = StartPosition1;
+            vertices[1] = StartPosition2;
+            vertices[2] = WaistPos;
+            vertices[3] = WaistPos;
+            vertices[4] = EndPosition1;
+            vertices[5] = EndPosition2;
 
-            vertices = new Vector3[6] {
-                StartPosition1,
-                StartPosition2,
-                WaistPos,
-                WaistPos,
-                EndPosition1,
-                EndPosition2
-            };
+            uv[0].x = cs1;
+            uv[1].x = cs2;
+            uv[2].x = 0f;
+            uv[3].x = 0f;
+            uv[4].x = ce1;
+            uv[5].x = ce2;
 
-            uv = new Vector2[6] {
-                 new Vector2(cs1,0f),new Vector2(cs2,0f),new Vector2(0f,0f),new Vector2(0f,0f),new Vector2(ce1,0f),new Vector2(ce2,0f)
-            };
-
+            uv[0].y = uv[1].y = uv[2].y = uv[3].y = uv[4].y = uv[5].y = 0f;
         }
         else
         {
@@ -149,11 +154,6 @@ public class LightRay : MonoBehaviour
                 if (ce1 < 0) ce1 = -ce1;
                 ce2 = (cos2 * (WaistPos.x - EndPosition2.x) + sin2 * (WaistPos.y - EndPosition2.y)) * Ilum;
                 if (ce2 < 0) ce2 = -ce2;
-
-                //cs1 = Vector3.Distance(StartPosition1, WaistPos) * div;
-                //cs2 = Vector3.Distance(StartPosition2, WaistPos) * div;
-                //ce1 = Vector3.Distance(EndPosition1, WaistPos) * div;
-                //ce2 = Vector3.Distance(EndPosition2, WaistPos) * div;
             }
             else
             {   // Faisceau collimaté
@@ -162,31 +162,29 @@ public class LightRay : MonoBehaviour
                 cs1 = cs2 = ce1 = ce2 = cc / Intensity;
             }
 
-            vertices = new Vector3[6] {
-                StartPosition1,
-                StartPosition2,
-                EndPosition1,
-                EndPosition1,
-                StartPosition2,
-                EndPosition2
-            };
+            vertices[0] = StartPosition1;
+            vertices[1] = StartPosition2;
+            vertices[2] = EndPosition1;
+            vertices[3] = EndPosition1;
+            vertices[4] = StartPosition2;
+            vertices[5] = EndPosition2;
 
-            uv = new Vector2[6] {
-                 new Vector2(cs1,0f),new Vector2(cs2,0f),new Vector2(ce1,0f),new Vector2(ce1,0f),new Vector2(cs2,0f),new Vector2(ce2,0f)
-            };
+            uv[0].x = cs1;
+            uv[1].x = cs2;
+            uv[2].x = ce1;
+            uv[3].x = ce1;
+            uv[4].x = cs2;
+            uv[5].x = ce2;
+            uv[0].y = uv[1].y = uv[2].y = uv[3].y = uv[4].y = uv[5].y = 0f;
         }
 
-        // Used to keep the center of the mesh in the camera axis
         Vector3 OffsetPosition = Camera.main.transform.position;
         for (int i = 0; i < 6; i++)
             vertices[i] -= OffsetPosition;
 
-        Mesh m = GetComponent<MeshFilter>().mesh;
-
-        m.vertices = vertices;
-        m.uv = uv;
-
-        GetComponent<MeshRenderer>().material.color = Col;
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        meshRenderer.material.color = Col;
 
     }
 
@@ -201,6 +199,15 @@ public class LightRay : MonoBehaviour
             r.End = null;
             r.Origin = null;
         }
+
+        /*foreach (LightRay r in Children)
+        {
+            r.FreeLightRay();
+        }
+
+        Children.Clear();
+        gameObject.SetActive(false);*/
+
     }
 
     static public LightRay NewLightRayChild(LightRay lr = null)
@@ -215,12 +222,12 @@ public class LightRay : MonoBehaviour
         LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
         if (lr)
         {
-            r.transform.SetParent(lr.transform);
+            r.transform.parent = lr.transform;
             r.depth = lr.depth + 1;
         }
         else
         {
-            r.transform.SetParent(Rays);
+            r.transform.parent = Rays;
             r.depth = 0;
         }
 
@@ -235,7 +242,7 @@ public class LightRay : MonoBehaviour
             newRaysAvailable = true;
 
         GameObject ray = new GameObject("Ray");
-        ray.transform.SetParent(RaysReserve);
+        ray.transform.parent = (RaysReserve);
         ray.transform.localScale = Vector3.one;
         ray.transform.localPosition = Vector3.zero;
 

@@ -13,7 +13,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="selection.svg"
    inkscape:export-filename="selection.png"
    inkscape:export-xdpi="96"
@@ -682,6 +682,19 @@
          stdDeviation="5.2300677"
          id="feGaussianBlur11614-3-8" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter11612-0"
+       x="-0.21960001"
+       width="1.4392"
+       y="-0.21960001"
+       height="1.4392">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="5.2300677"
+         id="feGaussianBlur11614-7" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -691,10 +704,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.32705556"
-     inkscape:cx="1151.5087"
-     inkscape:cy="158.51629"
+     inkscape:cx="768.75577"
+     inkscape:cy="233.33241"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g3347"
      showgrid="false"
      inkscape:pagecheckerboard="true"
      inkscape:snap-bbox="true"
@@ -703,10 +716,10 @@
      inkscape:snap-object-midpoints="true"
      inkscape:bbox-nodes="true"
      inkscape:object-nodes="true"
-     inkscape:window-width="1600"
-     inkscape:window-height="837"
+     inkscape:window-width="1536"
+     inkscape:window-height="801"
      inkscape:window-x="-8"
-     inkscape:window-y="161"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-global="true"
      inkscape:document-rotation="0"
@@ -739,7 +752,7 @@
          inkscape:label="#g12034"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96"
-         inkscape:export-filename="selection.png"
+         inkscape:export-filename="C:\Users\Tristan Briant\Documents\GitHub\Optics\optics\Assets\Images\selection.png"
          transform="translate(-2.7387232,-2.5680764)">
         <g
            id="g1530"
@@ -1053,6 +1066,22 @@
                inkscape:transform-center-x="7.613955"
                inkscape:transform-center-y="-13.187753" />
           </g>
+        </g>
+        <g
+           id="g11675-1"
+           transform="matrix(0.82123959,0,0,0.82123959,347.32313,134.21953)">
+          <circle
+             transform="matrix(0.66274994,0,0,1.0025942,70.204709,-0.1190281)"
+             cy="45.884148"
+             cx="48.776215"
+             id="circle11673-9"
+             style="opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.505618;stroke:none;stroke-width:3.03655;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter11612-0)"
+             r="28.579605" />
+          <path
+             style="fill:#ffffff;stroke:none;stroke-width:0.426186px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 97.962068,25.197493 c 0,0 2.216422,13.751641 2.216422,20.68666 0,6.935019 -2.216422,20.68666 -2.216422,20.68666 L 113.3801,45.884153 Z"
+             id="path344"
+             sodipodi:nodetypes="czccc" />
         </g>
       </g>
       <g

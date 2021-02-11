@@ -220,8 +220,9 @@ public class Designer : MonoBehaviour
 
         }
 
-        GameEngine GE = GameObject.FindObjectOfType<GameEngine>();
-        GE.UpdateComponentList();
+        //GameEngine GE = GameObject.FindObjectOfType<GameEngine>();
+        //GE.UpdateComponentList();
+        GameEngine.instance.UpdateComponentList();
     }
 
     public static string getBetween(string strSource, string strStart, string strEnd)

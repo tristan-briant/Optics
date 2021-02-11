@@ -18,12 +18,18 @@ public class GameEngine : MonoBehaviour
     public bool running = false;
     public bool levelLoaded = false;
 
+    [System.NonSerialized]
+    public static GameEngine instance;
+
 
     Vector3 CamPositionPrev = Vector3.zero;
 
     void Awake()
     {
-
+        if (instance == null)
+            instance = this;
+        else
+            DestroyImmediate(gameObject);
     }
 
 

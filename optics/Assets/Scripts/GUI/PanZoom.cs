@@ -16,6 +16,13 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     const float PerspectiveEffect = 0.5f;  // ratio for panning / moving the grass and give perspecive
     public GameObject Grass;
 
+    Transform cam;
+
+    void Awake()
+    {
+        //cam = Camera.main.transform;
+    }
+
     void Start()
     {
         screenWidth = (float)Screen.width / 2.0f;
@@ -85,11 +92,11 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
     }
 
-    void ClampCamera()
-    {// Clamp the camera in the rectangle of the PG
+    void ClampCamera() { // Clamp the camera in the rectangle of the PG
+    
         Vector3 CamPos = Camera.main.transform.position;
         float camsize = Camera.main.orthographicSize;
-        float ratio = Camera.main.aspect*0.5f;
+        float ratio = Camera.main.aspect * 0.5f;
 
         if (2 * camsize * ratio > rt.rect.width + SizeOffset)
             CamPos.x = 0;
@@ -110,7 +117,7 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         GrassPos.z = 2;
         Grass.transform.position = GrassPos;
 
-        Grass.transform.localScale = Vector3.one * Mathf.Sqrt(camsize) ;
+        Grass.transform.localScale = Vector3.one * Mathf.Sqrt(camsize);
 
     }
 

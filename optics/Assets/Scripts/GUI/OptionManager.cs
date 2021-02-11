@@ -84,7 +84,7 @@ public class OptionManager : MonoBehaviour
     public void DeleteComposant()
     {
         CP.GetComponent<GenericComponent>().Delete();
-        FindObjectOfType<GameEngine>().UpdateComponentList();
+        GameEngine.instance.UpdateComponentList();
     }
 
     void Update()
@@ -98,7 +98,7 @@ public class OptionManager : MonoBehaviour
     void SetSize()
     {
         if (itemHolder)
-            itemHolder.localScale = Mathf.Clamp(Camera.main.orthographicSize / 3f, 0.1f, 10f) * Vector2.one;
+            itemHolder.localScale = Mathf.Clamp(Camera.main.orthographicSize / 4f, 0.1f, 10f) * Vector2.one;
     }
 
 }

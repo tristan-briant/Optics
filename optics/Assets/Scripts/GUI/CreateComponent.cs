@@ -20,23 +20,20 @@ IPointerDownHandler, IPointerUpHandler
         item = null;
 
         //StartCoroutine("Wel");
-        StartCoroutine("OnLongClick");
+        StartCoroutine(OnLongClick());
         //SpawnItem();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        StopCoroutine("OnLongClick");
+        StopCoroutine(OnLongClick());
     }
 
     IEnumerator OnLongClick()
     {
         yield return new WaitForSeconds(longClickTime); // Time before deciding if it is a long click
-        //longClicking = true;
-        Debug.Log("Long click");
-
         SpawnItem();
-        StartCoroutine("Wel");
+        StartCoroutine(WelcomOnBoard());
     }
 
     /*public void OnDrag(PointerEventData eventData)
@@ -77,11 +74,8 @@ IPointerDownHandler, IPointerUpHandler
 
     void SpawnItem()
     {
-
-
         item = Instantiate(prefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
         item.GetComponent<ChessPiece>().enabled = false;
-
     }
 
     void Activate(bool active)
@@ -96,29 +90,31 @@ IPointerDownHandler, IPointerUpHandler
             co.enabled = active;
     }
 
-    IEnumerator Wel()
+    IEnumerator WelcomOnBoard()
     {
         const float AnimTime = 0.5f;
         float time = 0;
         item.transform.SetParent(GameObject.Find("DragLayer").transform);
         //item.transform.localScale = Vector3.one;
         Activate(false);
-        Vector3 FinalPosition= new Vector3(Random.Range(-1f,1f),Random.Range(-1f,1f),Random.Range(-1f,1f));
+        Vector3 FinalPosition = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
 
         while (time < AnimTime)
         {
             time += Time.deltaTime;
             item.transform.localScale = Mathf.Lerp(2f, 1f, time / AnimTime) * Vector3.one;
-            item.transform.position = FinalPosition + new Vector3(0, Mathf.Lerp(2f, 1f, time / AnimTime), 0);
+            item.transform.position = FinalPosition + new Vector3(0, Mathf.Lerp(1f, 0f, time / AnimTime), 0);
             yield return 0;
         }
 
         Activate(true);
-        item.transform.SetParent(GameObject.Find("Playground/Components").transform);
+        item.transform.SetParent(GameObject.Find("Playground/Components").transform,false);
         item.transform.localScale = Vector3.one;
+
+        item.GetComponent<ChessPiece>().positionSet = FinalPosition;
         item.GetComponent<ChessPiece>().LetFindPlace();
 
-        FindObjectOfType<GameEngine>().UpdateComponentList();
+        GameEngine.instance.UpdateComponentList();
     }
 
 }

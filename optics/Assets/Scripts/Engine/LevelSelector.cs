@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelector : MonoBehaviour {
 
-    GameEngine GE;
+    //GameEngine GE;
     int CurrentLevel = 0;
 
-    private void Start()
+    /*private void Start()
     {
         GE = GameObject.Find("GameEngine").GetComponent<GameEngine>();
-    }
+    }*/
 
     public void SelectLevel(int n)
     {
@@ -26,12 +26,12 @@ public class LevelSelector : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GE.running)
+            if (GameEngine.instance.running)
             {
-                GE.ResetLightRay();
+                GameEngine.instance.ResetLightRay();
                 SceneManager.UnloadSceneAsync("Level" + CurrentLevel);
                 SceneManager.LoadScene("MiniMap", LoadSceneMode.Additive);
-                GE.running = false;
+                GameEngine.instance.running = false;
             }
             else
             {

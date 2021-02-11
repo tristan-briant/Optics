@@ -360,7 +360,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1249176973561624812, guid: 14fee1f2336f127439cba39da644f3f7,
+  m_Sprite: {fileID: -296561919158229276, guid: 14fee1f2336f127439cba39da644f3f7,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -636,7 +636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1249176973561624812, guid: 14fee1f2336f127439cba39da644f3f7,
+  m_Sprite: {fileID: -296561919158229276, guid: 14fee1f2336f127439cba39da644f3f7,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1249176973561624812, guid: 14fee1f2336f127439cba39da644f3f7,
+  m_Sprite: {fileID: -296561919158229276, guid: 14fee1f2336f127439cba39da644f3f7,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1020,13 +1020,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CP: {fileID: 0}
-  slider: {fileID: 0}
   EnableColor: {r: 0, g: 0, b: 0, a: 0}
   DisableColor: {r: 0, g: 0, b: 0, a: 0}
   RotationSwitch: {fileID: 0}
   TranslationSwitch: {fileID: 0}
-  HandleLeft: {fileID: 0}
-  HandleRight: {fileID: 0}
 --- !u!1 &7191295125642850064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1165,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1249176973561624812, guid: 14fee1f2336f127439cba39da644f3f7,
+  m_Sprite: {fileID: -296561919158229276, guid: 14fee1f2336f127439cba39da644f3f7,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
