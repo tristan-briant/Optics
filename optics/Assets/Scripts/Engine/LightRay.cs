@@ -25,6 +25,9 @@ public class LightRay : MonoBehaviour
     static public Transform Rays;
     static public int DepthMax;
 
+    static List<LightRay> ActiveRays;
+    static List<LightRay> AvailableRays; // For ray pool Not yet implemented
+
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
 
     public static bool NewRaysAvailable { get { bool value = newRaysAvailable; newRaysAvailable = false; return value; } set => newRaysAvailable = value; }

@@ -64,3 +64,6 @@ TagManager:
   - name: GUI
     uniqueID: 3067595485
     locked: 0
+  - name: Transitions
+    uniqueID: 120096891
+    locked: 0

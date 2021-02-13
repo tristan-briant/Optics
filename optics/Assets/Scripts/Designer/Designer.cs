@@ -12,17 +12,18 @@ public class Designer : MonoBehaviour
     const int MaxSize = 8;
     const int MinSize = 3;
     static public Vector2 PGSize;
-
-    //public GameObject Pg;
-
     static public string PGdata;
 
+    [System.NonSerialized]
+    public Designer instance;
 
-    private void Start()
+    public void Awake()
     {
-
+        if (instance == null)
+            instance = this;
+        else
+            DestroyImmediate(gameObject);
     }
-
 
     /*
         static public byte[] MakeThumbBytes(int size = 256)
@@ -120,7 +121,7 @@ public class Designer : MonoBehaviour
         }
     */
 
-    [ContextMenu("SaveToString")]
+    //[ContextMenu("SaveToString")]
     static public void SaveToString()
     {
         GameObject PG = GameObject.Find("Playground");
@@ -170,7 +171,14 @@ public class Designer : MonoBehaviour
 
         }
 */
-    [ContextMenu("Clear Field")]
+
+    static public void AddMirror()
+    {
+        GameObject Mirror = AssetDatabase.LoadAssetAtPath("Assets/Resources/Components/Mirror/Mirror.prefab", typeof(GameObject)) as GameObject;
+        GameObject newGO = PrefabUtility.InstantiatePrefab(Mirror) as GameObject;
+    }
+
+    //[ContextMenu("Clear Field")]
     static public void ClearPlayground()
     {
         GameObject PG = GameObject.Find("Playground/Components");
@@ -180,15 +188,12 @@ public class Designer : MonoBehaviour
             GenericComponent component = PG.transform.GetChild(0).GetComponent<GenericComponent>();
             component.Delete();
         }
-
     }
 
-    [ContextMenu("LoadFromString")]
-    static public void LoadFromString()
+    //[ContextMenu("LoadFromString")]
+    static public void LoadFromString(bool prefab = false)
     {
         if (PGdata == null) return;
-
-
         //PGdata = PGdata.Replace("\r", ""); //clean up string
 
         ClearPlayground();
@@ -197,7 +202,7 @@ public class Designer : MonoBehaviour
         string[] tokens = PGdata.Split('\n');
 
 
-        GameObject PGGround = GameObject.Find("Playground/Ground");
+        GameObject PGGround = GameObject.Find("Playground/ChessBoard");
         PGGround.GetComponent<PanZoom>().SetPlaygroundSize(float.Parse(tokens[0]), float.Parse(tokens[1]));
 
 
@@ -206,10 +211,16 @@ public class Designer : MonoBehaviour
         for (int i = 2; i < tokens.Length; i++)
         {
             String PrefabComponentPath = getBetween(tokens[i], "\"prefabPath\":\"", "\"");
-            Debug.Log(PrefabComponentPath);
             if (PrefabComponentPath == "") continue;
 
-            GameObject component = Instantiate(Resources.Load(PrefabComponentPath, typeof(GameObject))) as GameObject;
+            GameObject component, resource;
+
+            resource = Resources.Load(PrefabComponentPath, typeof(GameObject)) as GameObject;
+            if (!prefab)
+                component = Instantiate(resource) as GameObject;
+            else
+                component = PrefabUtility.InstantiatePrefab(resource) as GameObject;
+
             component.transform.SetParent(PGComponents.transform);
 
             GenericComponent gc = component.GetComponent<GenericComponent>();
@@ -222,8 +233,12 @@ public class Designer : MonoBehaviour
 
         //GameEngine GE = GameObject.FindObjectOfType<GameEngine>();
         //GE.UpdateComponentList();
-        GameEngine.instance.UpdateComponentList();
+        if (GameEngine.instance)
+            GameEngine.instance.UpdateComponentList();
     }
+
+
+
 
     public static string getBetween(string strSource, string strStart, string strEnd)
     {

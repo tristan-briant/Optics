@@ -57,6 +57,11 @@ public class GenericComponent : MonoBehaviour
         transform.localScale = Vector3.one;
         GameObject RP = GetComponent<ChessPiece>().RotatingPart;
         RP.transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg - 90f);
+
+        hasChanged = true;
+
+        //Animator anim = GetComponent<Animator>();
+        //if (anim) anim.Play(0);
     }
 
 }

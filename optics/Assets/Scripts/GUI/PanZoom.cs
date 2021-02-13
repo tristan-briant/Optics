@@ -1,8 +1,9 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.EventSystems;
 
 
-public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     Vector3 touchStart;
     float CamSizeMax;
@@ -16,12 +17,6 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     const float PerspectiveEffect = 0.5f;  // ratio for panning / moving the grass and give perspecive
     public GameObject Grass;
 
-    Transform cam;
-
-    void Awake()
-    {
-        //cam = Camera.main.transform;
-    }
 
     void Start()
     {
@@ -54,7 +49,9 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     public void OnPointerDown(PointerEventData eventData)
     {
         touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        ChessPiece.UnSelectAll();
+
+         if (Input.touchCount == 1 && Input.GetTouch(0).tapCount == 2)
+            StartCoroutine(ResetCamera());
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -89,16 +86,18 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
             zoom(deltaMagnitude / screenWidth * Camera.main.orthographicSize);
         }
+       
 
     }
 
-    void ClampCamera() { // Clamp the camera in the rectangle of the PG
-    
+    void ClampCamera()
+    { // Clamp the camera in the rectangle of the PG
+
         Vector3 CamPos = Camera.main.transform.position;
         float camsize = Camera.main.orthographicSize;
         float ratio = Camera.main.aspect * 0.5f;
 
-        if (2 * camsize * ratio > rt.rect.width + SizeOffset)
+        /*if (2 * camsize * ratio > rt.rect.width + SizeOffset)
             CamPos.x = 0;
         else
             CamPos.x = Mathf.Clamp(CamPos.x, -(rt.rect.width + SizeOffset) / 2 + camsize * ratio, (rt.rect.width + SizeOffset) / 2 - camsize * ratio);
@@ -107,6 +106,9 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
             CamPos.y = 0;
         else
             CamPos.y = Mathf.Clamp(CamPos.y, -(rt.rect.height + SizeOffset) / 2 + camsize, (rt.rect.height + SizeOffset) / 2 - camsize);
+*/
+        CamPos.x = Mathf.Clamp(CamPos.x, -rt.rect.width / 2, +rt.rect.width / 2);
+        CamPos.y = Mathf.Clamp(CamPos.y, -rt.rect.height / 2, +rt.rect.height / 2);
 
         CamPos.z = -10f;
 
@@ -141,4 +143,39 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         //throw new System.NotImplementedException();
     }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        int clickCount = eventData.clickCount;
+
+        if (clickCount == 1)
+        {
+            ChessPiece.UnSelectAll();
+        }
+        if (clickCount == 2)
+        {
+            StartCoroutine(ResetCamera());
+        }
+    }
+
+    IEnumerator ResetCamera()
+    {
+        float finalOrthSize = rt.rect.height / 2;
+        Vector3 finalCamPos = new Vector3(0, 0, -10);
+
+        const float animTime = 0.5f;
+        float t = 0;
+        while (t < animTime)
+        {
+            t += Time.deltaTime;
+            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, finalOrthSize, t / animTime);
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, finalCamPos, t / animTime);
+            yield return null;
+        }
+
+        Camera.main.orthographicSize = finalOrthSize;
+        Camera.main.transform.position = finalCamPos;
+
+    }
+
 }

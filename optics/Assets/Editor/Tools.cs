@@ -24,10 +24,14 @@ public class Tools : MonoBehaviour
     [MenuItem("MyTools/LoadFromString")]
     static void LoadFromString()
     {
-        Designer.LoadFromString();
+        Designer.LoadFromString(true);
     }
 
-
+    [MenuItem("MyTools/Add Mirror")]
+    static void AddMirror()
+    {
+        Designer.AddMirror();
+    }
 
 }
 

@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Options: {fileID: 7190625865546143246, guid: f1d16d82575f70c42858eaffe527ee80, type: 3}
-  RotatingPart: {fileID: 0}
+  RotatingPart: {fileID: 1682881425409968}
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
@@ -130,8 +130,8 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  CanTranslate: 1
-  CanRotate: 1
+  canTranslate: 1
+  canRotate: 1
   radius: 0.5
   reflectionCoef: 0.5
 --- !u!58 &1014612037

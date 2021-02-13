@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Profiling;
@@ -32,7 +32,6 @@ public class GameEngine : MonoBehaviour
             DestroyImmediate(gameObject);
     }
 
-
     void Start()
     {
         Application.targetFrameRate = 30;
@@ -56,16 +55,23 @@ public class GameEngine : MonoBehaviour
             for (; i < k + 100 && i < LightRay.rayNumberMax; i++)
                 LightRay.InstantiateLightRay();
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
     }
 
     public void StartGameEngine()
     {
         UpdateComponentList();
-        Rays = GameObject.Find("Rays").transform;
-        Debug.Log("Nombre de ray en reserve : " + RaysReserve.transform.childCount);
         running = true;
+    }
+
+    public void StopGameEngine()
+    {
+        ResetLightRay();
+        Array.Clear(LightSources, 0, LightSources.Length);
+        Array.Clear(OpticalComponents, 0, OpticalComponents.Length);
+        Array.Clear(Targets, 0, Targets.Length);
+        running = false;
     }
 
     void LateUpdate()
@@ -232,7 +238,7 @@ public class GameEngine : MonoBehaviour
         OpticalComponents = FindObjectsOfType<OpticalComponent>();
         Targets = FindObjectsOfType<Target>();
 
-        //UpdateAllRays();
+        UpdateAllRays();
     }
 
 }

@@ -16,7 +16,7 @@ public class StarFollowRay : MonoBehaviour
     public void Initialize(LightRay lr)
     {
         Pos = 0;
-        transform.SetParent(GameObject.Find("Playground/Stars").transform);
+        transform.SetParent(GameObject.Find("Stars").transform);
         Ray = lr;
         transform.localScale = Vector3.one;
         Vector3 SPos;
@@ -57,7 +57,7 @@ public class StarFollowRay : MonoBehaviour
                 SPos.x = Ray.StartPosition1.x + Ray.cos1 * Pos;
                 SPos.y = Ray.StartPosition1.y + Ray.sin1 * Pos;
                 SPos.z = 0;
-                transform.localPosition = SPos;
+                transform.position = SPos;
                 SetColor();
             }
         }
