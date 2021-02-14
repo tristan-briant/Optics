@@ -20,19 +20,40 @@ public class Mirror : OpticalComponent
         r.Length2 = Mathf.Sqrt((xc2 - xo2) * (xc2 - xo2) + (yc2 - yo2) * (yc2 - yo2));
 
         LightRay lr = null;
-        if (r.transform.childCount == 0)
-            lr = LightRay.NewLightRayChild(r);
-        else if (r.transform.childCount == 1)
-            lr = r.transform.GetChild(0).GetComponent<LightRay>();
-        else
+        switch (r.Children.Count)
         {
-            while (r.transform.childCount > 1)
-                r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
-
-            lr = r.transform.GetChild(0).GetComponent<LightRay>();
+            case 0:
+                lr = LightRay.NewLightRayChild(r);
+                break;
+            case 1:
+                lr = r.Children[0];
+                break;
+            default:
+                r.ClearChildren(1);
+                lr = r.Children[0];
+                break;
         }
 
-        if (lr == null) return;
+        /*if (r.Children.Count == 0)
+            lr = LightRay.NewLightRayChild(r);
+        else if (r.Children.Count == 1)
+        {
+
+            if (r.Children.Count > 1)
+            {
+                foreach ()
+                    r.Children.RemoveRange(1, r.Children.Count - 1);
+            }
+            lr = r.Children[0];
+        }
+        */
+        //foreach (LightRay l in r.Children)
+        //    l.FreeLightRay();
+
+        //r.Children.Clear();
+        //lr = LightRay.NewLightRayChild(r);
+
+        if (lr == null) { return; }
 
         lr.Col = r.Col;
         lr.Intensity = r.Intensity;

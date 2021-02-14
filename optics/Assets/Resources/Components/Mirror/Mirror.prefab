@@ -144,7 +144,7 @@ RectTransform:
   m_GameObject: {fileID: 9084299584709155513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9999998, y: 0.9999998, z: 0.9999998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8486909116824943773}
   - {fileID: 9084299584218590800}
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Options: {fileID: 7190625865546143246, guid: f1d16d82575f70c42858eaffe527ee80, type: 3}
-  RotatingPart: {fileID: 0}
+  RotatingPart: {fileID: 9084299584218590803}
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
@@ -223,8 +223,8 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  CanTranslate: 1
-  CanRotate: 1
+  canTranslate: 1
+  canRotate: 1
   radius: 0.5
 --- !u!95 &1059315308
 Animator:

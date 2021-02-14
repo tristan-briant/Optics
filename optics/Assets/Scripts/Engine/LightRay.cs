@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightRay : MonoBehaviour
 {
     public static int rayNumber;
-    public const int rayNumberMax = 1000;
+    //static public int rayNumberMax;
     private static bool newRaysAvailable;
     public Vector3 StartPosition1, StartPosition2;
     public float Direction1, Direction2;
@@ -19,14 +19,14 @@ public class LightRay : MonoBehaviour
     public OpticalComponent End;
     public int depth;
 
-    public List<LightRay> Children;
 
     static public Transform RaysReserve;
     static public Transform Rays;
     static public int DepthMax;
 
-    static List<LightRay> ActiveRays;
-    static List<LightRay> AvailableRays; // For ray pool Not yet implemented
+    public List<LightRay> Children;
+    //static Queue<LightRay> ActiveRays = new Queue<LightRay>();
+    static Queue<LightRay> AvailableRays = new Queue<LightRay>(); // For ray pool Not yet implemented
 
     const float EPSILON = 0.00001f; // pour les erreurs d'arrondis
 
@@ -71,9 +71,11 @@ public class LightRay : MonoBehaviour
     {
         // Draw the rays recursively;
         DrawMesh(CameraPosition);
-        foreach (Transform child in transform)
+        //foreach (Transform child in transform)
+        foreach (LightRay lr in Children)
         {
-            child.GetComponent<LightRay>().Draw(CameraPosition);
+            //child.GetComponent<LightRay>().Draw(CameraPosition);
+            lr.Draw(CameraPosition);
         }
     }
 
@@ -182,11 +184,12 @@ public class LightRay : MonoBehaviour
         }
 
 
-        for (int i = 0; i < 6; i++)
-            vertices[i] -= CameraPosition;
+        /*for (int i = 0; i < 6; i++)
+            vertices[i] -= CameraPosition;*/
 
 
         mesh.vertices = vertices;
+        mesh.RecalculateBounds();
         mesh.uv = uv;
         meshRenderer.material.color = Col;
 
@@ -198,71 +201,111 @@ public class LightRay : MonoBehaviour
             vertices[i] -= CameraDeltaPosition;
 
         mesh.vertices = vertices;
-    }
 
+        foreach (LightRay lr in Children)
+            lr.SetRelativePosition(CameraDeltaPosition);
+    }
 
     public void FreeLightRay() // remove child recursively
     {
-        if (RaysReserve.transform.childCount == 0)
-            newRaysAvailable = true;
+        //if (RaysReserve.transform.childCount == 0)
+        //    newRaysAvailable = true;
 
-        foreach (LightRay r in GetComponentsInChildren<LightRay>())
+        /*foreach (LightRay r in GetComponentsInChildren<LightRay>())
         {
             r.transform.parent = RaysReserve;
             r.End = null;
             r.Origin = null;
-        }
+        }*/
 
-        /*foreach (LightRay r in Children)
-        {
+        foreach (LightRay r in Children)
             r.FreeLightRay();
-        }
+
+        End = null;
+        Origin = null;
+        Children.Clear();
+        gameObject.SetActive(false);
+
+        AvailableRays.Enqueue(this);
+    }
+
+    public void ClearChildren()
+    {
+        foreach (LightRay r in Children)
+            r.FreeLightRay();
 
         Children.Clear();
-        gameObject.SetActive(false);*/
-
     }
+
+    public void ClearChildren(int except) // remove all child exept a certain number
+    {
+        if (Children.Count < except) return;
+
+        for (int i = except; i < Children.Count; i++)
+            Children[i].FreeLightRay();
+
+        Children.RemoveRange(except, Children.Count - except);
+    }
+
 
     static public LightRay NewLightRayChild(LightRay lr = null)
     {
-        if (lr && lr.depth >= DepthMax) return null; // profondeur max atteinte !!
-        if (RaysReserve == null || RaysReserve.childCount == 0)
+        if (lr && lr.depth >= DepthMax)
         {
-            return null; // Plus de rayons disponible !!
-        }
+            Debug.Log("Profmax");
+            return null;
+        } // profondeur max atteinte !!
 
-        // Preparation du rayon
-        LightRay r = RaysReserve.GetChild(0).GetComponent<LightRay>();
+        if (AvailableRays.Count == 0) return null;
+
+        LightRay r = AvailableRays.Dequeue();
+        r.gameObject.SetActive(true);
+
         if (lr)
         {
-            r.transform.parent = lr.transform;
+            lr.Children.Add(r);
             r.depth = lr.depth + 1;
         }
         else
-        {
-            r.transform.parent = Rays;
             r.depth = 0;
-        }
 
-        r.transform.localScale = Vector3.one;
-        r.transform.localPosition = Vector3.zero;
         return r;
     }
 
     static public LightRay InstantiateLightRay()
     {
-        if (RaysReserve.transform.childCount == 0)
-            newRaysAvailable = true;
+        /*if (RaysReserve.transform.childCount == 0)
+            newRaysAvailable = true;*/
 
         GameObject ray = new GameObject("Ray");
-        ray.transform.parent = (RaysReserve);
+        //ray.transform.parent = RaysReserve;
+        ray.transform.parent = Rays;
         ray.transform.localScale = Vector3.one;
         ray.transform.localPosition = Vector3.zero;
 
         LightRay r = ray.AddComponent<LightRay>();
         r.InitializeMesh();
         rayNumber++;
+
+        r.Children = new List<LightRay>();
+
+        r.gameObject.SetActive(false);
+        AvailableRays.Enqueue(r);
         return r;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Renderer rend = GetComponent<Renderer>();
+        // A sphere that fully encloses the bounding box.
+        Vector3 center = rend.bounds.center;
+        float radius = rend.bounds.extents.magnitude;
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(center, 1);
+
+        Debug.Log("center" + center);
+        Debug.Log("  bounds " + radius);
     }
 
 }

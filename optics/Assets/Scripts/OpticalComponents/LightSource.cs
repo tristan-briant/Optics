@@ -7,7 +7,7 @@ public class LightSource : OpticalComponent
     public int N = 10;
     public float vergence = 0;
     public float Length = 15;
-    LightRay[] LightRays;
+
     private Color Color = new Color(1, 1, 0.8f, 0.5f);
     public float intensity = 1;
     public float lightRadius = 0.5f;
@@ -34,6 +34,9 @@ public class LightSource : OpticalComponent
     public float IntensityMax { get => 1f; }
     public float IntensityMin { get => 0.1f; }
 
+    [System.NonSerialized]
+    public List<LightRay> LightRays = new List<LightRay>();
+
     Color LightColor()
     {
         return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
@@ -47,28 +50,37 @@ public class LightSource : OpticalComponent
 
     public void InitializeSource()
     {
-        if (LightRays == null)
-            LightRays = new LightRay[N];
-
-        for (int i = 0; i < N; i++)
-        {
-            if (LightRays[i] == null)
+        //if (LightRays == null)
+        //    LightRays = new LightRay[N];
+        if (LightRays.Count < N)
+            for (int i = LightRays.Count; i < N; i++)
             {
                 LightRay r = LightRay.NewLightRayChild();
-                if (r != null)
-                {
-                    r.Origin = this;
-                    LightRays[i] = r;
-                }
+                if (r == null) break; // no more ray available !
+                r.Origin = this;
+                LightRays.Add(r);
             }
+
+        /*
+            for (int i = 0; i < N; i++)
+            {
+                if (LightRays[i] == null)
+                {
+                    LightRay r = LightRay.NewLightRayChild();
+                    if (r != null)
+                    {
+                        r.Origin = this;
+                        LightRays[i] = r;
+                    }
+                }
+            }*/
         }
-    }
 
     override public void Deflect(LightRay r)
     { // Simple obstacle
-        while (r.transform.childCount > 0)
-            r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
-
+       
+        r.ClearChildren();
+        
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
         float xo2 = r.StartPosition2.x;
@@ -99,12 +111,13 @@ public class LightSource : OpticalComponent
 
         Vector3 pos = new Vector3(x, y, 0);
 
-        if (LightRays == null || LightRays[N - 1] == null)
+        //if (LightRays == null || LightRays[N - 1] == null)
+        if(LightRays.Count<N)
             InitializeSource();
 
         Color SourceColor = LightColor();
 
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < LightRays.Count; i++)
         {
             LightRay r = LightRays[i];
             if (r == null) return;
@@ -135,14 +148,15 @@ public class LightSource : OpticalComponent
     {
         const float proba = 0.01f;
 
-        if (LightRays != null && LightRays[N - 1] != null)
+        //if (LightRays != null && LightRays[N - 1] != null)
+        if(LightRays.Count>0)
         {
 
             if (Random.Range(0.0f, 1.0f) < proba)
             {
                 GameObject Star = Instantiate(Resources.Load("Star", typeof(GameObject)) as GameObject);
                 StarFollowRay sf = Star.GetComponent<StarFollowRay>();
-                sf.Initialize(LightRays[Random.Range(0, N)]);
+                sf.Initialize(LightRays[Random.Range(0, LightRays.Count)]);
             }
         }
 

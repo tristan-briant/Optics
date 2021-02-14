@@ -14,7 +14,7 @@ public class GameEngine : MonoBehaviour
     public float LengthMax = 15.0f;
     public Transform Rays;
     public Transform RaysReserve;
-    public int DepthMax = 10;
+    public int DepthMax = 2;
     public bool running = false;
     public bool levelLoaded = false;
 
@@ -22,7 +22,7 @@ public class GameEngine : MonoBehaviour
     public static GameEngine instance;
 
 
-    Vector3 CamPositionPrev = Vector3.zero;
+    Vector3 CamPosition = Vector3.zero;
 
     void Awake()
     {
@@ -35,9 +35,7 @@ public class GameEngine : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 30;
-        //RaysReserve = GameObject.Find("RaysReserve").transform;  // find and deactivate
-        RaysReserve.gameObject.SetActive(false);
-        //Rays = GameObject.Find("Rays").transform;
+        //RaysReserve.gameObject.SetActive(false);
 
         // Initialize Ray system (static variables)
         LightRay.RaysReserve = RaysReserve;
@@ -49,10 +47,10 @@ public class GameEngine : MonoBehaviour
 
     IEnumerator FillRaysReserve()
     {
-        for (int i = 0; i < LightRay.rayNumberMax; i++)
+        for (int i = 0; i < NRaysMax; i++)
         {
             int k = i;
-            for (; i < k + 100 && i < LightRay.rayNumberMax; i++)
+            for (; i < k + 100 && i < NRaysMax; i++)
                 LightRay.InstantiateLightRay();
 
             yield return new WaitForFixedUpdate();
@@ -76,21 +74,20 @@ public class GameEngine : MonoBehaviour
 
     void LateUpdate()
     {
-        //Profiler.BeginSample("MyPieceOfCode");
-
         if (!running) return;
 
         bool update = false;
 
-        Vector3 CamPosCurent = Camera.main.transform.localPosition;
-        if (CamPosCurent != CamPositionPrev)
+        /*Vector3 CamPositionNew = Camera.main.transform.localPosition;
+        if (CamPositionNew != CamPosition)
         {
 
-            foreach (LightRay lr in Rays.GetComponentsInChildren<LightRay>())
-                lr.SetRelativePosition(CamPosCurent - CamPositionPrev);
+            foreach (LightSource ls in LightSources)
+                foreach (LightRay lr in ls.LightRays)
+                    lr.SetRelativePosition(CamPositionNew - CamPosition);
 
-            CamPositionPrev = CamPosCurent;
-        }
+            CamPosition = CamPositionNew;
+        }*/
 
         if (LightRay.NewRaysAvailable)
         {
@@ -98,18 +95,15 @@ public class GameEngine : MonoBehaviour
             return;
         }
 
-
         foreach (OpticalComponent op in OpticalComponents)
         {
             if (op.hasChanged)
             {
-                if (op.GetComponent<LightSource>()) // C'est une source on update tout par défaut
-                {
-                    UpdateAllRays();
-                    return;
-                }
+                if (op is LightSource) // C'est une source on update les rayons emit (plus la source en tant que op ensuite) 
+                    UpdateLightRays1LS(op as LightSource);
 
                 UpdateLightRays1OP(op);
+
                 update = true;
             }
         }
@@ -118,59 +112,43 @@ public class GameEngine : MonoBehaviour
         {
             foreach (Target t in Targets) t.ComputeScore();
         }
-
-        //Profiler.EndSample();
     }
 
     private void UpdateAllRays()
     {
-
         foreach (LightSource ls in LightSources)
-        {
-            ls.EmitLight();
-        }
-
-        Vector3 camPos = Camera.main.transform.position;
-        foreach (Transform t in Rays)
-        {
-            LightRay lr = t.GetComponent<LightRay>();
-            Collision(lr);
-            lr.Draw(camPos);
-        }
+            UpdateLightRays1LS(ls);
 
         foreach (LightSource ls in LightSources) ls.hasChanged = false;
         foreach (OpticalComponent op in OpticalComponents) op.hasChanged = false;
         foreach (Target t in Targets) t.ComputeScore();
-
     }
 
     bool Collision(LightRay lr)
     {
-
-        float lmin = -1;
+        float dmin = -1;
         OpticalComponent opCollision = null;
 
         foreach (OpticalComponent op in OpticalComponents)
         {
             if (lr.Origin == op) continue;
 
-            float l = op.Collision2(lr);
+            float d = op.Collision2(lr);
 
-            if (l > 0 && (l < lmin || lmin < 0)) // trouve la plus proche collision
+            if (d > 0 && (d < dmin || dmin < 0)) // trouve la plus proche collision
             {
-                lmin = l;
+                dmin = d;
                 opCollision = op;
             }
         }
 
-        if (lmin > 0)
+        if (dmin > 0)
         {
             lr.End = opCollision;
             opCollision.Deflect(lr);
 
-            foreach (Transform lchild in lr.transform)
-                Collision(lchild.GetComponent<LightRay>());
-
+            foreach (LightRay lchild in lr.Children)
+                Collision(lchild);
         }
         else  // Si on touche personne
         {
@@ -178,46 +156,46 @@ public class GameEngine : MonoBehaviour
             lr.End = null;
 
             // On retire tous les rayon enfants
-            while (lr.transform.childCount > 0) // Attention le foreach ne marche pas car on change le nombre de child !
-                                                //ResetLightRay(lr.transform.GetChild(0).GetComponent<LightRay>());
-                lr.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
+            lr.ClearChildren();
         }
 
+        lr.DrawMesh(CamPosition); // Met à jour le mesh centrer sur la camera
         return false;
     }
 
     public void ResetLightRay()
     {
-        foreach (LightRay r in Rays.GetComponentsInChildren<LightRay>())
-            r.FreeLightRay();
+        foreach (LightSource lightSource in GameEngine.instance.LightSources)
+            foreach (LightRay lr in lightSource.LightRays)
+                lr.FreeLightRay();
     }
 
-    private void UpdateLightRays1OP(OpticalComponent op)
+    void UpdateLightRays1LS(LightSource ls)
     {
-        foreach (Transform t in Rays)
-        {
-            LightRay lr = t.GetComponent<LightRay>();
-            Update1LightRay1OP(lr, op);
-        }
+        ls.EmitLight();
+        foreach (LightRay lr in ls.LightRays)
+            Collision(lr);
+
+        ls.hasChanged = false;
+    }
+
+    void UpdateLightRays1OP(OpticalComponent op)
+    {
+        foreach (LightSource lightSource in GameEngine.instance.LightSources)
+            foreach (LightRay lr in lightSource.LightRays)
+                Update1LightRay1OP(lr, op);
 
         op.hasChanged = false;
-
     }
 
     private void Update1LightRay1OP(LightRay lr, OpticalComponent op)
     {
         if (Collision1OP(lr, op)) // si nouvelle collision ou perte de collision
-        {
-            Collision(lr);
-            lr.Draw(Camera.main.transform.position);
-        }
+            Collision(lr); // recalcule tout le rayon
         else
-        {
-            foreach (Transform lchild in lr.transform)
-            {
-                Update1LightRay1OP(lchild.GetComponent<LightRay>(), op);
-            }
-        }
+            foreach (LightRay lchild in lr.Children)
+                Update1LightRay1OP(lchild, op);
+
     }
 
     bool Collision1OP(LightRay lr, OpticalComponent op) // test la collision avec 1 optical component

@@ -29,29 +29,26 @@ public class LameSemi : OpticalComponent
 
         LightRay lr = null;
         LightRay lt = null;
-        if (r.transform.childCount == 0)
-        {
-            lr = LightRay.NewLightRayChild(r);
-            lt = LightRay.NewLightRayChild(r);
-        }
-        else if (r.transform.childCount == 1)
-        {
-            lt = r.transform.GetChild(0).GetComponent<LightRay>();
-            lr = LightRay.NewLightRayChild(r);
-        }
-        else if (r.transform.childCount == 2)
-        {
-            lt = r.transform.GetChild(0).GetComponent<LightRay>();
-            lr = r.transform.GetChild(1).GetComponent<LightRay>();
-        }
-        else
-        {
-            while (r.transform.childCount > 2)
-                //FreeLightRay(r.transform.GetChild(0).GetComponent<LightRay>());
-                r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
 
-            lt = r.transform.GetChild(0).GetComponent<LightRay>();
-            lr = r.transform.GetChild(1).GetComponent<LightRay>();
+        switch (r.Children.Count)
+        {
+            case 0:
+                lr = LightRay.NewLightRayChild(r);
+                lt = LightRay.NewLightRayChild(r);
+                break;
+            case 1:
+                lr = r.Children[0];
+                lt = LightRay.NewLightRayChild(r);
+                break;
+            case 2:
+                lr = r.Children[0];
+                lt = r.Children[1];
+                break;
+            default:
+                r.ClearChildren(2);
+                lr = r.Children[0];
+                lt = r.Children[1];
+                break;
         }
 
         // Rayon transmis
@@ -63,6 +60,7 @@ public class LameSemi : OpticalComponent
             lt.StartPosition2 = new Vector3(xc2, yc2, 0);
             lt.Direction1 = r.Direction1;
             lt.Direction2 = r.Direction2;
+            lt.Length1 = lt.Length2 = 15.0f;
             lt.Origin = this;
             lt.ComputeDir();
         }
@@ -76,6 +74,7 @@ public class LameSemi : OpticalComponent
             lr.StartPosition2 = new Vector3(xc2, yc2, 0);
             lr.Direction1 = -ao1 + 2 * angle;
             lr.Direction2 = -ao2 + 2 * angle;
+            lr.Length1 = lr.Length2 = 15.0f;
             lr.Origin = this;
             lr.ComputeDir();
         }
