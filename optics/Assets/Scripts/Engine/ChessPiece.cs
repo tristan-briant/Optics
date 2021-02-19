@@ -33,7 +33,7 @@ public class ChessPiece : MonoBehaviour
     const float ClickDuration = 0.2f; // maximum click duration 
     const float LongClickDuration = 1.0f; // long click duration 
 
-    private bool longClicking;
+    //private bool longClicking;
     public float SnapIncrement = 0.25f;
 
 
@@ -168,36 +168,27 @@ public class ChessPiece : MonoBehaviour
         rb = RotatingPart.GetComponent<Rigidbody2D>();
         if (rb) DestroyImmediate(rb);
 
-        if (translation)
+        if (translation || rotation)
         {
-            rigidbodyPart = gameObject.AddComponent<Rigidbody2D>();
+            positionSet = transform.position;
+            angleSet = GetComponent<GenericComponent>().angle * Mathf.Rad2Deg;
+
+            if (translation)
+            {
+                rigidbodyPart = gameObject.AddComponent<Rigidbody2D>();
+                rigidbodyPart.constraints = RigidbodyConstraints2D.FreezeRotation;
+            }
+
+            if (rotation)
+            {
+                rigidbodyPart = RotatingPart.AddComponent<Rigidbody2D>();
+                rigidbodyPart.constraints = RigidbodyConstraints2D.FreezePosition;
+            }
+
             rigidbodyPart.gravityScale = 0;
-            rigidbodyPart.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rigidbodyPart.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         }
 
-        if (rotation)
-        {
-            rigidbodyPart = RotatingPart.AddComponent<Rigidbody2D>();
-            rigidbodyPart.constraints = RigidbodyConstraints2D.FreezePosition;
-        }
-
-        /*    if (rotation && translation)
-                rb.constraints = RigidbodyConstraints2D.None;
-
-        if (!rotation && translation)
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-        if (rotation && !translation)
-            rb.constraints = RigidbodyConstraints2D.FreezePosition;
-
-        if (!rotation && !translation)
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
-        if (!translation)
-            PositionSet = transform.position;
-        if (!rotation)
-            angleSet = transform.eulerAngles.z;
-            */
 
         clamped = !(rotation || translation);
     }
@@ -232,8 +223,6 @@ public class ChessPiece : MonoBehaviour
 
             if (moving || ChessPiece.manipulated == this) // smooth moves
             {
-                //rigidbodyPart.angularVelocity = 0.5f * deltaAngle / Time.fixedDeltaTime;
-
                 const float alpha = 0.5f;
                 Vector2 goToPos = alpha * transform.position + (1 - alpha) * PositionSet;
                 rigidbodyPart.MovePosition(goToPos);
@@ -243,12 +232,12 @@ public class ChessPiece : MonoBehaviour
             else  // Go Final position
             {
                 TeleportTo(new Vector2(PositionSet.x, PositionSet.y));
-                //rigidbodyPart.position = (new Vector2(PositionSet.x, PositionSet.y));
-                //rigidbodyPart.rotation = (angleSet);
             }
 
-        }
+            //UpdateCoordinates();  // Essentially for genericcomponent with no automatic update of trans and rotation
 
+
+        }
     }
 
     IEnumerator FixPlace()
@@ -256,8 +245,11 @@ public class ChessPiece : MonoBehaviour
         Constrain(true, false);
         yield return new WaitForFixedUpdate();
         yield return new WaitForFixedUpdate();
-
         Constrain(false, false);
+
+        /*GenericComponent gc = GetComponent<GenericComponent>();
+        if (gc)
+            gc.UpdateCoordinates();*/
     }
 
     public void TeleportTo(Vector3 vector)
@@ -268,6 +260,14 @@ public class ChessPiece : MonoBehaviour
         if (rb)
             rb.position = vector;
     }
+
+    void UpdateCoordinates()
+    {
+        GenericComponent gc = GetComponent<GenericComponent>();
+        if (gc)
+            gc.UpdateCoordinates();
+    }
+
 
 }
 

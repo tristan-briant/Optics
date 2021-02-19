@@ -9,8 +9,8 @@ public class Target : OpticalComponent
     public float CollectedIntensity;
     public float TargetIntensity;
 
-    Transform Shine;
-    Transform ScoreText;
+    Image Shine;
+    Text ScoreText;
 
     float score = 0, scoreSpeed = 0.5f;
 
@@ -29,11 +29,12 @@ public class Target : OpticalComponent
     public float IntensityMin { get => 0.1f; }
 
 
+
     public override void Start()
     {
         base.Start();
-        Shine = transform.Find("Optics/Shine");
-        ScoreText = transform.Find("Optics/Score");
+        Shine = transform.Find("Optics/Shine").GetComponent<Image>();
+        ScoreText = transform.Find("Optics/Score").GetComponent<Text>();
     }
 
     public void ResetTarget()
@@ -89,8 +90,7 @@ public class Target : OpticalComponent
 
     override public void Deflect(LightRay r)
     {
-        while (r.transform.childCount > 0)
-            r.transform.GetChild(0).GetComponent<LightRay>().FreeLightRay();
+        r.ClearChildren();
 
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
@@ -101,10 +101,10 @@ public class Target : OpticalComponent
         r.Length2 = Mathf.Sqrt((x - xo2) * (x - xo2) + (y - yo2) * (y - yo2));
     }
 
-    override public void Update()
+    public void Update()
     {
-        base.Update();
-        Color c = Shine.GetComponent<Image>().color;
+        //base.LateUpdate();
+        Color c = Shine.color;
         float I = Mathf.Clamp01((CollectedIntensity / TargetIntensity));
 
         if (score < I)
@@ -119,9 +119,10 @@ public class Target : OpticalComponent
         }
 
         c.a = Mathf.Sqrt(score) * (0.6f + 0.4f * Mathf.Cos(1.5f * Mathf.PI * Time.time));
-        Shine.GetComponent<Image>().color = c;
-        ScoreText.GetComponent<Text>().text = Mathf.RoundToInt(score * 100) + "%";
-        ScoreText.GetComponent<Text>().fontSize = (int)(20 + 40 * score);
+        Shine.color = c;
+        
+        ScoreText.text = Mathf.RoundToInt(score * 100) + "%";
+        ScoreText.fontSize = (int)(20 + 40 * score);
     }
 
     public void ComputeScore()

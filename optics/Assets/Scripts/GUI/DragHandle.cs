@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     Animator animator;
     Vector3 startPos;
@@ -22,7 +22,6 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     void Start()
     {
-        //animator = GetComponentInParent<Animator>();
         startPos = transform.localPosition;
         startPos.z = 0;
         startAngle = AngleFromXY(startPos.x, startPos.y);
@@ -57,10 +56,8 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         positionMouse0 = ratioFineTranslation * transform.position
                         + (1 - ratioFineTranslation) * HandleInitialPosition;
 
-
-        //animator.SetBool("controled", true);
         lr.enabled = true;
-        // = true;
+
 
         handle.GetComponent<HandleManager>().ConstrainTarget(translation, rotation);
     }
@@ -68,9 +65,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerUp(PointerEventData ev)
     {
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
-        //animator.SetBool("controled", false);
         StartCoroutine("BackInPlace");
-        //dragged = false;
         handle.GetComponent<HandleManager>().ConstrainTarget(false, false);
     }
 
@@ -103,6 +98,8 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         lr.SetPosition(1, transform.position);
 
         transform.rotation = Quaternion.identity;
+        transform.parent.parent.rotation = Quaternion.identity;
+        
     }
 
     void XYLocalPosition(Vector3 newPos)
@@ -121,10 +118,6 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         transform.position = pos;
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
-    }
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -135,7 +128,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
         direction.z = 0;
 
-        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition)- offset;
+        transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offset;
 
         if (rotation)
             XYLocalPosition(startPos / startPos.magnitude * direction.magnitude);
@@ -160,8 +153,4 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
-    }
 }

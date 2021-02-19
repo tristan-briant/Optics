@@ -17,7 +17,7 @@ public class MyMathf
     /// map float to 0 -> 0.999f for frame
     {
         if (xmin != xmax)
-            return Mathf.Clamp((x - xmin) / (xmax - xmin),0, 0.99f);
+            return Mathf.Clamp((x - xmin) / (xmax - xmin), 0, 0.99f);
         else
             return 0;
 
@@ -45,6 +45,16 @@ public class MyMathf
         v.z = Round(v.z, increment);
         return v;
     }
+
+    public static Vector2 rotate(Vector2 v, float angleDeg)
+    {
+        float angle = angleDeg * Mathf.Deg2Rad;
+        return new Vector2(
+            v.x * Mathf.Cos(angle) - v.y * Mathf.Sin(angle),
+            v.x * Mathf.Sin(angle) + v.y * Mathf.Cos(angle)
+        );
+    }
+
 
 
 }

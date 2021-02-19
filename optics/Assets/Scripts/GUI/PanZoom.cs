@@ -3,13 +3,16 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 
-public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
+public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
+//IPointerDownHandler, IPointerUpHandler,  //IBeginDragHandler, 
+//IEndDragHandler
 {
     Vector3 touchStart;
     float CamSizeMax;
     float CamSizeMin = 2f;
     RectTransform rt;
 
+    public Vector2 Size = new Vector2(4, 4);
     private float screenWidth;
     private float screenHeight;
 
@@ -17,12 +20,23 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     const float PerspectiveEffect = 0.5f;  // ratio for panning / moving the grass and give perspecive
     public GameObject Grass;
 
+    public static PanZoom instance;
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            DestroyImmediate(gameObject);
+    }
 
     void Start()
     {
         screenWidth = (float)Screen.width / 2.0f;
         screenHeight = (float)Screen.height / 2.0f;
 
+        GameObject PG = GameObject.Find("Playground");
+        Size = ((RectTransform)PG.transform).rect.size;
         SetupCameraAndPlayground();
     }
 
@@ -30,33 +44,25 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     {
         GameObject PG = GameObject.Find("Playground");
         rt = (RectTransform)PG.transform;
-        CamSizeMax = (rt.rect.height + SizeOffset) / 2;
-        Camera.main.orthographicSize = rt.rect.height / 2;
+        rt.sizeDelta = Size;
+        GetComponent<BoxCollider2D>().size = Size;
+
+        foreach (BoxCollider2D wall in transform.Find("Base").GetComponentsInChildren<BoxCollider2D>())
+            wall.size = ((RectTransform)wall.transform).rect.size;
+
+        CamSizeMax = (Size.y + SizeOffset) / 2;
+        Camera.main.orthographicSize = Size.y / 2;
         Camera.main.transform.position = new Vector3(0, 0, -10);
-
-        GetComponent<BoxCollider2D>().size = new Vector2(rt.rect.width, rt.rect.height);
-
     }
 
     public void SetPlaygroundSize(float width, float height)
     {
-        GameObject PG = GameObject.Find("Playground");
-        PG.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        //GameObject PG = GameObject.Find("Playground");
+        //PG.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        Size.x = width;
+        Size.y = height;
 
         SetupCameraAndPlayground();
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-         if (Input.touchCount == 1 && Input.GetTouch(0).tapCount == 2)
-            StartCoroutine(ResetCamera());
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     void zoom(float increment)
@@ -68,26 +74,6 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     void Update()
     {
         zoom(-Input.GetAxis("Mouse ScrollWheel"));
-
-        if (Input.touchCount == 2)
-        {
-            Touch T0 = Input.GetTouch(0);
-            Touch T1 = Input.GetTouch(1);
-
-            Vector2 posOld0 = T0.position - T0.deltaPosition;
-            Vector2 posOld1 = T1.position - T1.deltaPosition;
-
-            float deltaMagnitude = (posOld1 - posOld0).magnitude - (T1.position - T0.position).magnitude;
-            Vector3 deltaPos;
-            deltaPos.x = 0.5f * (T0.deltaPosition.x + T1.deltaPosition.x);
-            deltaPos.y = 0.5f * (T0.deltaPosition.y + T1.deltaPosition.y);
-            deltaPos.z = 0;
-            Camera.main.transform.position -= deltaPos / screenWidth * Camera.main.orthographicSize;
-
-            zoom(deltaMagnitude / screenWidth * Camera.main.orthographicSize);
-        }
-       
-
     }
 
     void ClampCamera()
@@ -97,16 +83,6 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
         float camsize = Camera.main.orthographicSize;
         float ratio = Camera.main.aspect * 0.5f;
 
-        /*if (2 * camsize * ratio > rt.rect.width + SizeOffset)
-            CamPos.x = 0;
-        else
-            CamPos.x = Mathf.Clamp(CamPos.x, -(rt.rect.width + SizeOffset) / 2 + camsize * ratio, (rt.rect.width + SizeOffset) / 2 - camsize * ratio);
-
-        if (2 * camsize > rt.rect.height + SizeOffset)
-            CamPos.y = 0;
-        else
-            CamPos.y = Mathf.Clamp(CamPos.y, -(rt.rect.height + SizeOffset) / 2 + camsize, (rt.rect.height + SizeOffset) / 2 - camsize);
-*/
         CamPos.x = Mathf.Clamp(CamPos.x, -rt.rect.width / 2, +rt.rect.width / 2);
         CamPos.y = Mathf.Clamp(CamPos.y, -rt.rect.height / 2, +rt.rect.height / 2);
 
@@ -125,28 +101,48 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (Input.touchCount == 1 || Input.GetMouseButton(0))
+        if (Input.touchCount == 2)
         {
-            Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch T0 = Input.GetTouch(0);
+            Touch T1 = Input.GetTouch(1);
+
+            Vector2 posOld0 = T0.position - T0.deltaPosition;
+            Vector2 posOld1 = T1.position - T1.deltaPosition;
+
+            float deltaMagnitude = (posOld1 - posOld0).magnitude - (T1.position - T0.position).magnitude;
+            Vector3 deltaPos = T0.deltaPosition * 0.5f;
+            //deltaPos.x = 0.5f * (T0.deltaPosition.x + T1.deltaPosition.x);
+            //deltaPos.y = 0.5f * (T0.deltaPosition.y + T1.deltaPosition.y);
+            deltaPos.z = 0;
+            //Vector3 direction = 0.5f*-eventData.delta * Camera.main.orthographicSize / screenHeight;
+            //direction.z = 0;
+            //Camera.main.transform.position += direction;
+            Camera.main.transform.position -= deltaPos / screenHeight * Camera.main.orthographicSize;
+
+            zoom(deltaMagnitude / screenWidth * Camera.main.orthographicSize);
+        }
+        else if (Input.touchCount == 1 || Input.GetMouseButton(0))
+        {
+            //Vector3 direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = -eventData.delta * Camera.main.orthographicSize / screenHeight;
+            //Vector3 direction = -T0.deltaPosition * Camera.main.orthographicSize / screenHeight;
             direction.z = 0;
             Camera.main.transform.position += direction;
             ClampCamera();
         }
+
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
-    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         int clickCount = eventData.clickCount;
+
+        if (Input.touchCount == 1)
+        {
+            Touch T0 = Input.GetTouch(0);
+            clickCount = T0.tapCount;
+        }
 
         if (clickCount == 1)
         {
@@ -175,6 +171,12 @@ public class PanZoom : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
 
         Camera.main.orthographicSize = finalOrthSize;
         Camera.main.transform.position = finalCamPos;
+
+    }
+
+    public void IncrementSize(int deltaW, int deltaH)
+    {
+
 
     }
 

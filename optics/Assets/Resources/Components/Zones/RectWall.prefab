@@ -24,7 +24,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1164569849748146}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.6463748, w: 0.76302004}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -52,9 +52,9 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  CanTranslate: 1
-  CanRotate: 1
-  radius: 0.5
+  canTranslate: 1
+  canRotate: 1
+  radius: 3.0413814
 --- !u!1 &1281146447401316
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,13 +110,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabPath: Components/Zones/RectWall
-  x: 0
-  y: 0
+  x: 0.00000007599581
+  y: 1.875
   angle: 0
-  CanTranslate: 1
-  CanRotate: 0
-  height: 2
-  width: 2
+  canTranslate: 1
+  canRotate: 1
+  height: 1
+  width: 6
 --- !u!114 &114560891331988176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,8 +132,8 @@ MonoBehaviour:
   Options: {fileID: 7190625865546143246, guid: 5924373cddcdf6a408f52af1547d046b, type: 3}
   RotatingPart: {fileID: 1281146447401316}
   moving: 0
-  positionSet: {x: 0, y: 0, z: 0}
-  angleSet: 0
+  positionSet: {x: 0.00000007599581, y: 1.875, z: 0}
+  angleSet: 90
   SnapIncrement: 0.125
 --- !u!114 &3584759616454423264
 MonoBehaviour:
@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gothrow: 0
 --- !u!1 &1365500645755708
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +269,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.985, y: 0.985}
   m_EdgeRadius: 0
 --- !u!1 &1661322807618750
 GameObject:
@@ -294,7 +295,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661322807618750}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.6463748, w: 0.76302004}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -322,9 +323,9 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  CanTranslate: 1
-  CanRotate: 1
-  radius: 0.5
+  canTranslate: 1
+  canRotate: 1
+  radius: 3.0413814
 --- !u!1 &9110326684367939955
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,5 +386,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.985, y: 0.985}
   m_EdgeRadius: 0

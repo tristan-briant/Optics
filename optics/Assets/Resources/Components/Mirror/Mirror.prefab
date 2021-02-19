@@ -27,17 +27,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9084299584218590803}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9084299584709155512}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.2, y: 1}
+  m_SizeDelta: {x: 1, y: 0.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9084299584218590807
 CanvasRenderer:
@@ -66,7 +66,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300006, guid: 87ce9b832b750f749a6662d5337007d2, type: 3}
+  m_Sprite: {fileID: 4484022868090459299, guid: ad18da7eec4f238479720be9bbd0173f,
+    type: 3}
   m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -111,8 +112,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.2, y: 1}
-  m_Direction: 0
+  m_Size: {x: 1, y: 0.2}
+  m_Direction: 1
 --- !u!1 &9084299584709155513
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,10 +125,8 @@ GameObject:
   - component: {fileID: 9084299584709155512}
   - component: {fileID: 9084299584709155494}
   - component: {fileID: 9084299584709155489}
-  - component: {fileID: 9084299584709155491}
   - component: {fileID: 9084299584709155518}
   - component: {fileID: 1059315308}
-  - component: {fileID: 9191760045612681134}
   m_Layer: 5
   m_Name: Mirror
   m_TagString: Untagged
@@ -168,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gothrow: 0
 --- !u!114 &9084299584709155489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,27 +186,6 @@ MonoBehaviour:
   positionSet: {x: 0, y: 0, z: 0}
   angleSet: 0
   SnapIncrement: 0.25
---- !u!50 &9084299584709155491
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9084299584709155513}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 7
 --- !u!114 &9084299584709155518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,22 +224,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &9191760045612681134
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9084299584709155513}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!1001 &7755173583650216834
 PrefabInstance:
   m_ObjectHideFlags: 0

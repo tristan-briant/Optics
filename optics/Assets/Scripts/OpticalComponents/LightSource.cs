@@ -42,16 +42,13 @@ public class LightSource : OpticalComponent
         return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
     }
 
-    override public void Update()
+    public void Update()
     {
-        base.Update();
         LaunchStar();
     }
 
     public void InitializeSource()
     {
-        //if (LightRays == null)
-        //    LightRays = new LightRay[N];
         if (LightRays.Count < N)
             for (int i = LightRays.Count; i < N; i++)
             {
@@ -60,27 +57,13 @@ public class LightSource : OpticalComponent
                 r.Origin = this;
                 LightRays.Add(r);
             }
-
-        /*
-            for (int i = 0; i < N; i++)
-            {
-                if (LightRays[i] == null)
-                {
-                    LightRay r = LightRay.NewLightRayChild();
-                    if (r != null)
-                    {
-                        r.Origin = this;
-                        LightRays[i] = r;
-                    }
-                }
-            }*/
-        }
+    }
 
     override public void Deflect(LightRay r)
     { // Simple obstacle
-       
+
         r.ClearChildren();
-        
+
         float xo1 = r.StartPosition1.x;
         float yo1 = r.StartPosition1.y;
         float xo2 = r.StartPosition2.x;
@@ -107,12 +90,12 @@ public class LightSource : OpticalComponent
 
     public void EmitLight()
     {
-        float EmitAngle = angle - Mathf.PI / 2;
+        float EmitAngle = angle ;//- Mathf.PI / 2;
 
         Vector3 pos = new Vector3(x, y, 0);
 
         //if (LightRays == null || LightRays[N - 1] == null)
-        if(LightRays.Count<N)
+        if (LightRays.Count < N)
             InitializeSource();
 
         Color SourceColor = LightColor();
@@ -139,6 +122,7 @@ public class LightSource : OpticalComponent
             r.Direction1 = Vergence * lightRadius * (-0.5f + i / (float)N) + EmitAngle;
             r.Direction2 = Vergence * lightRadius * (-0.5f + (i + 1) / (float)N) + EmitAngle;
 
+            r.Length1 = r.Length2 = 15.0f;
             // Précalcul de paramètres géométriques utiles pour le calcul de collision
             r.ComputeDir();
         }
@@ -149,7 +133,7 @@ public class LightSource : OpticalComponent
         const float proba = 0.01f;
 
         //if (LightRays != null && LightRays[N - 1] != null)
-        if(LightRays.Count>0)
+        if (LightRays.Count > 0)
         {
 
             if (Random.Range(0.0f, 1.0f) < proba)

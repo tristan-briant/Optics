@@ -11,6 +11,7 @@ public class HandleManager : MonoBehaviour
     const float incrementRotation = 11.25f;
     Transform itemHolder;
 
+    float startAngle;
 
     void Start()
     {
@@ -35,6 +36,8 @@ public class HandleManager : MonoBehaviour
                 if (dh.rotation)
                     dh.gameObject.SetActive(false);
 
+        startAngle = CP.GetComponent<ChessPiece>().angleSet;
+
     }
 
     float DeltaAngleSet;
@@ -57,9 +60,6 @@ public class HandleManager : MonoBehaviour
             CP.GetComponent<ChessPiece>().angleSet = b;
 
         }
-
-        itemHolder.transform.rotation = Quaternion.Euler(0, 0, CP.GetComponent<ChessPiece>().angleSet);
-
     }
 
     public void SetTargetDeltaPosition(Vector3 deltaPosition)
@@ -73,6 +73,12 @@ public class HandleManager : MonoBehaviour
         if (translation || rotation)
             ChessPiece.Manipulated = CP;
         else ChessPiece.Manipulated = null;
+    }
+
+    void Update()
+    {
+        transform.rotation = Quaternion.identity;
+        itemHolder.transform.rotation = Quaternion.Euler(0, 0, CP.GetComponent<ChessPiece>().angleSet - startAngle);
     }
 
 }

@@ -30,7 +30,7 @@ public class Tools : MonoBehaviour
     [MenuItem("MyTools/Add Mirror")]
     static void AddMirror()
     {
-        Designer.AddMirror();
+        //Designer.AddMirror();
     }
 
 }

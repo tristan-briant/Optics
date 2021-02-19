@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gothrow: 0
 --- !u!114 &114436401197558634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +72,7 @@ MonoBehaviour:
   RotatingPart: {fileID: 1682881425409968}
   moving: 0
   positionSet: {x: 0, y: 0, z: 0}
-  angleSet: 0
+  angleSet: 90
   SnapIncrement: 0.25
 --- !u!114 &-3893915406522161320
 MonoBehaviour:
@@ -171,17 +172,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682881425409968}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224803810575661914}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1, y: 2}
+  m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222333048509928748
 CanvasRenderer:
@@ -256,8 +257,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.2, y: 2}
-  m_Direction: 0
+  m_Size: {x: 2, y: 0.2}
+  m_Direction: 1
 --- !u!1001 &5248025149289076286
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="optical-components.svg"
    inkscape:export-filename="C:\Users\Tristan Briant\Documents\GitHub\Optics\Images\artwork1.png"
    inkscape:export-xdpi="264"
@@ -653,8 +653,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.41953299"
-     inkscape:cx="-465.71704"
-     inkscape:cy="-2042.4659"
+     inkscape:cx="-1278.7333"
+     inkscape:cy="-2351.0087"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1496,9 +1496,13 @@
        id="g6795" />
     <g
        id="Lenses"
-       transform="translate(455.22076,-395.73168)">
+       transform="translate(-557.96644,-830.97407)"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="C:\Users\Tristan Briant\Documents\GitHub\Optics\optics\Assets\Images\Lenses.png">
       <g
-         id="g6753">
+         id="g6753"
+         transform="rotate(90,216.28358,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6732"
@@ -1539,7 +1543,8 @@
         </g>
       </g>
       <g
-         id="g6767">
+         id="g6767"
+         transform="rotate(90,351.75024,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6736"
@@ -1577,7 +1582,8 @@
         </g>
       </g>
       <g
-         id="g6774">
+         id="g6774"
+         transform="rotate(90,419.48358,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6738"
@@ -1615,7 +1621,8 @@
         </g>
       </g>
       <g
-         id="g6781">
+         id="g6781"
+         transform="rotate(90,487.21692,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6740"
@@ -1653,7 +1660,8 @@
         </g>
       </g>
       <g
-         id="g6788">
+         id="g6788"
+         transform="rotate(90,554.95028,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6742"
@@ -1698,7 +1706,7 @@
          x="588.81696"
          y="-38.69492" />
       <g
-         transform="matrix(0.70710679,0.62634638,-0.70710679,0.62634638,365.75047,-139.44367)"
+         transform="matrix(-0.62634638,0.70710679,-0.62634638,-0.70710679,757.27431,-261.73997)"
          id="g6730"
          inkscape:export-xdpi="79.999954"
          inkscape:export-ydpi="79.999954"
@@ -1726,7 +1734,8 @@
            transform="rotate(-45)" />
       </g>
       <g
-         id="g6760">
+         id="g6760"
+         transform="rotate(90,284.01692,-4.8282509)">
         <rect
            style="fill:none;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
            id="rect6734"
@@ -1769,13 +1778,13 @@
     </g>
     <g
        id="Optics"
-       inkscape:export-filename="Optics.png"
+       inkscape:export-filename="C:\Users\Tristan Briant\Documents\GitHub\Optics\optics\Assets\Images\Optics.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        transform="translate(4.9053959,-1.3378352)">
       <g
          id="lame-semi"
-         transform="translate(-597.60705,-610.99215)"
+         transform="rotate(90,392.94142,-595.81707)"
          inkscape:export-filename="lame-semi.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96">
@@ -1918,7 +1927,7 @@
       </g>
       <g
          id="g1694"
-         transform="translate(-74.470884,2.5150129)">
+         transform="rotate(90,-243.11359,-641.00257)">
         <g
            inkscape:export-ydpi="79.999954"
            inkscape:export-xdpi="79.999954"

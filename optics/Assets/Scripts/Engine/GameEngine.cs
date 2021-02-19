@@ -21,9 +21,6 @@ public class GameEngine : MonoBehaviour
     [System.NonSerialized]
     public static GameEngine instance;
 
-
-    Vector3 CamPosition = Vector3.zero;
-
     void Awake()
     {
         if (instance == null)
@@ -78,21 +75,16 @@ public class GameEngine : MonoBehaviour
 
         bool update = false;
 
-        /*Vector3 CamPositionNew = Camera.main.transform.localPosition;
-        if (CamPositionNew != CamPosition)
+        if (LightRay.misere && LightRay.NewRaysAvailable)
         {
-
-            foreach (LightSource ls in LightSources)
-                foreach (LightRay lr in ls.LightRays)
-                    lr.SetRelativePosition(CamPositionNew - CamPosition);
-
-            CamPosition = CamPositionNew;
-        }*/
-
-        if (LightRay.NewRaysAvailable)
-        {
+            LightRay.misere = false;
             UpdateAllRays();
             return;
+        }
+
+        foreach (OpticalComponent op in OpticalComponents)
+        {
+            op.UpdateCoordinates();
         }
 
         foreach (OpticalComponent op in OpticalComponents)
@@ -159,7 +151,7 @@ public class GameEngine : MonoBehaviour
             lr.ClearChildren();
         }
 
-        lr.DrawMesh(CamPosition); // Met à jour le mesh centrer sur la camera
+        lr.DrawMesh(); // Met à jour le mesh centrer sur la camera
         return false;
     }
 

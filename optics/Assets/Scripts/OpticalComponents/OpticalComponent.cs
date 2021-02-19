@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class OpticalComponent : GenericComponent
 {
     protected Transform Optics;
-
-
+    protected ChessPiece CP;
 
     public float radius = 0.5f;
     public float Radius { get => radius; set { radius = Mathf.Clamp(value, RadiusMin, RadiusMax); hasChanged = true; ChangeVisual(); } }
@@ -21,12 +20,14 @@ public class OpticalComponent : GenericComponent
         if (Optics == null)
             Optics = this.transform;
 
-        ChangeVisual();
+        CP = GetComponent<ChessPiece>();
+
+        base.Start();
     }
 
-    Vector3 OldPosition;
-    Quaternion OldRotation;
-    virtual public void Update()
+    protected Vector3 OldPosition;
+    protected Quaternion OldRotation;
+    override public void UpdateCoordinates()
     {
         if (OldPosition != Optics.position || Optics.rotation != OldRotation)
         {
@@ -37,17 +38,19 @@ public class OpticalComponent : GenericComponent
         }
     }
 
-    public void ComputeDir()
+
+    override public void ComputeDir()
     {
         Vector3 pos = transform.position;
         x = pos.x;
         y = pos.y;
 
-        angle = (Optics.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
+        angle = Optics.rotation.eulerAngles.z * Mathf.Deg2Rad;
         cos = Mathf.Cos(angle);
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;
     }
+
 
     virtual public bool FastCollision(LightRay lr)
     {
@@ -145,6 +148,8 @@ public class OpticalComponent : GenericComponent
 
     public virtual void Deflect(LightRay r) { }
 
+
+    [ContextMenu("ChangeVisual")]
     override public void ChangeVisual()
     {
         base.ChangeVisual();
@@ -153,14 +158,17 @@ public class OpticalComponent : GenericComponent
         if (anim)
         {
             anim.SetFloat("Size", MyMathf.MapToFrame(Radius, RadiusMin, RadiusMax));
+
+            if (CP)
+                CP.LetFindPlace();
         }
 
-        GetComponent<ChessPiece>().LetFindPlace();
     }
 
     override public void ClampParameters() // Used to clamp all params between min and max, used in editor mode
     {
         radius = Mathf.Clamp(radius, RadiusMin, RadiusMax);
     }
+
 
 }

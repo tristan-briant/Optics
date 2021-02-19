@@ -61,7 +61,7 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
         HandleInitialPosition = handle.position;
-        positionMouse0 = transform.position;
+        positionMouse0 = transform.localPosition;
 
         handle.GetComponent<OptionWall>().ResetPosition();
 
@@ -108,7 +108,7 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             transform.localPosition = new Vector2(transform.localPosition.x, 0);
         }
 
-        Vector3 delta = transform.position - positionMouse0;
+        Vector3 delta = transform.localPosition - positionMouse0;
         if (left)
             delta.x = -delta.x;
         if (down)
@@ -121,7 +121,7 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             delta.y = 0;
 
         handle.GetComponent<OptionWall>().ChangeSize(new Vector2(delta.x, delta.y), left, right, up, down);
-        positionMouse0 = transform.position;
+        positionMouse0 = transform.localPosition;
 
     }
 
@@ -131,5 +131,5 @@ public class DimensionHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         //throw new System.NotImplementedException();
     }
 
-   
+
 }

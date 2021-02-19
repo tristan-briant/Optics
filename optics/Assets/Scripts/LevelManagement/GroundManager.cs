@@ -7,7 +7,7 @@ public class GroundManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetupGround();
+        //SetupGround();
     }
 
     // Update is called once per frame

@@ -12,7 +12,7 @@ public class RailManager : GenericComponent
     public float Length { get => length; set => length = value; }
 
 
-    
+
 
 
     public void FixedUpdate()
@@ -24,7 +24,7 @@ public class RailManager : GenericComponent
             foreach (GenericComponent op in AttachedComponents)
             {
                 op.GetComponent<ChessPiece>().PositionSet += delta;
-                op.GetComponent<ChessPiece>().Constrain(true,false);
+                op.GetComponent<ChessPiece>().Constrain(true, false);
                 //op.GetComponent<ChessPiece>().LetFindPlace();
             }
         }
@@ -37,7 +37,7 @@ public class RailManager : GenericComponent
     }
 
 
-    void OnTriggerStay2D(Collider2D collision)
+    /*void OnTriggerStay2D(Collider2D collision)
     {
         if (attachMode)
         {
@@ -71,7 +71,7 @@ public class RailManager : GenericComponent
             }
 
         }
-    }
+    }*/
 
 
     Vector3 ClampPosition(Vector3 pos)
@@ -113,6 +113,7 @@ public class RailManager : GenericComponent
             //cp.GetComponent<Rigidbody2D>().position= new Vector2(pos.x,pos.y);
             //cp.transform.position = pos;
             cp.GetComponent<ChessPiece>().PositionSet = pos;
+            cp.GetComponent<ChessPiece>().TeleportTo(pos);
         }
     }
 

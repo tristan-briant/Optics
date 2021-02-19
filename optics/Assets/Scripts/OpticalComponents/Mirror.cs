@@ -34,35 +34,13 @@ public class Mirror : OpticalComponent
                 break;
         }
 
-        /*if (r.Children.Count == 0)
-            lr = LightRay.NewLightRayChild(r);
-        else if (r.Children.Count == 1)
-        {
-
-            if (r.Children.Count > 1)
-            {
-                foreach ()
-                    r.Children.RemoveRange(1, r.Children.Count - 1);
-            }
-            lr = r.Children[0];
-        }
-        */
-        //foreach (LightRay l in r.Children)
-        //    l.FreeLightRay();
-
-        //r.Children.Clear();
-        //lr = LightRay.NewLightRayChild(r);
-
         if (lr == null) { return; }
 
         lr.Col = r.Col;
         lr.Intensity = r.Intensity;
         lr.StartPosition1 = new Vector3(xc1, yc1, 0);
         lr.StartPosition2 = new Vector3(xc2, yc2, 0);
-        lr.Direction1 = ao1;
-        lr.Direction2 = ao2;
-        lr.Length1 = 15.0f;
-        lr.Length2 = 15.0f;
+        lr.Length1 = lr.Length2 = 15.0f;
         lr.Origin = this;
 
         // Pour un miroir

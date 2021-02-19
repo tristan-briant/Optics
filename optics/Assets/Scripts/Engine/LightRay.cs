@@ -18,6 +18,7 @@ public class LightRay : MonoBehaviour
     public OpticalComponent Origin;
     public OpticalComponent End;
     public int depth;
+    public static bool misere = false;  // Flag when no more ray can be instantiated
 
 
     static public Transform RaysReserve;
@@ -67,16 +68,13 @@ public class LightRay : MonoBehaviour
 
     }
 
-    public void Draw(Vector3 CameraPosition)
+    public void Draw()
     {
         // Draw the rays recursively;
-        DrawMesh(CameraPosition);
-        //foreach (Transform child in transform)
+        DrawMesh();
+
         foreach (LightRay lr in Children)
-        {
-            //child.GetComponent<LightRay>().Draw(CameraPosition);
-            lr.Draw(CameraPosition);
-        }
+            lr.Draw();
     }
 
     public void ComputeDir()
@@ -95,7 +93,7 @@ public class LightRay : MonoBehaviour
         if (div > 2 * Mathf.PI) div -= 2 * Mathf.PI;
     }
 
-    public void DrawMesh(Vector3 CameraPosition)
+    public void DrawMesh()
     {
         //Test if a waist exists
         Vector3 EndPosition1 = StartPosition1 + Length1 * new Vector3(cos1, sin1, 0);
@@ -189,35 +187,14 @@ public class LightRay : MonoBehaviour
 
 
         mesh.vertices = vertices;
-        mesh.RecalculateBounds();
+        mesh.RecalculateBounds();  // Necessary, otherwise problem of occlusion culling
         mesh.uv = uv;
         meshRenderer.material.color = Col;
 
     }
 
-    public void SetRelativePosition(Vector3 CameraDeltaPosition)
-    {
-        for (int i = 0; i < 6; i++)
-            vertices[i] -= CameraDeltaPosition;
-
-        mesh.vertices = vertices;
-
-        foreach (LightRay lr in Children)
-            lr.SetRelativePosition(CameraDeltaPosition);
-    }
-
     public void FreeLightRay() // remove child recursively
     {
-        //if (RaysReserve.transform.childCount == 0)
-        //    newRaysAvailable = true;
-
-        /*foreach (LightRay r in GetComponentsInChildren<LightRay>())
-        {
-            r.transform.parent = RaysReserve;
-            r.End = null;
-            r.Origin = null;
-        }*/
-
         foreach (LightRay r in Children)
             r.FreeLightRay();
 
@@ -247,7 +224,6 @@ public class LightRay : MonoBehaviour
         Children.RemoveRange(except, Children.Count - except);
     }
 
-
     static public LightRay NewLightRayChild(LightRay lr = null)
     {
         if (lr && lr.depth >= DepthMax)
@@ -256,7 +232,11 @@ public class LightRay : MonoBehaviour
             return null;
         } // profondeur max atteinte !!
 
-        if (AvailableRays.Count == 0) return null;
+        if (AvailableRays.Count == 0)
+        {
+            misere = true;
+            return null;
+        }
 
         LightRay r = AvailableRays.Dequeue();
         r.gameObject.SetActive(true);
@@ -274,11 +254,7 @@ public class LightRay : MonoBehaviour
 
     static public LightRay InstantiateLightRay()
     {
-        /*if (RaysReserve.transform.childCount == 0)
-            newRaysAvailable = true;*/
-
         GameObject ray = new GameObject("Ray");
-        //ray.transform.parent = RaysReserve;
         ray.transform.parent = Rays;
         ray.transform.localScale = Vector3.one;
         ray.transform.localPosition = Vector3.zero;
@@ -291,6 +267,8 @@ public class LightRay : MonoBehaviour
 
         r.gameObject.SetActive(false);
         AvailableRays.Enqueue(r);
+        newRaysAvailable = true;
+
         return r;
     }
 
