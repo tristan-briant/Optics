@@ -1,27 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CreateComponent : MonoBehaviour,//IDragHandler, IBeginDragHandler, IEndDragHandler, 
+public class CreateComponent : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler,
 IPointerDownHandler, IPointerUpHandler
 {
+    public GameObject prefab;
 
-    const float longClickTime = 0.3f;
-    //bool longClicking = false;
+    const float longClickTime = 1.0f;
+    bool longClicking = false;
     float clickStartTime;
     Vector3 clickStartPos;
-    public GameObject prefab;
 
     GameObject item;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //longClicking = false;
+        longClicking = false;
         item = null;
 
-        //StartCoroutine("Wel");
         StartCoroutine(OnLongClick());
-        //SpawnItem();
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -33,10 +32,11 @@ IPointerDownHandler, IPointerUpHandler
     {
         yield return new WaitForSeconds(longClickTime); // Time before deciding if it is a long click
         SpawnItem();
-        StartCoroutine(WelcomOnBoard());
+        longClicking = true;
+        //StartCoroutine(WelcomOnBoard());
     }
 
-    /*public void OnDrag(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)
     {
         if (!longClicking)
             transform.GetComponentInParent<ScrollRect>().OnDrag(eventData);
@@ -49,7 +49,6 @@ IPointerDownHandler, IPointerUpHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("toto");
         if (!longClicking)
         {
             StopCoroutine("OnLongClick");
@@ -70,7 +69,7 @@ IPointerDownHandler, IPointerUpHandler
 
             FindObjectOfType<GameEngine>().UpdateComponentList();
         }
-    }*/
+    }
 
     void SpawnItem()
     {
@@ -108,7 +107,7 @@ IPointerDownHandler, IPointerUpHandler
         }
 
         Activate(true);
-        item.transform.SetParent(GameObject.Find("Playground/Components").transform,false);
+        item.transform.SetParent(GameObject.Find("Playground/Components").transform, false);
         item.transform.localScale = Vector3.one;
 
         item.GetComponent<ChessPiece>().positionSet = FinalPosition;

@@ -34,6 +34,9 @@ public class LightSource : OpticalComponent
     public float IntensityMax { get => 1f; }
     public float IntensityMin { get => 0.1f; }
 
+    public bool cartoon = false;
+    public bool Cartoon { get => cartoon; set { cartoon = value; EmitLight(); } }
+
     [System.NonSerialized]
     public List<LightRay> LightRays = new List<LightRay>();
 
@@ -90,7 +93,7 @@ public class LightSource : OpticalComponent
 
     public void EmitLight()
     {
-        float EmitAngle = angle ;//- Mathf.PI / 2;
+        float EmitAngle = angle;//- Mathf.PI / 2;
 
         Vector3 pos = new Vector3(x, y, 0);
 
@@ -108,7 +111,11 @@ public class LightSource : OpticalComponent
             // Couleur et intensité
 
             Color c = SourceColor;
-            c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
+            if (!cartoon)
+                c.a = c.a * (1 - (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
+            else
+                c.a = c.a * (1 - 0.7f * (i + 0.5f - N / 2f) * (i + 0.5f - N / 2f) / (float)N / N * 4.0f);
+
             r.Col = c;
             r.Intensity = Intensity / N;
 
