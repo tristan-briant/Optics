@@ -37,6 +37,7 @@ public class GenericComponent : MonoBehaviour
 
     virtual public void Start()
     {
+        UpdateCoordinates();
         ChangeVisual();
     }
 
@@ -61,7 +62,7 @@ public class GenericComponent : MonoBehaviour
 
     virtual public void UpdateCoordinates()
     {
-       Vector3 pos = transform.position;
+        Vector3 pos = transform.position;
         x = pos.x;
         y = pos.y;
 

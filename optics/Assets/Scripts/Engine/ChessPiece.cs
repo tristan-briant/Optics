@@ -89,7 +89,7 @@ public class ChessPiece : MonoBehaviour
 
         Constrain(false, false);
         PositionSet = transform.position;
-        angleSet = transform.eulerAngles.z;
+        angleSet = RotatingPart.transform.eulerAngles.z;
         PG = GameObject.FindGameObjectWithTag("Playground");
     }
 
@@ -104,7 +104,7 @@ public class ChessPiece : MonoBehaviour
             Selected = false;
         else
         {
-            if (CanRotate || CanTranslate)
+            if (CanRotate || CanTranslate || GameEngine.instance.isInEditMode)
             {
                 Selected = true;
                 Handle = Instantiate(Resources.Load<GameObject>("GUI/Handle"));
@@ -122,19 +122,18 @@ public class ChessPiece : MonoBehaviour
             GameObject.Destroy(Handle);
 
         Selected = true;
-        //Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
-        if (Options)
-            Handle = Instantiate(Options);
-        else
-            Handle = Instantiate(Resources.Load<GameObject>("GUI/Option"));
 
-        Handle.GetComponent<OptionManager>().CP = this;
+        if (GameEngine.instance.isInEditMode && Options)
+        {
+            Handle = Instantiate(Options);
+            Handle.GetComponent<OptionManager>().CP = this;
+        }
     }
 
     void OnMouseBeginDrag()
     {
         offsetTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        if (!CanTranslate) return;
+        if (!CanTranslate && !GameEngine.instance.isInEditMode) return;
 
         Manipulated = this;
         moving = true;
@@ -143,17 +142,17 @@ public class ChessPiece : MonoBehaviour
 
     void OnMouseDragging()
     {
-        if (!CanTranslate) return;
+        if (!CanTranslate && !GameEngine.instance.isInEditMode) return;
 
         positionSet = Camera.main.ScreenToWorldPoint(Input.mousePosition) - offsetTouch;
         if (SnapToGrid)
-            positionSet = MyMathf.Round(positionSet, SnapIncrement);
+            positionSet = MyMathf.Round(positionSet, GameEngine.instance.SnapIncrement);
 
     }
 
     void OnMouseEndDrag()
     {
-        if (!CanTranslate) return;
+        if (!CanTranslate && !GameEngine.instance.isInEditMode) return;
 
         PositionSet = MyMathf.Round(transform.position, SnapIncrement / 2);
         moving = false;
@@ -264,8 +263,7 @@ public class ChessPiece : MonoBehaviour
     void UpdateCoordinates()
     {
         GenericComponent gc = GetComponent<GenericComponent>();
-        if (gc)
-            gc.UpdateCoordinates();
+        gc?.UpdateCoordinates();
     }
 
 

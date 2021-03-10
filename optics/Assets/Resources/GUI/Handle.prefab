@@ -620,6 +620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e80e9d666a4cdb8469e033502346411d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableColor: {r: 0.3066038, g: 1, b: 0.37186462, a: 0.8235294}
+  disableColor: {r: 1, g: 0.33668965, b: 0.30588233, a: 0.8235294}
   CP: {fileID: 0}
   angleSet: 0
   PositionSet: {x: 0, y: 0, z: 0}

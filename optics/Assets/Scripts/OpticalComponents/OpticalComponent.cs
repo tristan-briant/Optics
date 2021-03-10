@@ -29,6 +29,8 @@ public class OpticalComponent : GenericComponent
     protected Quaternion OldRotation;
     override public void UpdateCoordinates()
     {
+        if (Optics == null) return;
+
         if (OldPosition != Optics.position || Optics.rotation != OldRotation)
         {
             ComputeDir();
@@ -37,7 +39,6 @@ public class OpticalComponent : GenericComponent
             hasChanged = true;
         }
     }
-
 
     override public void ComputeDir()
     {
@@ -50,7 +51,6 @@ public class OpticalComponent : GenericComponent
         sin = Mathf.Sin(angle);
         param = -sin * x + cos * y;
     }
-
 
     virtual public bool FastCollision(LightRay lr)
     {
@@ -147,7 +147,6 @@ public class OpticalComponent : GenericComponent
     }
 
     public virtual void Deflect(LightRay r) { }
-
 
     [ContextMenu("ChangeVisual")]
     override public void ChangeVisual()

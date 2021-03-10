@@ -22,6 +22,7 @@ public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
 
     public static PanZoom instance;
 
+    #region SINGLETON
     void Awake()
     {
         if (instance == null)
@@ -29,6 +30,7 @@ public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
         else
             DestroyImmediate(gameObject);
     }
+    #endregion
 
     void Start()
     {
@@ -51,8 +53,13 @@ public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
             wall.size = ((RectTransform)wall.transform).rect.size;
 
         CamSizeMax = (Size.y + SizeOffset) / 2;
-        Camera.main.orthographicSize = Size.y / 2;
-        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        Camera cam = Camera.main;
+        if (cam)
+        {
+            cam.orthographicSize = Size.y / 2;
+            cam.transform.position = new Vector3(0, 0, -10);
+        }
     }
 
     public void SetPlaygroundSize(float width, float height)
@@ -73,7 +80,8 @@ public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
 
     void Update()
     {
-        zoom(-Input.GetAxis("Mouse ScrollWheel"));
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            zoom(-Input.GetAxis("Mouse ScrollWheel"));
     }
 
     void ClampCamera()
@@ -132,7 +140,6 @@ public class PanZoom : MonoBehaviour, IDragHandler, IPointerClickHandler
         }
 
     }
-
 
     public void OnPointerClick(PointerEventData eventData)
     {

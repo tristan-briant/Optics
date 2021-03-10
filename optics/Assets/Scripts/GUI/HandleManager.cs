@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HandleManager : MonoBehaviour
 {
+    public Color enableColor;
+    public Color disableColor;
+
     public ChessPiece CP;
-
-
     public float angleSet;
     public Vector3 PositionSet;
     float angleAct, angleMouse0, angleMouse1;
@@ -15,7 +17,6 @@ public class HandleManager : MonoBehaviour
 
     void Start()
     {
-
         transform.SetParent(CP.transform);
 
         itemHolder = transform.Find("ItemHolder");
@@ -26,15 +27,41 @@ public class HandleManager : MonoBehaviour
         transform.position = CP.transform.position;
         transform.rotation = Quaternion.identity;
 
-        if (!CP.CanTranslate)
-            foreach (DragHandle dh in transform.GetComponentsInChildren<DragHandle>())
-                if (dh.translation)
-                    dh.gameObject.SetActive(false);
 
-        if (!CP.CanRotate)
-            foreach (DragHandle dh in transform.GetComponentsInChildren<DragHandle>())
-                if (dh.rotation)
+        foreach (DragHandle dh in transform.GetComponentsInChildren<DragHandle>())
+        {
+            if (dh.translation)
+            {
+                if (CP.CanTranslate)
+                {
+                    dh.gameObject.SetActive(true);
+                    dh.GetComponent<Image>().color = enableColor;
+                }
+                else if (GameEngine.instance.isInEditMode)
+                {
+                    dh.gameObject.SetActive(true);
+                    dh.GetComponent<Image>().color = disableColor;
+                }
+                else
                     dh.gameObject.SetActive(false);
+            }
+
+            if (dh.rotation)
+            {
+                if (CP.CanRotate)
+                {
+                    dh.gameObject.SetActive(true);
+                    dh.GetComponent<Image>().color = enableColor;
+                }
+                else if (GameEngine.instance.isInEditMode)
+                {
+                    dh.gameObject.SetActive(true);
+                    dh.GetComponent<Image>().color = disableColor;
+                }
+                else
+                    dh.gameObject.SetActive(false);
+            }
+        }
 
         startAngle = CP.GetComponent<ChessPiece>().angleSet;
 

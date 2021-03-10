@@ -2,8 +2,10 @@
 
 public class LevelButton : MonoBehaviour
 {
-    public void SelectLevel(int n)
+    public int LevelToBeloaded;
+
+    public void SelectLevel()
     {
-        LevelManager.instance.SelectLevel(n);
+        LevelManager.instance.SelectLevel(LevelToBeloaded);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 //using SimpleFileBrowser;
 
 public class Designer : MonoBehaviour
@@ -25,57 +26,58 @@ public class Designer : MonoBehaviour
             DestroyImmediate(gameObject);
     }
 
+
+    static public byte[] MakeThumbBytes(int size = 32) // 16 pixel per unit
+    {
+        //prepare l'image
+        GameObject Pg = GameObject.Find("Playground");
+        RectTransform rect = Pg.transform as RectTransform;
+        int w = (int)(rect.rect.width * size);
+        int h = (int)(rect.rect.height * size);
+
+        // Prepare la texture et la camera
+        RenderTexture rt = new RenderTexture(w, h, 24);
+        Camera cam = GameObject.Find("CameraThumbNail").GetComponent<Camera>();
+        cam.targetTexture = rt;
+        cam.orthographicSize = 0.5f * rect.rect.height;
+        cam.transform.position = new Vector3(0, 0, -10);
+        cam.Render();
+
+        Texture2D texture = new Texture2D(w, h, TextureFormat.RGB24, false);
+
+        RenderTexture.active = rt;//cam.targetTexture;
+        texture.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
+
+        texture.Apply();
+
+        return texture.EncodeToPNG();
+    }
+
+    static public void MakeThumb(string filename) => File.WriteAllBytes(filename, MakeThumbBytes());
+
+    static public void MakeThumbNail()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        MakeThumb("Assets/Resources/Levels/" + scene.name + ".png");
+    }
+
     /*
-        static public byte[] MakeThumbBytes(int size = 256)
-        {
-            //prepare l'image
-            GameObject Pg = GameObject.Find("Playground");
-            GameObject canvas = GameObject.Find("CanvasThumbnail");
-            Pg.transform.SetParent(canvas.transform);
-            GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-            gc.ResizePlayGround();
+            //[ContextMenu("SaveToFile")]
+            public void SaveToFile()
+            {
+                string filename = "PlayGround" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
+                    + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
 
-            // Prepare la texture
-            RenderTexture rt = new RenderTexture(size, size, 24);
-            Camera cam = GameObject.Find("CameraThumbnail").GetComponent<Camera>();
-            cam.targetTexture = rt;
-            cam.Render();
+                string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
 
+                SaveToString();
 
-            Texture2D texture = new Texture2D(size, size, TextureFormat.RGB24, false);
+                File.WriteAllText(file, PGdata);
 
-            RenderTexture.active = rt;//cam.targetTexture;
-            texture.ReadPixels(new Rect(0, 0, cam.targetTexture.width, cam.targetTexture.height), 0, 0);
+                MakeThumb(Path.Combine(Application.persistentDataPath, filename + ".png"), 1024);
+            }
 
-            texture.Apply();
-
-            //Remet tout en ordre
-            canvas = GameObject.Find("PlaygroundHolder");
-            Pg.transform.SetParent(canvas.transform);
-            gc.ResizePlayGround();
-
-
-            return texture.EncodeToPNG();
-        }
-
-        public void MakeThumb(string filename, int size = 256) => File.WriteAllBytes(filename, MakeThumbBytes());
-
-        //[ContextMenu("SaveToFile")]
-        public void SaveToFile()
-        {
-            string filename = "PlayGround" + System.DateTime.Now.ToShortDateString().Replace("/", "-") + "-"
-                + System.DateTime.Now.ToLongTimeString().Replace(":", "-");
-
-            string file = Path.Combine(Application.persistentDataPath, filename + ".txt");
-
-            SaveToString();
-
-            File.WriteAllText(file, PGdata);
-
-            MakeThumb(Path.Combine(Application.persistentDataPath, filename + ".png"), 1024);
-        }
-
-        */
+            */
 
     /*
         static public void SaveToPrefs()
@@ -141,7 +143,7 @@ public class Designer : MonoBehaviour
 
         Debug.Log(PGdata);
     }
-    
+
     static public void ClearPlayground()
     {
         GameObject PG = GameObject.Find("Playground/Components");
@@ -164,9 +166,11 @@ public class Designer : MonoBehaviour
 
         string[] tokens = PGdata.Split('\n');
 
-
-        GameObject PGGround = GameObject.Find("Playground/ChessBoard");
-        PGGround.GetComponent<PanZoom>().SetPlaygroundSize(float.Parse(tokens[0]), float.Parse(tokens[1]));
+        if (GameEngine.instance != null) // otherwise not in play mode
+        {
+            GameObject PGGround = GameObject.Find("Playground/ChessBoard");
+            PGGround.GetComponent<PanZoom>().SetPlaygroundSize(float.Parse(tokens[0]), float.Parse(tokens[1]));
+        }
 
 
         GameObject PGComponents = GameObject.Find("Playground/Components");
@@ -180,8 +184,8 @@ public class Designer : MonoBehaviour
             gc.FromJson(tokens[i]);
         }
 
-        if (GameEngine.instance)
-            GameEngine.instance.UpdateComponentList();
+
+        GameEngine.instance?.UpdateComponentList();
     }
 
 

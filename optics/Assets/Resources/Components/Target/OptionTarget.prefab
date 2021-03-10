@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96147fd846f1d2c478830f089bea30c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParameterName: LightRadius
+  ParameterName: Radius
   increment: 0.1
   Max: 0.8
   Min: 0.2
@@ -1451,7 +1451,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 5322280223819626833}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

@@ -6,18 +6,44 @@ using UnityEngine.Profiling;
 
 public class GameEngine : MonoBehaviour
 {
-
+    [HideInInspector]
     public LightSource[] LightSources;
+    [HideInInspector]
     public OpticalComponent[] OpticalComponents;
+    [HideInInspector]
     public Target[] Targets;
+
+    [Header("Performance")]
     public int NRaysMax = 1000;
     public float LengthMax = 15.0f;
-    public Transform Rays;
-    public Transform RaysReserve;
-    public int DepthMax = 2;
-    public bool running = false;
-    public bool levelLoaded = false;
+    public int DepthMax = 10;
 
+    public Transform Rays;
+
+
+    public enum Mode { Edit, Play, Inactive }
+    public Mode PlayMode;
+
+    public enum SnapMode { Gross, Fine, None }
+    public SnapMode snapMode;
+    public float SnapIncrement
+    {
+        get
+        {
+            switch (snapMode)
+            {
+                case SnapMode.Gross:
+                    return 0.25f;
+                case SnapMode.Fine:
+                    return 0.125f;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+
+    #region SINGLETON
     [System.NonSerialized]
     public static GameEngine instance;
 
@@ -28,14 +54,11 @@ public class GameEngine : MonoBehaviour
         else
             DestroyImmediate(gameObject);
     }
+    #endregion
 
     void Start()
     {
         Application.targetFrameRate = 30;
-        //RaysReserve.gameObject.SetActive(false);
-
-        // Initialize Ray system (static variables)
-        LightRay.RaysReserve = RaysReserve;
         LightRay.Rays = Rays;
         LightRay.DepthMax = DepthMax;
 
@@ -54,10 +77,16 @@ public class GameEngine : MonoBehaviour
         }
     }
 
-    public void StartGameEngine()
+    public bool isInEditMode { get => PlayMode == Mode.Edit; }
+    public bool isInInactiveMode { get => PlayMode == Mode.Inactive; }
+    public bool LevelCompleted;
+
+    public void StartGameEngine(Mode playmod = Mode.Play)
     {
-        UpdateComponentList();
-        running = true;
+        if (playmod != Mode.Inactive)
+            UpdateComponentList();
+        PlayMode = playmod;
+        LevelCompleted = false;
     }
 
     public void StopGameEngine()
@@ -66,12 +95,12 @@ public class GameEngine : MonoBehaviour
         Array.Clear(LightSources, 0, LightSources.Length);
         Array.Clear(OpticalComponents, 0, OpticalComponents.Length);
         Array.Clear(Targets, 0, Targets.Length);
-        running = false;
+        PlayMode = Mode.Inactive;
     }
 
     void LateUpdate()
     {
-        if (!running) return;
+        if (PlayMode == Mode.Inactive) return;
 
         bool update = false;
 
@@ -91,19 +120,46 @@ public class GameEngine : MonoBehaviour
         {
             if (op.hasChanged)
             {
-                if (op is LightSource) // C'est une source on update les rayons emit (plus la source en tant que op ensuite) 
-                    UpdateLightRays1LS(op as LightSource);
+                if (op is LightSource ls) // C'est une source on update les rayons emit (plus la source en tant que op ensuite) 
+                    UpdateLightRays1LS(ls);
 
                 UpdateLightRays1OP(op);
-
+                op.hasChanged = false;
                 update = true;
             }
         }
 
-        if (update)
+        if (Targets.Length > 0)
         {
-            foreach (Target t in Targets) t.ComputeScore();
+            bool completed = true;
+            foreach (Target tg in Targets)
+            {
+                tg.UpdateCoordinates();
+                if (update || tg.hasChanged)
+                {
+                    tg.ComputeScore();
+                    tg.hasChanged = false;
+                }
+
+                completed &= tg.success;
+            }
+
+            if (completed && !LevelCompleted && !ChessPiece.Manipulated)
+            {
+                LevelCompleted = true;
+                LevelManager.instance.ShowsScoreBoard();
+            }
         }
+
+
+        /*if (update)
+        {
+            foreach (Target tg in Targets)
+            {
+                tg.ComputeScore();
+                tg.hasChanged = false;
+            }
+        }*/
     }
 
     private void UpdateAllRays()
@@ -158,8 +214,9 @@ public class GameEngine : MonoBehaviour
     public void ResetLightRay()
     {
         foreach (LightSource lightSource in GameEngine.instance.LightSources)
-            foreach (LightRay lr in lightSource.LightRays)
-                lr.FreeLightRay();
+            if (lightSource != null)
+                foreach (LightRay lr in lightSource.LightRays)
+                    lr.FreeLightRay();
     }
 
     void UpdateLightRays1LS(LightSource ls)
@@ -176,8 +233,6 @@ public class GameEngine : MonoBehaviour
         foreach (LightSource lightSource in GameEngine.instance.LightSources)
             foreach (LightRay lr in lightSource.LightRays)
                 Update1LightRay1OP(lr, op);
-
-        op.hasChanged = false;
     }
 
     private void Update1LightRay1OP(LightRay lr, OpticalComponent op)

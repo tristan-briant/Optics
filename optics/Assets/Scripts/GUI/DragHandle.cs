@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
 
 
 public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
@@ -57,6 +59,7 @@ public class DragHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                         + (1 - ratioFineTranslation) * HandleInitialPosition;
 
         lr.enabled = true;
+        lr.endColor = lr.startColor = GetComponent<Image>().color;
 
 
         handle.GetComponent<HandleManager>().ConstrainTarget(translation, rotation);

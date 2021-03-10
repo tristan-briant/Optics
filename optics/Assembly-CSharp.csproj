@@ -55,17 +55,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\MotorizedRail.cs" />
-     <Compile Include="Assets\OpticalGrid.cs" />
+     <Compile Include="Assets\MenuSetup.cs" />
+     <Compile Include="Assets\MiniMapManager.cs" />
      <Compile Include="Assets\Scripts\Debug\CreatePoligon.cs" />
      <Compile Include="Assets\Scripts\Debug\polygon.cs" />
      <Compile Include="Assets\Scripts\Designer\Designer.cs" />
      <Compile Include="Assets\Scripts\Designer\SimpleObject.cs" />
      <Compile Include="Assets\Scripts\Engine\ChessPiece.cs" />
-     <Compile Include="Assets\Scripts\Engine\DontDestroyOnLoad.cs" />
      <Compile Include="Assets\Scripts\Engine\GameEngine.cs" />
      <Compile Include="Assets\Scripts\Engine\LevelManager.cs" />
-     <Compile Include="Assets\Scripts\Engine\LevelSelector.cs" />
      <Compile Include="Assets\Scripts\Engine\LightRay.cs" />
      <Compile Include="Assets\Scripts\Engine\MyMathf.cs" />
      <Compile Include="Assets\Scripts\Engine\StarFollowRay.cs" />
@@ -74,16 +72,19 @@
      <Compile Include="Assets\Scripts\GUI\CreateComponent.cs" />
      <Compile Include="Assets\Scripts\GUI\DimensionHandle.cs" />
      <Compile Include="Assets\Scripts\GUI\DragHandle.cs" />
+     <Compile Include="Assets\Scripts\GUI\EditCurve.cs" />
      <Compile Include="Assets\Scripts\GUI\FloatParameterModifier.cs" />
      <Compile Include="Assets\Scripts\GUI\HandleManager.cs" />
      <Compile Include="Assets\Scripts\GUI\LevelButton.cs" />
      <Compile Include="Assets\Scripts\GUI\NoRotation.cs" />
      <Compile Include="Assets\Scripts\GUI\OptionManager.cs" />
      <Compile Include="Assets\Scripts\GUI\PanZoom.cs" />
+     <Compile Include="Assets\Scripts\GUI\PathCurve.cs" />
      <Compile Include="Assets\Scripts\GUI\PointerManager.cs" />
      <Compile Include="Assets\Scripts\LevelManagement\GroundManager.cs" />
      <Compile Include="Assets\Scripts\LevelManagement\LevelDescriptor.cs" />
      <Compile Include="Assets\Scripts\LevelManagement\LevelLoader.cs" />
+     <Compile Include="Assets\Scripts\MotorizedRail.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\GenericComponent.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\LameSemi.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Lens.cs" />
@@ -98,7 +99,9 @@
      <Compile Include="Assets\Scripts\OpticalComponents\Zones\RectWall.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Zones\RectZone.cs" />
      <Compile Include="Assets\Scripts\OpticalComponents\Zones\Wall.cs" />
+     <Compile Include="Assets\Scripts\OpticalGrid.cs" />
      <Compile Include="Assets\Scripts\Unused\Alignment.cs" />
+     <Compile Include="Assets\Scripts\Unused\DontDestroyOnLoad.cs" />
      <Compile Include="Assets\Scripts\Unused\FixedRotation.cs" />
      <Compile Include="Assets\Scripts\Unused\GrasManager.cs" />
      <Compile Include="Assets\Scripts\Unused\MyRaycaster.cs" />

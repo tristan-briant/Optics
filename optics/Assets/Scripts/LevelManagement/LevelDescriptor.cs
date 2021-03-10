@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-public class LevelDescriptor : MonoBehaviour
+[System.Serializable]
+public struct LevelDescriptor
 {
+    public string LevelName;
     public Sprite thumbnail;
     // Start is called before the first frame update
 

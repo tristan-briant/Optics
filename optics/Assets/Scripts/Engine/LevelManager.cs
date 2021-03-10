@@ -5,8 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    public int CurrentLevel = 0;
+    public string CurrentLevel = "";
+    public int CurrentLevelNumber = -1;
+    //public List<LevelDescriptor> Levels = new List<LevelDescriptor>();
+    public List<string> Levels = new List<string>();
+    public GameObject ScoreBoard;
+    public GameObject PauseMenu;
 
+    #region SINGLETON
     public static LevelManager instance;
 
     void Awake()
@@ -16,14 +22,17 @@ public class LevelManager : MonoBehaviour
         else
             DestroyImmediate(gameObject);
     }
+    #endregion
 
     void Start() // Lance le GameEngine quand le niveau est prêt
     {
         if (SceneManager.sceneCount == 1)
+        {
             SceneManager.LoadScene("MiniMap", LoadSceneMode.Additive);
+            CurrentLevel = "MiniMap";
+        }
         else
             GameEngine.instance.StartGameEngine();
-
 
         string output = "";
         if (SceneManager.sceneCount > 0)
@@ -36,8 +45,14 @@ public class LevelManager : MonoBehaviour
                 output += scene.isDirty ? "Dirty, " : "Clean, ";
                 output += scene.buildIndex >= 0 ? " in build)\n" : " NOT in build)\n";
 
+
+
+
                 if (scene.name.Contains("Level"))
-                    CurrentLevel = int.Parse(scene.name.Substring(5));
+                    CurrentLevelNumber = Levels.FindIndex(a => a == scene.name);
+                if (scene.name == "MiniMap")
+                    CurrentLevel = "MiniMap";
+
             }
         }
         else
@@ -50,16 +65,37 @@ public class LevelManager : MonoBehaviour
         //StartCoroutine("StartWithDelay", 0.1f);
     }
 
-    public void SelectLevel(int n)
+    public void SelectNextLevel(int i = +1)  // -1 for prev level
     {
-        Debug.Log("Loading: " + "Level" + n);
-        CurrentLevel = n;
-        StartCoroutine(Transition("MiniMap", "Level" + CurrentLevel));
+        SelectLevel(CurrentLevelNumber + i);
     }
 
-    IEnumerator LoadAsync(int levelNumber)
+    public void SelectLevel(int n)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync("Level" + levelNumber, LoadSceneMode.Additive);
+        if (n >= 0 && n < Levels.Count)
+        {
+            Debug.Log("Loading: " + Levels[n]);
+            StartCoroutine(Transition(CurrentLevel, Levels[n]));
+
+            CurrentLevel = Levels[n];
+            CurrentLevelNumber = n;
+        }
+    }
+
+    public void BackToMenu()
+    {
+        StartCoroutine(Transition(CurrentLevel, "MiniMap"));
+        CurrentLevel = "MiniMap";
+        CurrentLevelNumber = -1;
+    }
+
+    public bool isNextLevelAccessible { get => (CurrentLevelNumber >= 0 && CurrentLevelNumber < Levels.Count - 1); }
+    public bool isPrevLevelAccessible { get => CurrentLevelNumber > 0; }
+
+
+    IEnumerator LoadAsync(string LevelName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(LevelName, LoadSceneMode.Additive);
 
         while (!operation.isDone)
         {
@@ -71,14 +107,19 @@ public class LevelManager : MonoBehaviour
 
     IEnumerator Transition(string scene1, string scene2)
     {
-        LevelLoader lvloader = FindObjectOfType<LevelLoader>();
+        LevelLoader lvloader;
+
+        Time.timeScale = 0.0f;
+
+        lvloader = FindObjectOfType<LevelLoader>();
         if (lvloader)
         {
-            lvloader.StartTransition();
-            yield return new WaitForSeconds(lvloader.animationTime);
+            lvloader.TransitionOut();
+            yield return new WaitForSecondsRealtime(lvloader.animationTime);
         }
-        if (GameEngine.instance.running)
+        if (GameEngine.instance.PlayMode != GameEngine.Mode.Inactive)
             GameEngine.instance.StopGameEngine();
+
 
         SceneManager.UnloadSceneAsync(scene1);
         AsyncOperation operation = SceneManager.LoadSceneAsync(scene2, LoadSceneMode.Additive);
@@ -88,18 +129,34 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
 
-        if (GameObject.Find("Playground"))
-            GameEngine.instance.StartGameEngine();
+        if (lvloader)
+        {
+            lvloader.TransitionIn();
+            yield return new WaitForSecondsRealtime(lvloader.animationTime);
+        }
+        Time.timeScale = 1.0f;
+
+
+        if (scene2.Contains("Level"))
+            GameEngine.instance.StartGameEngine(GameEngine.Mode.Play);
+        else if (scene2.Contains("SandBox"))
+            GameEngine.instance.StartGameEngine(GameEngine.Mode.Edit);
+        else
+            GameEngine.instance.StopGameEngine();
 
     }
+
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameEngine.instance.running)
+            if (!GameEngine.instance.isInInactiveMode)
             {
-                StartCoroutine(Transition("Level" + CurrentLevel, "MiniMap"));
+                if (PauseMenu.activeSelf)
+                    Resume();
+                else
+                    Pause();
             }
             else
             {
@@ -109,4 +166,22 @@ public class LevelManager : MonoBehaviour
 
     }
 
+    public void ShowsScoreBoard()
+    {
+        ScoreBoard.SetActive(true);
+        ScoreBoard.GetComponent<Animator>().Update(0);
+
+    }
+
+    public void Pause()
+    {
+        PauseMenu.SetActive(true);
+        Time.timeScale = 0.0f;
+    }
+
+    public void Resume()
+    {
+        PauseMenu.SetActive(false);
+        Time.timeScale = 1.0f;
+    }
 }
