@@ -8,7 +8,7 @@ IPointerDownHandler, IPointerUpHandler
 {
     public GameObject prefab;
 
-    const float longClickTime = 1.0f;
+    const float longClickTime = .50f;
     bool longClicking = false;
     float clickStartTime;
     Vector3 clickStartPos;
@@ -51,7 +51,8 @@ IPointerDownHandler, IPointerUpHandler
     {
         if (!longClicking)
         {
-            StopCoroutine("OnLongClick");
+            //StopCoroutine("OnLongClick");
+            StopAllCoroutines();
             transform.GetComponentInParent<ScrollRect>().OnBeginDrag(eventData);
         }
     }
@@ -75,6 +76,10 @@ IPointerDownHandler, IPointerUpHandler
     {
         item = Instantiate(prefab, (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
         item.GetComponent<ChessPiece>().enabled = false;
+
+        
+        item.transform.SetParent(GameObject.Find("DragLayer").transform);
+        Activate(false); // after setparen otherwise canvas.overrideSorting won't work
     }
 
     void Activate(bool active)
@@ -82,8 +87,11 @@ IPointerDownHandler, IPointerUpHandler
         item.GetComponent<OpticalComponent>().enabled = active;
         item.GetComponent<ChessPiece>().enabled = active;
 
-        foreach (Canvas cv in item.GetComponentsInChildren<Canvas>())
+        item.gameObject.SetActive(true);
+        foreach (Canvas cv in item.GetComponentsInChildren<Canvas>()){
             cv.overrideSorting = active;
+            Debug.Log("canvas found");
+        }
 
         foreach (Collider2D co in item.GetComponentsInChildren<Collider2D>())
             co.enabled = active;
@@ -93,7 +101,7 @@ IPointerDownHandler, IPointerUpHandler
     {
         const float AnimTime = 0.5f;
         float time = 0;
-        item.transform.SetParent(GameObject.Find("DragLayer").transform);
+        //item.transform.SetParent(GameObject.Find("DragLayer").transform);
         //item.transform.localScale = Vector3.one;
         Activate(false);
         Vector3 FinalPosition = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
@@ -106,8 +114,9 @@ IPointerDownHandler, IPointerUpHandler
             yield return 0;
         }
 
+       
+        item.transform.SetParent(GameObject.Find("Playground/Components").transform, false); 
         Activate(true);
-        item.transform.SetParent(GameObject.Find("Playground/Components").transform, false);
         item.transform.localScale = Vector3.one;
 
         item.GetComponent<ChessPiece>().positionSet = FinalPosition;

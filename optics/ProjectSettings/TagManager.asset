@@ -53,6 +53,9 @@ TagManager:
   - name: Bases
     uniqueID: 474554351
     locked: 0
+  - name: Tips
+    uniqueID: 806176645
+    locked: 0
   - name: Rays
     uniqueID: 3302682715
     locked: 0

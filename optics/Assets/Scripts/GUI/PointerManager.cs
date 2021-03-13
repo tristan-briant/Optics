@@ -17,11 +17,15 @@ IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDra
     public void Start()
     {
         //Input.simulateMouseWithTouches=false;
+        GenericComponent genericComponent= GetComponent<GenericComponent>();
+        if(genericComponent)
+        gothrow = (!genericComponent.canRotate && !genericComponent.canTranslate && GameEngine.instance.PlayMode != GameEngine.Mode.Edit);
     }
 
     public void Update()
     {
         if (gothrow) return;
+        
 
         if (Input.touchCount > 1)  // Only interested in 1 touch moves otherwise cancel everything
         {

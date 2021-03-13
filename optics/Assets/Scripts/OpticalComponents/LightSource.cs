@@ -42,7 +42,9 @@ public class LightSource : OpticalComponent
 
     Color LightColor()
     {
-        return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
+        //return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
+        return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 1f : 0f, 0.5f * Intensity);
+        
     }
 
     public void Update()

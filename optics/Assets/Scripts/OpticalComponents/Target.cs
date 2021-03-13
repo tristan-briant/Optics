@@ -7,7 +7,9 @@ public class Target : GenericComponent
 {
 
     public float CollectedIntensity;
-    public float TargetIntensity;
+    float CollectedRed, CollectedGreen, CollectedBlue;
+
+    //public float TargetIntensity;
 
     Image Shine;
     Text ScoreText;
@@ -143,7 +145,8 @@ public class Target : GenericComponent
     {
 
         Color c = Shine.color;
-        float I = Mathf.Clamp01((CollectedIntensity / TargetIntensity));
+        float I = Mathf.Clamp01((CollectedIntensity / Intensity));
+
 
         if (score < I)
         {
@@ -169,12 +172,28 @@ public class Target : GenericComponent
     public void ComputeScore()
     {
         CollectedIntensity = 0;
+        CollectedRed = CollectedGreen = CollectedBlue = 0;
 
         foreach (LightRay lr in LightRay.Rays.GetComponentsInChildren<LightRay>())
         {
             if (Collision(lr))
-                CollectedIntensity += lr.Intensity;
+            {
+                CollectedRed += lr.Col.r * lr.Intensity;
+                CollectedGreen += lr.Col.g * lr.Intensity;
+                CollectedBlue += lr.Col.b * lr.Intensity;
+            }
         }
+
+
+        CollectedIntensity = Intensity;
+        if (red && CollectedRed < CollectedIntensity) CollectedIntensity = CollectedRed;
+        if (green && CollectedGreen < CollectedIntensity) CollectedIntensity = CollectedGreen;
+        if (blue && CollectedBlue < CollectedIntensity) CollectedIntensity = CollectedBlue;
+
+        if (!red) CollectedIntensity -= 3 * CollectedRed;
+        if (!green) CollectedIntensity -= 3 * CollectedGreen;
+        if (!blue) CollectedIntensity -= 3 * CollectedBlue;
+
     }
 
     public override void ChangeVisual()

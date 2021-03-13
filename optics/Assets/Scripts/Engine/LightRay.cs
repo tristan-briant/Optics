@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LightRay : MonoBehaviour
 {
+    Color Teinte = new Color(1f, 1f, 0.8f, 1f);
+
     public static int rayNumber;
     //static public int rayNumberMax;
     private static bool newRaysAvailable;
@@ -189,7 +191,7 @@ public class LightRay : MonoBehaviour
         mesh.vertices = vertices;
         mesh.RecalculateBounds();  // Necessary, otherwise problem of occlusion culling
         mesh.uv = uv;
-        meshRenderer.material.color = Col;
+        meshRenderer.material.color = Col * Teinte;
 
     }
 
@@ -272,7 +274,7 @@ public class LightRay : MonoBehaviour
         return r;
     }
 
-    void OnDrawGizmosSelected()
+    /*void OnDrawGizmosSelected()
     {
         Renderer rend = GetComponent<Renderer>();
         // A sphere that fully encloses the bounding box.
@@ -284,6 +286,6 @@ public class LightRay : MonoBehaviour
 
         Debug.Log("center" + center);
         Debug.Log("  bounds " + radius);
-    }
+    }*/
 
 }

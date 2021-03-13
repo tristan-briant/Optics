@@ -24,17 +24,25 @@ public class GameEngine : MonoBehaviour
     public enum Mode { Edit, Play, Inactive }
     public Mode PlayMode;
 
-    public enum SnapMode { Gross, Fine, None }
-    public SnapMode snapMode;
+    public enum GridSnapMode { None, Fine, Gross }
+    public GridSnapMode snapMode = GridSnapMode.None;
+    //public GridSnapMode SnapMode { get; set; }
+
+    public void SetSnapMode(int mode)
+    {
+        snapMode = (GridSnapMode)mode;
+    }
+
+
     public float SnapIncrement
     {
         get
         {
             switch (snapMode)
             {
-                case SnapMode.Gross:
+                case GridSnapMode.Gross:
                     return 0.25f;
-                case SnapMode.Fine:
+                case GridSnapMode.Fine:
                     return 0.125f;
                 default:
                     return 0;
@@ -70,7 +78,7 @@ public class GameEngine : MonoBehaviour
         for (int i = 0; i < NRaysMax; i++)
         {
             int k = i;
-            for (; i < k + 100 && i < NRaysMax; i++)
+            for (; i < k + 10 && i < NRaysMax; i++)
                 LightRay.InstantiateLightRay();
 
             yield return new WaitForFixedUpdate();
@@ -81,11 +89,19 @@ public class GameEngine : MonoBehaviour
     public bool isInInactiveMode { get => PlayMode == Mode.Inactive; }
     public bool LevelCompleted;
 
-    public void StartGameEngine(Mode playmod = Mode.Play)
+    public void StartGameEngine(Mode playmod)
     {
         if (playmod != Mode.Inactive)
             UpdateComponentList();
         PlayMode = playmod;
+        LevelCompleted = false;
+    }
+
+    public void StartGameEngine()
+    {
+        if (PlayMode != Mode.Inactive)
+            UpdateComponentList();
+
         LevelCompleted = false;
     }
 
@@ -264,6 +280,11 @@ public class GameEngine : MonoBehaviour
         Targets = FindObjectsOfType<Target>();
 
         UpdateAllRays();
+    }
+
+    void OnDestroy()
+    {
+        instance = null;
     }
 
 }

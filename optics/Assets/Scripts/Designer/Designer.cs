@@ -184,7 +184,7 @@ public class Designer : MonoBehaviour
             gc.FromJson(tokens[i]);
         }
 
-
+        
         GameEngine.instance?.UpdateComponentList();
     }
 

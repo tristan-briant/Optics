@@ -727,6 +727,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2287689895942520044, guid: 580e98b89524f2e48abc38998a926573,
         type: 3}
+      propertyPath: intensity
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2287689895942520044, guid: 580e98b89524f2e48abc38998a926573,
+        type: 3}
       propertyPath: canTranslate
       value: 0
       objectReference: {fileID: 0}

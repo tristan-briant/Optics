@@ -77,6 +77,7 @@ public class GenericComponent : MonoBehaviour
         {
             CP.positionSet = transform.position;
             CP.angleSet = angle * Mathf.Rad2Deg;
+            GetComponent<PointerManager>().gothrow = (!canRotate && !canTranslate && GameEngine.instance.PlayMode != GameEngine.Mode.Edit);
         }
 
     }

@@ -660,6 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056abd9aa9b997149901719a41c39dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Size: {x: 4, y: 4}
   Grass: {fileID: 6708498444668458235}
 --- !u!114 &6708498445191527824
 MonoBehaviour:
@@ -683,6 +684,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6708498445329519322}
   - component: {fileID: 6708498445329519325}
+  - component: {fileID: 5605420440036008419}
   m_Layer: 5
   m_Name: Playground
   m_TagString: Playground
@@ -732,3 +734,15 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &5605420440036008419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6708498445329519323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d59dca8349afc448adbb3fa079731e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
