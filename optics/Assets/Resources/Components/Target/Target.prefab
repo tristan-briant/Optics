@@ -453,17 +453,14 @@ MonoBehaviour:
   x: 0
   y: 0
   angle: 0
-  canTranslate: 1
+  canTranslate: 0
   canRotate: 0
-  radius: 0.3
   CollectedIntensity: 0
-  TargetIntensity: 1
-  Shine: {fileID: 2287689895107189470}
-  ScoreText: {fileID: 2287689895930715835}
   red: 1
   green: 1
   blue: 1
   intensity: 1
+  radius: 0.3
 --- !u!58 &2287689895942520047
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -508,6 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f507c46a3d1f43999e373ab012e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gothrow: 0
 --- !u!1 &6669586201910984033
 GameObject:
   m_ObjectHideFlags: 0

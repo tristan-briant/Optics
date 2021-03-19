@@ -27,28 +27,54 @@ public class FloatParameterModifier : MonoBehaviour
 
         if (ValueText)
             ValueText.text = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString(format);
+
         if (slider)
         {
             if (ob.GetType().GetProperty(ParameterName + "Max") != null)
-                slider.maxValue = ((float)ob.GetType().GetProperty(ParameterName + "Max").GetValue(ob, null));
-            else
-                slider.maxValue = Max;
+                Max = ((float)ob.GetType().GetProperty(ParameterName + "Max").GetValue(ob, null));
+
             if (ob.GetType().GetProperty(ParameterName + "Min") != null)
-                slider.minValue = ((float)ob.GetType().GetProperty(ParameterName + "Min").GetValue(ob, null));
-            else
+                Min = ((float)ob.GetType().GetProperty(ParameterName + "Min").GetValue(ob, null));
+
+
+            float value = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null));
+
+            if (increment <= 0)
+            {
+                slider.maxValue = Max;
                 slider.minValue = Min;
-            slider.value = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null));
+                slider.value = value;
+            }
+            else
+            {
+                slider.wholeNumbers = true;
+                slider.minValue = 0;
+                slider.maxValue = (Max - Min) / increment;
+                slider.value = Mathf.RoundToInt((value - Min) / increment);
+            }
 
             slider.onValueChanged.AddListener(SliderValueChanged);
-
         }
     }
 
 
     public void SliderValueChanged(float value)
     {
-        ob.GetType().GetProperty(ParameterName).SetValue(ob, value, null);
-        slider.value = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null));
+        if (increment <= 0)
+        {
+            ob.GetType().GetProperty(ParameterName).SetValue(ob, value, null);
+            slider.value = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null));
+        }
+        else
+        {
+            ob.GetType().GetProperty(ParameterName).SetValue(ob, value * increment + Min, null);
+            float val = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null));
+            slider.value = Mathf.RoundToInt((val - Min) / increment);
+        }
+
+        if (ValueText)
+            ValueText.text = ((float)ob.GetType().GetProperty(ParameterName).GetValue(ob, null)).ToString(format);
+
     }
 
     public void IncrementValue(float multiplier)

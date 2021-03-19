@@ -44,7 +44,7 @@ public class LightSource : OpticalComponent
     {
         //return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 0.8f : 0f, 0.5f * Intensity);
         return new Color(red ? 1f : 0f, green ? 1f : 0f, blue ? 1f : 0f, 0.5f * Intensity);
-        
+
     }
 
     public void Update()
@@ -122,14 +122,14 @@ public class LightSource : OpticalComponent
             r.Intensity = Intensity / N;
 
             // Calculs des positions et directions
-            float l1 = -lightRadius * (-0.5f + i / (float)N);
-            float l2 = -lightRadius * (-0.5f + (i + 1) / (float)N);
+            float l1 = -lightRadius * (-0.5f + (i + 1) / (float)N);
+            float l2 = -lightRadius * (-0.5f + (i) / (float)N);
 
             r.StartPosition1 = pos + new Vector3(Mathf.Sin(EmitAngle) * l1, -Mathf.Cos(EmitAngle) * l1, 0);
             r.StartPosition2 = pos + new Vector3(Mathf.Sin(EmitAngle) * l2, -Mathf.Cos(EmitAngle) * l2, 0);
 
-            r.Direction1 = Vergence * lightRadius * (-0.5f + i / (float)N) + EmitAngle;
-            r.Direction2 = Vergence * lightRadius * (-0.5f + (i + 1) / (float)N) + EmitAngle;
+            r.Direction1 = Mathf.Atan(Vergence * lightRadius * (-0.5f + (i + 1) / (float)N)) + EmitAngle;
+            r.Direction2 = Mathf.Atan(Vergence * lightRadius * (-0.5f + (i) / (float)N)) + EmitAngle;
 
             r.Length1 = r.Length2 = 15.0f;
             // Précalcul de paramètres géométriques utiles pour le calcul de collision

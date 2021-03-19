@@ -89,7 +89,7 @@ public class Lens : OpticalComponent
             anim.SetFloat("Size", MyMathf.MapToFrame(Radius, RadiusMin, RadiusMax));
             anim.SetFloat("Shape", MyMathf.MapToFrame(Vergence, VergenceMin, VergenceMax));
 
-            //anim.Update(0);
+            anim.Update(0);
 
             //if (Application.isPlaying)
             GetComponent<ChessPiece>().LetFindPlace();

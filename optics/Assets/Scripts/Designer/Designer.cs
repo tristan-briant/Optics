@@ -144,6 +144,19 @@ public class Designer : MonoBehaviour
         Debug.Log(PGdata);
     }
 
+    static public void SaveToPrefs()
+    {
+        SaveToString();
+        PlayerPrefs.SetString("SandBox", PGdata);
+    }
+
+    static public void LoadFromPrefs()
+    {
+        //SaveToString();
+        PGdata = PlayerPrefs.GetString("SandBox");
+        LoadFromString();
+    }
+
     static public void ClearPlayground()
     {
         GameObject PG = GameObject.Find("Playground/Components");
@@ -184,7 +197,7 @@ public class Designer : MonoBehaviour
             gc.FromJson(tokens[i]);
         }
 
-        
+
         GameEngine.instance?.UpdateComponentList();
     }
 

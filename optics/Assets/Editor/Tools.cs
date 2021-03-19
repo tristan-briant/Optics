@@ -39,7 +39,16 @@ public class Tools : MonoBehaviour
         Designer.MakeThumbNail();
     }
 
+    [MenuItem("LightMare/SaveToPrefs")]
+    static void SaveToPrefs()
+    {
+        Designer.SaveToPrefs();
+    }
 
-
+    [MenuItem("LightMare/LoadFromPrefs")]
+    static void LoadFromPrefs()
+    {
+        Designer.LoadFromPrefs();
+    }
 }
 

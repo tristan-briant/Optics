@@ -84,7 +84,7 @@ IPointerDownHandler, IPointerUpHandler
 
     void Activate(bool active)
     {
-        item.GetComponent<OpticalComponent>().enabled = active;
+        item.GetComponent<GenericComponent>().enabled = active;
         item.GetComponent<ChessPiece>().enabled = active;
 
         item.gameObject.SetActive(true);
