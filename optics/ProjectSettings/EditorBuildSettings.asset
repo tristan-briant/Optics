@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MiniMap.unity
     guid: 35b315c0bfe417f48b5c23e14b4bfb44
   - enabled: 1
+    path: Assets/Scenes/Levels/SandBox.unity
+    guid: 956515d7d0eec6e49ac8fac74f938e81
+  - enabled: 1
     path: Assets/Scenes/Levels/Level 1.1.unity
     guid: 49a1271f2cb5c384d9f998e2affbef3a
   - enabled: 1
@@ -35,6 +38,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Level 1.4.unity
     guid: daca86ea28c9f56429944f05723c3b0b
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 1.8.unity
+    guid: f77a56e0e437d3f47a7d0e8a203cc2cd
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 1.9.unity
+    guid: 3b44e316518c1684ca2c9a695f934cd7
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level 4.unity
+    guid: 9ee184281fbd86a4c9915c720fe4c031
   - enabled: 1
     path: Assets/Scenes/Levels/Level 1.5.unity
     guid: f36a68c610a567e4bafa8da4d6d274f3

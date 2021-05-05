@@ -28,6 +28,9 @@ public class GameEngine : MonoBehaviour
     public GridSnapMode snapMode = GridSnapMode.None;
     //public GridSnapMode SnapMode { get; set; }
 
+    public GameObject GUIEdit;
+    public GameObject GUIPlay;
+
     public void SetSnapMode(int mode)
     {
         snapMode = (GridSnapMode)mode;

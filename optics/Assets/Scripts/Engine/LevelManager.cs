@@ -46,8 +46,6 @@ public class LevelManager : MonoBehaviour
                 output += scene.buildIndex >= 0 ? " in build)\n" : " NOT in build)\n";
 
 
-
-
                 if (scene.name.Contains("Level"))
                     CurrentLevelNumber = Levels.FindIndex(a => a == scene.name);
                 if (scene.name == "MiniMap")
@@ -79,6 +77,11 @@ public class LevelManager : MonoBehaviour
 
             CurrentLevel = Levels[n];
             CurrentLevelNumber = n;
+        }
+        if (n == -1)// SandBox
+        {
+            StartCoroutine(Transition(CurrentLevel, "SandBox"));
+            CurrentLevel = "SandBox";
         }
     }
 
@@ -138,11 +141,23 @@ public class LevelManager : MonoBehaviour
 
 
         if (scene2.Contains("Level"))
+        {
             GameEngine.instance.StartGameEngine(GameEngine.Mode.Play);
+            GameEngine.instance.GUIEdit.SetActive(false);
+            GameEngine.instance.GUIPlay.SetActive(true);
+        }
         else if (scene2.Contains("SandBox"))
+        {
             GameEngine.instance.StartGameEngine(GameEngine.Mode.Edit);
-        else
+            GameEngine.instance.GUIEdit.SetActive(true);
+            GameEngine.instance.GUIPlay.SetActive(false);
+        }
+        else // minimap or option
+        {
             GameEngine.instance.StopGameEngine();
+            GameEngine.instance.GUIEdit.SetActive(false);
+            GameEngine.instance.GUIPlay.SetActive(false);
+        }
 
     }
 

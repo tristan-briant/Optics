@@ -8,8 +8,8 @@ public class LevelButton : MonoBehaviour
 
     void Start()
     {
-
-        text?.SetText((LevelToBeloaded + 1).ToString());
+        if (LevelToBeloaded >= 0)
+            text?.SetText((LevelToBeloaded + 1).ToString());
     }
 
     public void SelectLevel()
